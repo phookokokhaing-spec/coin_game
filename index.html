@@ -1406,12 +1406,16 @@
 
                 <hr class="divider" />
 
-                <!-- Exchange Rate -->
+                <!-- ===== EXCHANGE RATE (UPDATED - Firestore) ===== -->
                 <div class="admin-section">
                     <h4>💰 လဲလှယ်နှုန်းသတ်မှတ်ရန်</h4>
+                    <p style="font-size:10px;color:var(--text-muted);">အားလုံးအတူတူပြောင်းလဲမည်</p>
                     <div class="admin-row">
                         <input type="number" id="adminRate" placeholder="1$ = ? Coins" />
                         <button class="btn-sm green" onclick="adminSetRate()">သတ်မှတ်</button>
+                    </div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">
+                        လက်ရှိနှုန်း: 1$ = <span id="currentRateDisplay">3000</span> Coins
                     </div>
                 </div>
 
@@ -1542,7 +1546,8 @@
         // ============================================================
         //  🔑 YOUTUBE API KEY
         // ============================================================
-        const YOUTUBE_API_KEY = 'AIzaSyCKX2dooGrhE9nZQsdm5rLadQ5RWJXveao';
+        const YOUTUBE_API_KEY = 'AIzaSyAg0ufPnsTmjlJgiZG5hdpqrzlAEdt2FOM';
+
         // ============================================================
         //  ADMIN LOCK - 12 TAPS
         // ============================================================
@@ -1581,6 +1586,7 @@
         let currentUser = null;
         let userData = { coins: 0, usdt: 0, username: 'User', email: '', isBanned: false, lastActive: null };
         let isAdmin = false;
+        let exchangeRate = 3000; // Default
 
         // Ad system
         let adLinks = JSON.parse(localStorage.getItem('adLinks')) || [
@@ -1591,7 +1597,6 @@
         let adCoins = JSON.parse(localStorage.getItem('adCoins')) || [30, 20, 40, 50, 60];
         let adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
 
-        let exchangeRate = parseInt(localStorage.getItem('exchangeRate')) || 3000;
         let isWithdrawOpen = localStorage.getItem('isWithdrawOpen') === 'true';
         let withdrawDate = localStorage.getItem('withdrawDate') || '';
 
@@ -1658,6 +1663,74 @@
             el._timeout = setTimeout(() => {
                 el.classList.remove('show');
             }, 3500);
+        }
+
+        // ============================================================
+        //  EXCHANGE RATE - FIRESTORE (NEW)
+        // ============================================================
+        async function loadExchangeRate() {
+            try {
+                const doc = await db.collection('settings').doc('exchangeRate').get();
+                if (doc.exists) {
+                    exchangeRate = doc.data().rate || 3000;
+                } else {
+                    exchangeRate = 3000;
+                    await db.collection('settings').doc('exchangeRate').set({
+                        rate: 3000,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                updateExchangeRateUI();
+            } catch (error) {
+                console.error('Load exchange rate error:', error);
+                exchangeRate = 3000;
+                updateExchangeRateUI();
+            }
+        }
+
+        function updateExchangeRateUI() {
+            document.getElementById('marketRate').textContent = '1$ = ' + exchangeRate + ' Coins';
+            document.getElementById('exchangeRateDisplay').textContent = '1$ = ' + exchangeRate + ' Coins';
+            document.getElementById('currentRateDisplay').textContent = exchangeRate;
+            if (document.getElementById('adminRate')) {
+                document.getElementById('adminRate').value = exchangeRate;
+            }
+        }
+
+        // Listen for real-time exchange rate changes
+        function listenExchangeRate() {
+            db.collection('settings').doc('exchangeRate').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const rate = doc.data().rate || 3000;
+                    exchangeRate = rate;
+                    updateExchangeRateUI();
+                    console.log('📊 Exchange rate updated:', rate);
+                }
+            });
+        }
+
+        // Admin - Set Exchange Rate (Firestore)
+        async function adminSetRate() {
+            const rate = parseInt(document.getElementById('adminRate').value);
+            if (!rate || rate < 1) {
+                showToast('တန်ဖိုးမှန်ကန်စွာထည့်ပါ။', 'error');
+                return;
+            }
+
+            try {
+                await db.collection('settings').doc('exchangeRate').set({
+                    rate: rate,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser?.uid || 'admin'
+                });
+
+                exchangeRate = rate;
+                updateExchangeRateUI();
+                showToast('✅ 1$ = ' + rate + ' Coins သတ်မှတ်ပြီးပါပြီ!', 'success');
+            } catch (error) {
+                console.error('Set rate error:', error);
+                showToast('❌ သတ်မှတ်မှု မအောင်မြင်ပါ။', 'error');
+            }
         }
 
         // ============================================================
@@ -1809,6 +1882,10 @@
                     updateUI();
                 }
 
+                // Load exchange rate from Firestore
+                await loadExchangeRate();
+                listenExchangeRate();
+
                 db.collection('users').doc(user.uid).update({
                     lastActive: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(() => {});
@@ -1862,13 +1939,12 @@
             document.getElementById('profileEmail').value = userData.email || '';
             document.getElementById('marketUsdt').textContent = '$' + usdt.toFixed(2);
             document.getElementById('exchangeCoins').textContent = coins;
-            document.getElementById('marketRate').textContent = '1$ = ' + exchangeRate + ' Coins';
-            document.getElementById('exchangeRateDisplay').textContent = '1$ = ' + exchangeRate + ' Coins';
 
             const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(username) + '&background=d32f2f&color=fff&size=72';
             document.getElementById('profileImg').src = localStorage.getItem('profileImg') || avatar;
 
             updateWithdrawUI();
+            updateExchangeRateUI();
         }
 
         function updateWithdrawUI() {
@@ -2868,7 +2944,8 @@
                 loadWithdrawRequests();
                 loadBannedUsers();
                 updateWithdrawBadge();
-                loadAdList(); // <-- Load ad list
+                loadAdList();
+                updateExchangeRateUI();
                 showToast('✅ Admin ဝင်ရောက်ပြီးပါပြီ');
                 closeModal('adminModal');
             } else {
@@ -2919,7 +2996,7 @@
         }
 
         // ============================================================
-        //  ADMIN - AD MANAGEMENT (UPDATED)
+        //  ADMIN - AD MANAGEMENT
         // ============================================================
         function loadAdList() {
             const tbody = document.getElementById('adListBody');
@@ -3011,18 +3088,6 @@
 
             loadAdList();
             showToast('✅ Ad ဖျက်ပြီးပါပြီ!', 'success');
-        }
-
-        // ============================================================
-        //  ADMIN - EXCHANGE RATE
-        // ============================================================
-        function adminSetRate() {
-            const rate = parseInt(document.getElementById('adminRate').value);
-            if (!rate || rate < 1) { showToast('တန်ဖိုးမှန်ကန်စွာထည့်ပါ။', 'error'); return; }
-            exchangeRate = rate;
-            localStorage.setItem('exchangeRate', rate);
-            updateUI();
-            showToast('✅ 1$ = ' + rate + ' Coins သတ်မှတ်ပြီးပါပြီ');
         }
 
         // ============================================================
@@ -3174,8 +3239,7 @@
 
         console.log('✅ App initialized successfully!');
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
-        console.log('📊 Transaction History: Index မလိုတော့ပါ။');
-        console.log('🔍 YouTube Search: API Key ထည့်ပြီးသား!');
+        console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
         console.log('🔗 Ad Management: Admin မှ Ad ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
     </script>
 </body>
