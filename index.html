@@ -54,7 +54,6 @@
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        /* ===== FIX: Use dvh instead of vh for mobile browsers ===== */
         html,
         body {
             height: 100%;
@@ -68,10 +67,9 @@
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
-            transition: background var(--transition), color var(--transition);
-            /* FIX: Prevent body from scrolling */
             overflow: hidden;
             position: relative;
+            transition: background var(--transition), color var(--transition);
         }
 
         ::-webkit-scrollbar {
@@ -251,7 +249,6 @@
             flex: 1;
             flex-direction: column;
             min-height: 0;
-            /* FIX: Important for flex children */
             height: 100%;
             padding: 6px 6px 0;
             overflow: hidden;
@@ -273,7 +270,6 @@
             box-shadow: var(--shadow);
             margin-bottom: 6px;
             flex-shrink: 0;
-            /* FIX: Prevent shrinking */
             min-height: 48px;
         }
         .top-bar input {
@@ -345,7 +341,6 @@
             color: var(--text-primary);
         }
 
-        /* Admin lock button */
         .admin-lock-btn {
             position: relative;
         }
@@ -383,7 +378,6 @@
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             flex-shrink: 0;
-            /* FIX: Prevent shrinking */
             min-height: 120px;
         }
         #player {
@@ -487,7 +481,6 @@
         /* ===== PLAYLIST ===== */
         .playlist-section {
             flex: 1;
-            /* FIX: Take remaining space */
             min-height: 0;
             background: var(--bg-secondary);
             backdrop-filter: blur(12px);
@@ -558,12 +551,9 @@
             padding: 6px 0 10px;
             border-top: 1px solid var(--border-color);
             flex-shrink: 0;
-            /* FIX: Don't shrink */
             border-radius: var(--radius) var(--radius) 0 0;
             min-height: 56px;
-            /* FIX: Minimum height */
             margin-top: auto;
-            /* FIX: Push to bottom */
         }
         .bottom-nav .nav-item {
             display: flex;
@@ -958,7 +948,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Badge for banned list */
         .ban-badge {
             background: var(--accent);
             color: #fff;
@@ -966,6 +955,47 @@
             border-radius: 20px;
             font-size: 10px;
             margin-left: 6px;
+        }
+
+        /* Loading spinner for search */
+        .search-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+        }
+        .search-loading i {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 10px;
+            animation: spin 1s linear infinite;
+        }
+        .search-no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        .search-no-results i {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+
+        /* Ad list table */
+        .ad-link-cell {
+            font-size: 10px;
+            text-align: left;
+            word-break: break-all;
+            max-width: 150px;
+        }
+        .ad-link-cell a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .ad-link-cell a:hover {
+            text-decoration: underline;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -1031,6 +1061,14 @@
             .transaction-item .right {
                 font-size: 14px;
             }
+            .ad-link-cell {
+                max-width: 80px;
+                font-size: 9px;
+            }
+            .admin-row input {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
         }
         @media (min-width: 768px) {
             .video-container {
@@ -1040,8 +1078,6 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
-        /* ===== FIX: Landscape mode on phones ===== */
         @media (max-height: 500px) {
             .video-container {
                 max-height: 120px;
@@ -1087,7 +1123,7 @@
 
     <!-- ===== SPLASH SCREEN ===== -->
     <div id="splash">
-        <div class="logo">Redwords<span>Program</span></div>
+        <div class="logo">Video<span>Coin</span></div>
         <div class="loader"></div>
         <p>Loading...</p>
     </div>
@@ -1143,8 +1179,8 @@
 
         <!-- TOP BAR -->
         <div class="top-bar">
-            <input type="text" id="searchInput" placeholder="🔍 YouTube URL သို့မဟုတ် Video ID..." />
-            <button class="btn-icon" onclick="playCustomUrl()"><i class="fas fa-play"></i></button>
+            <input type="text" id="searchInput" placeholder="🔍 YouTube မှာ ရှာရန် (သီချင်းအမည်၊ ဗီဒီယိုအမည်)..." />
+            <button class="btn-icon" onclick="searchYouTube()"><i class="fas fa-search"></i></button>
             <div class="coin-box"><i class="fas fa-coins"></i> <span id="totalCoins">0</span></div>
             <button class="icon-btn" onclick="toggleTheme()" title="အလင်းမှောင်"><i class="fas fa-moon"></i></button>
             <button class="icon-btn" onclick="openModal('profileModal')"><i class="fa-regular fa-user"></i></button>
@@ -1183,7 +1219,7 @@
             <div id="playlistContainer" class="video-grid"></div>
         </div>
 
-        <!-- ===== BOTTOM NAV - FIXED ===== -->
+        <!-- ===== BOTTOM NAV ===== -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchNav('home')"><i class="fas fa-home"></i><span>Home</span></div>
             <div class="nav-item" onclick="switchNav('search')"><i class="fas fa-search"></i><span>Search</span></div>
@@ -1307,7 +1343,7 @@
         </div>
     </div>
 
-    <!-- Admin Modal -->
+    <!-- ===== ADMIN MODAL (UPDATED) ===== -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('adminModal')">&times;</button>
@@ -1336,15 +1372,39 @@
 
                 <hr class="divider" />
 
-                <!-- Ad Management -->
+                <!-- ===== AD MANAGEMENT (UPDATED) ===== -->
                 <div class="admin-section">
-                    <h4>🔗 Ad Links & Coin</h4>
-                    <div class="admin-row">
-                        <input type="text" id="adminAdLink" placeholder="Ad Link" />
+                    <h4>🔗 Ad Links & Coin စီမံရန်</h4>
+                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link အသစ်ထည့်ရန် သို့မဟုတ် ရှိပြီးသားကို ဖျက်ရန်</p>
+
+                    <!-- Add New Ad -->
+                    <div class="admin-row" style="margin-bottom:6px;">
+                        <input type="text" id="adminAdLink" placeholder="Ad Link (URL)" style="flex:2;" />
                         <input type="number" id="adminAdCoin" placeholder="Coin" style="width:80px;" />
                         <button class="btn-sm green" onclick="adminAddAd()"><i class="fas fa-plus"></i> ထည့်</button>
                     </div>
+
+                    <!-- Ad List -->
+                    <div id="adListContainer" style="max-height:150px;overflow-y:auto;margin-top:6px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:50%;">Link</th>
+                                    <th style="width:20%;">Coin</th>
+                                    <th style="width:30%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adListBody">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="adListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">
+                        Ad Link မရှိသေးပါ
+                    </div>
                 </div>
+
+                <hr class="divider" />
 
                 <!-- Exchange Rate -->
                 <div class="admin-section">
@@ -1369,13 +1429,30 @@
 
                 <!-- User Management -->
                 <div class="admin-section">
-                    <h4>👥 User စာရင်း</h4>
+                    <h4>👥 User စာရင်း <span id="userCount" style="background:var(--accent);color:#fff;padding:1px 10px;border-radius:20px;font-size:10px;margin-left:6px;">0</span></h4>
+                    <div style="display:flex;gap:6px;margin-bottom:6px;">
+                        <input type="text" id="userSearchInput" placeholder="🔍 User ရှာရန်..." style="flex:1;padding:6px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--bg-input);color:var(--text-primary);font-size:11px;outline:none;" oninput="filterUsers()" />
+                        <button class="btn-sm green" onclick="loadAdminUsers()" style="padding:6px 12px;"><i class="fas fa-sync"></i></button>
+                    </div>
                     <div style="max-height:150px;overflow-y:auto;">
                         <table id="adminUserTable">
-                            <tr><th>နာမည်</th><th>Coin</th><th>USDT</th><th>Status</th><th>Action</th></tr>
+                            <thead>
+                                <tr>
+                                    <th>နာမည်</th>
+                                    <th>Coin</th>
+                                    <th>USDT</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Loading...</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
+
+                <hr class="divider" />
 
                 <!-- Coin Management -->
                 <div class="admin-section">
@@ -1463,7 +1540,12 @@
         var storage = firebase.storage();
 
         // ============================================================
-        //  ADMIN LOCK - 12 TAPS TO OPEN
+        //  🔑 YOUTUBE API KEY
+        // ============================================================
+        const YOUTUBE_API_KEY = 'AIzaSyAg0ufPnsTmjlJgiZG5hdpqrzlAEdt2FOM';
+
+        // ============================================================
+        //  ADMIN LOCK - 12 TAPS
         // ============================================================
         let adminTapCount = 0;
         let adminTapTimeout = null;
@@ -1510,10 +1592,7 @@
         let adCoins = JSON.parse(localStorage.getItem('adCoins')) || [30, 20, 40, 50, 60];
         let adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
 
-        // Exchange rate
         let exchangeRate = parseInt(localStorage.getItem('exchangeRate')) || 3000;
-
-        // Withdraw
         let isWithdrawOpen = localStorage.getItem('isWithdrawOpen') === 'true';
         let withdrawDate = localStorage.getItem('withdrawDate') || '';
 
@@ -1521,7 +1600,7 @@
         let player = null;
         let watchInterval = null;
         let watchTime = 0;
-        const TARGET_WATCH = 120; // 2 minutes
+        const TARGET_WATCH = 120;
 
         // Video lists
         const defaultVideos = [
@@ -1551,6 +1630,11 @@
         let myVideoList = JSON.parse(localStorage.getItem('globalAdminVideos')) || defaultVideos;
         let currentCategory = 'myvideo';
         let currentVideoId = myVideoList[0]?.id || "fHnXtisVCGs";
+
+        // ============================================================
+        //  ADMIN IDS
+        // ============================================================
+        const ADMIN_IDS = ["5586866145", "7625227853"];
 
         // ============================================================
         //  SPLASH
@@ -1602,7 +1686,6 @@
 
             try {
                 const cred = await auth.createUserWithEmailAndPassword(email, password);
-
                 await db.collection('users').doc(cred.user.uid).set({
                     username: username,
                     email: email,
@@ -1896,26 +1979,114 @@
                 watchInterval = null; }
         }
 
-        function playCustomUrl() {
-            const input = document.getElementById('searchInput').value.trim();
-            if (!input) { showToast('Video ID သို့မဟုတ် URL ထည့်ပါ။', 'error'); return; }
+        // ============================================================
+        //  🎯 YOUTUBE SEARCH
+        // ============================================================
+        async function searchYouTube() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                showToast('ကျေးဇူးပြု၍ သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ထည့်ပါ။', 'error');
+                return;
+            }
 
-            let id = input;
-            if (input.includes('youtu.be/')) id = input.split('youtu.be/')[1].split('?')[0];
-            else if (input.includes('watch?v=')) id = input.split('watch?v=').pop().split('&')[0];
-            else if (input.includes('shorts/')) id = input.split('shorts/')[1].split('?')[0];
-            else if (input.includes('/live/')) id = input.split('/live/')[1].split('?')[0];
+            let videoId = '';
+            if (query.includes('youtu.be/')) {
+                videoId = query.split('youtu.be/')[1].split('?')[0];
+            } else if (query.includes('watch?v=')) {
+                videoId = query.split('watch?v=').pop().split('&')[0];
+            } else if (query.includes('shorts/')) {
+                videoId = query.split('shorts/')[1].split('?')[0];
+            } else if (query.length === 11 && /^[a-zA-Z0-9_-]+$/.test(query)) {
+                videoId = query;
+            }
 
-            if (id && id.length === 11) {
-                loadVideo(id);
+            if (videoId && videoId.length === 11) {
+                loadVideo(videoId);
                 document.getElementById('searchInput').value = '';
-            } else {
-                showToast('မှန်ကန်သော Video ID မဟုတ်ပါ', 'error');
+                switchCategory('search', document.querySelector('.menu-item:last-child'));
+                return;
+            }
+
+            const container = document.getElementById('playlistContainer');
+            const title = document.getElementById('playlistTitle');
+            title.textContent = '🔍 ရှာဖွေနေပါသည်...';
+            container.innerHTML = `
+                <div class="search-loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>"${query}" ကိုရှာဖွေနေပါသည်...</p>
+                </div>
+            `;
+
+            switchCategory('search', document.querySelector('.menu-item:last-child'));
+
+            try {
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`
+                );
+
+                if (!response.ok) {
+                    throw new Error('API Key မှားနေသည် သို့မဟုတ် ကန့်သတ်ချက်ကျော်နေပါသည်။');
+                }
+
+                const data = await response.json();
+
+                if (data.items && data.items.length > 0) {
+                    const results = data.items.map(item => ({
+                        name: item.snippet.title,
+                        id: item.id.videoId,
+                        thumbnail: item.snippet.thumbnails.medium.url,
+                        channel: item.snippet.channelTitle
+                    }));
+
+                    title.textContent = `🔍 "${query}" ရလဒ် (${results.length})`;
+                    container.innerHTML = '';
+
+                    results.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'video-card';
+                        const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+                        card.innerHTML = `
+                            <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
+                            <div class="title">${item.name}</div>
+                        `;
+                        card.onclick = () => {
+                            loadVideo(item.id);
+                        };
+                        container.appendChild(card);
+                    });
+
+                } else {
+                    title.textContent = '🔍 ရှာဖွေမှုရလဒ်';
+                    container.innerHTML = `
+                        <div class="search-no-results">
+                            <i class="fas fa-search"></i>
+                            <p>"${query}" အတွက် ရလဒ်မတွေ့ပါ။</p>
+                            <p style="font-size:11px;margin-top:4px;">နောက်တစ်ကြိမ် ထပ်စမ်းပါ။</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Search error:', error);
+                title.textContent = '❌ ရှာဖွေမှုမအောင်မြင်ပါ';
+                container.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-exclamation-circle" style="color:var(--accent);"></i>
+                        <p>ရှာဖွေမှုမအောင်မြင်ပါ။</p>
+                        <p style="font-size:11px;margin-top:4px;color:var(--text-secondary);">${error.message}</p>
+                        <button class="btn" onclick="searchYouTube()" style="margin-top:10px;width:auto;padding:8px 20px;font-size:12px;">
+                            <i class="fas fa-sync"></i> ပြန်စမ်းမည်
+                        </button>
+                    </div>
+                `;
             }
         }
 
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') playCustomUrl();
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchYouTube();
+            }
         });
 
         // ============================================================
@@ -2024,9 +2195,13 @@
                 title.textContent = 'ကာတွန်းများ';
                 list = cartoonList;
             } else if (category === 'search') {
-                title.textContent = 'ရှာဖွေမှုရလဒ်များ';
+                title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
                 const q = document.getElementById('searchInput').value.trim();
-                list = q ? [{ name: '🔍 ' + q + ' (ရှာရန်)', id: 'fHnXtisVCGs' }] : [{ name: 'Video ID ထည့်ပါ', id: 'fHnXtisVCGs' }];
+                if (q) {
+                    list = [{ name: '🔍 ' + q + ' (ရှာဖွေရန်)', id: 'fHnXtisVCGs' }];
+                } else {
+                    list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
+                }
             }
 
             if (!list || list.length === 0) {
@@ -2047,7 +2222,7 @@
                     if (item.id && item.id.length === 11) {
                         loadVideo(item.id);
                     } else {
-                        showToast('Video ID မှားနေပါသည်', 'error');
+                        searchYouTube();
                     }
                 };
                 container.appendChild(card);
@@ -2537,10 +2712,150 @@
         }
 
         // ============================================================
-        //  ADMIN
+        //  ADMIN - LOAD ALL USERS
         // ============================================================
-        const ADMIN_IDS = ["5586866145", "7625227853"];
+        async function loadAdminUsers() {
+            const table = document.getElementById('adminUserTable');
+            const countEl = document.getElementById('userCount');
+            if (!table) return;
 
+            table.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Loading...</td></tr>';
+
+            try {
+                const snapshot = await db.collection('users')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    table.innerHTML =
+                        '<tr><td colspan="5" style="color:var(--text-muted);text-align:center;">User မရှိသေးပါ</td></tr>';
+                    if (countEl) countEl.textContent = '0';
+                    return;
+                }
+
+                const users = [];
+                snapshot.forEach(doc => {
+                    users.push({ id: doc.id, ...doc.data() });
+                });
+
+                if (countEl) countEl.textContent = users.length;
+
+                let html = '';
+                users.forEach(data => {
+                    const userId = data.id;
+                    const isCurrentUser = currentUser && userId === currentUser.uid;
+                    const isAdminUser = ADMIN_IDS.includes(userId);
+
+                    let statusHtml = data.isBanned ?
+                        '<span class="status-banned">⛔ Banned</span>' :
+                        '<span class="status-active">✅ Active</span>';
+
+                    let lastActive = 'N/A';
+                    if (data.lastActive) {
+                        try {
+                            const date = data.lastActive.toDate ? data.lastActive.toDate() : new Date(data
+                            .lastActive);
+                            lastActive = date.toLocaleString();
+                        } catch (e) { lastActive = 'N/A'; }
+                    }
+
+                    html += `
+                        <tr>
+                            <td>
+                                <strong>${data.username || 'User'}</strong>
+                                ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
+                                ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
+                                <br>
+                                <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
+                                <br>
+                                <span style="font-size:8px;color:var(--text-muted);">Last: ${lastActive}</span>
+                            </td>
+                            <td><strong>${data.coins || 0}</strong></td>
+                            <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
+                            <td>${statusHtml}</td>
+                            <td>
+                                <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+                                    ${!isAdminUser ? `
+                                        <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
+                                                onclick="toggleBan('${userId}')" 
+                                                style="width:100%;">
+                                            ${data.isBanned ? 'Unban' : 'Ban'}
+                                        </button>
+                                    ` : `
+                                        <span style="font-size:9px;color:var(--text-muted);">Admin</span>
+                                    `}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                table.innerHTML = html;
+
+            } catch (error) {
+                console.error('Load admin users error:', error);
+                table.innerHTML =
+                    `<tr><td colspan="5" style="color:var(--text-muted);text-align:center;">ပြဿနာရှိနေပါသည်: ${error.message}</td></tr>`;
+            }
+        }
+
+        // ============================================================
+        //  ADMIN - FILTER USERS
+        // ============================================================
+        function filterUsers() {
+            const input = document.getElementById('userSearchInput');
+            const query = input.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('#adminUserTable tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        // ============================================================
+        //  ADMIN - TOGGLE BAN
+        // ============================================================
+        async function toggleBan(uid) {
+            if (!uid) return;
+
+            try {
+                const doc = await db.collection('users').doc(uid).get();
+                if (!doc.exists) {
+                    showToast('User မတွေ့ပါ။', 'error');
+                    return;
+                }
+
+                const current = doc.data().isBanned || false;
+                const updateData = { isBanned: !current };
+
+                if (!current) {
+                    updateData.banReason = 'Admin မှ Ban လုပ်ထားပါသည်။';
+                    updateData.bannedAt = firebase.firestore.FieldValue.serverTimestamp();
+                } else {
+                    updateData.banReason = null;
+                    updateData.unbannedAt = firebase.firestore.FieldValue.serverTimestamp();
+                }
+
+                await db.collection('users').doc(uid).update(updateData);
+                showToast(`✅ User ${current ? 'Unban' : 'Ban'} လုပ်ပြီးပါပြီ။`);
+
+                loadAdminUsers();
+                loadBannedUsers();
+
+                if (!current && uid === currentUser?.uid) {
+                    await auth.signOut();
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Toggle ban error:', error);
+                showToast('❌ အပြောင်းအလဲ မအောင်မြင်ပါ။', 'error');
+            }
+        }
+
+        // ============================================================
+        //  ADMIN - VERIFY
+        // ============================================================
         function verifyAdmin() {
             const id = document.getElementById('adminIdInput').value.trim();
             if (ADMIN_IDS.includes(id)) {
@@ -2554,6 +2869,7 @@
                 loadWithdrawRequests();
                 loadBannedUsers();
                 updateWithdrawBadge();
+                loadAdList(); // <-- Load ad list
                 showToast('✅ Admin ဝင်ရောက်ပြီးပါပြီ');
                 closeModal('adminModal');
             } else {
@@ -2569,56 +2885,9 @@
             showToast('👋 Admin ထွက်ပြီးပါပြီ');
         }
 
-        async function loadAdminUsers() {
-            const table = document.getElementById('adminUserTable');
-            table.innerHTML = '<tr><th>နာမည်</th><th>Coin</th><th>USDT</th><th>Status</th><th>Action</th></tr>';
-
-            if (currentUser) {
-                const doc = await db.collection('users').doc(currentUser.uid).get();
-                if (doc.exists) {
-                    const d = doc.data();
-                    const row = table.insertRow();
-                    row.innerHTML = `
-                        <td>${d.username || 'User'}</td>
-                        <td>${d.coins || 0}</td>
-                        <td>${(d.usdt || 0).toFixed(2)}</td>
-                        <td>${d.isBanned ? '⛔ Banned' : '✅ Active'}</td>
-                        <td>
-                            <button class="btn-sm ${d.isBanned ? 'green' : 'red'}" onclick="toggleBan('${currentUser.uid}')">
-                                ${d.isBanned ? 'Unban' : 'Ban'}
-                            </button>
-                        </td>
-                    `;
-                }
-            }
-        }
-
-        async function toggleBan(uid) {
-            const doc = await db.collection('users').doc(uid).get();
-            if (doc.exists) {
-                const current = doc.data().isBanned || false;
-                const updateData = {
-                    isBanned: !current
-                };
-                if (!current) {
-                    updateData.banReason = 'Admin မှ Ban လုပ်ထားပါသည်။';
-                    updateData.bannedAt = firebase.firestore.FieldValue.serverTimestamp();
-                } else {
-                    updateData.banReason = null;
-                    updateData.unbannedAt = firebase.firestore.FieldValue.serverTimestamp();
-                }
-                await db.collection('users').doc(uid).update(updateData);
-                showToast('✅ User status ပြောင်းပြီးပါပြီ');
-                loadAdminUsers();
-                loadBannedUsers();
-                if (!current && uid === currentUser?.uid) {
-                    await auth.signOut();
-                    location.reload();
-                }
-            }
-        }
-
-        // Admin: Video
+        // ============================================================
+        //  ADMIN - VIDEO
+        // ============================================================
         async function adminAddVideo() {
             const title = document.getElementById('adminVidTitle').value.trim();
             const url = document.getElementById('adminVidUrl').value.trim();
@@ -2650,21 +2919,104 @@
             renderPlaylist('myvideo');
         }
 
-        // Admin: Ad
+        // ============================================================
+        //  ADMIN - AD MANAGEMENT (UPDATED)
+        // ============================================================
+        function loadAdList() {
+            const tbody = document.getElementById('adListBody');
+            const empty = document.getElementById('adListEmpty');
+            if (!tbody) return;
+
+            const links = JSON.parse(localStorage.getItem('adLinks')) || [];
+            const coins = JSON.parse(localStorage.getItem('adCoins')) || [];
+
+            if (links.length === 0) {
+                tbody.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            if (empty) empty.style.display = 'none';
+
+            let html = '';
+            links.forEach((link, index) => {
+                const coin = coins[index] || 30;
+                const displayLink = link.length > 30 ? link.substring(0, 30) + '...' : link;
+                html += `
+                    <tr>
+                        <td class="ad-link-cell">
+                            <a href="${link}" target="_blank">${displayLink}</a>
+                        </td>
+                        <td><strong>${coin}</strong></td>
+                        <td>
+                            <button class="btn-sm red" onclick="adminRemoveAd(${index})" style="padding:4px 10px;font-size:9px;">
+                                <i class="fas fa-trash"></i> ဖျက်
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
         function adminAddAd() {
             const link = document.getElementById('adminAdLink').value.trim();
             const coin = parseInt(document.getElementById('adminAdCoin').value);
-            if (!link || !coin) { showToast('Ad Link နှင့် Coin ထည့်ပါ။', 'error'); return; }
-            adLinks.push(link);
-            adCoins.push(coin);
-            localStorage.setItem('adLinks', JSON.stringify(adLinks));
-            localStorage.setItem('adCoins', JSON.stringify(adCoins));
-            showToast('✅ Ad ထည့်သွင်းပြီးပါပြီ');
+
+            if (!link) {
+                showToast('Ad Link ထည့်ပါ။', 'error');
+                return;
+            }
+            if (!coin || coin < 1) {
+                showToast('Coin ပမာဏ မှန်ကန်စွာထည့်ပါ။', 'error');
+                return;
+            }
+
+            let currentLinks = JSON.parse(localStorage.getItem('adLinks')) || [];
+            let currentCoins = JSON.parse(localStorage.getItem('adCoins')) || [];
+
+            currentLinks.push(link);
+            currentCoins.push(coin);
+
+            localStorage.setItem('adLinks', JSON.stringify(currentLinks));
+            localStorage.setItem('adCoins', JSON.stringify(currentCoins));
+
+            adLinks = currentLinks;
+            adCoins = currentCoins;
+
             document.getElementById('adminAdLink').value = '';
             document.getElementById('adminAdCoin').value = '';
+
+            loadAdList();
+            showToast('✅ Ad ထည့်သွင်းပြီးပါပြီ!', 'success');
         }
 
-        // Admin: Exchange Rate
+        function adminRemoveAd(index) {
+            if (!confirm('ဒီ Ad ကို ဖျက်မည်?')) return;
+
+            let currentLinks = JSON.parse(localStorage.getItem('adLinks')) || [];
+            let currentCoins = JSON.parse(localStorage.getItem('adCoins')) || [];
+
+            if (index < 0 || index >= currentLinks.length) {
+                showToast('Ad မတွေ့ပါ။', 'error');
+                return;
+            }
+
+            currentLinks.splice(index, 1);
+            currentCoins.splice(index, 1);
+
+            localStorage.setItem('adLinks', JSON.stringify(currentLinks));
+            localStorage.setItem('adCoins', JSON.stringify(currentCoins));
+
+            adLinks = currentLinks;
+            adCoins = currentCoins;
+
+            loadAdList();
+            showToast('✅ Ad ဖျက်ပြီးပါပြီ!', 'success');
+        }
+
+        // ============================================================
+        //  ADMIN - EXCHANGE RATE
+        // ============================================================
         function adminSetRate() {
             const rate = parseInt(document.getElementById('adminRate').value);
             if (!rate || rate < 1) { showToast('တန်ဖိုးမှန်ကန်စွာထည့်ပါ။', 'error'); return; }
@@ -2674,7 +3026,9 @@
             showToast('✅ 1$ = ' + rate + ' Coins သတ်မှတ်ပြီးပါပြီ');
         }
 
-        // Admin: Withdraw Control
+        // ============================================================
+        //  ADMIN - WITHDRAW CONTROL
+        // ============================================================
         function adminToggleWithdraw() {
             isWithdrawOpen = !isWithdrawOpen;
             localStorage.setItem('isWithdrawOpen', isWithdrawOpen);
@@ -2702,7 +3056,9 @@
             showToast('✅ ငွေထုတ်ရက် ' + date + ' သတ်မှတ်ပြီးပါပြီ');
         }
 
-        // Admin: Coin Management
+        // ============================================================
+        //  ADMIN - COIN MANAGEMENT
+        // ============================================================
         async function adminAddCoin() {
             const target = document.getElementById('adminTargetUser').value.trim();
             const amount = parseInt(document.getElementById('adminCoinAmount').value);
@@ -2714,24 +3070,32 @@
                 return;
             }
 
-            if (currentUser && target.toLowerCase() === (userData.username || '').toLowerCase()) {
-                await db.collection('users').doc(currentUser.uid).update({
-                    coins: firebase.firestore.FieldValue.increment(amount)
-                });
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'admin_add',
-                    amount: amount,
-                    description: 'Admin မှ ထည့်ပေးခြင်း',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                msg.textContent = '✅ ' + target + ' အား ' + amount + ' Coin ထည့်ပေးပြီးပါပြီ';
-                msg.style.color = '#4caf50';
-                loadAdminUsers();
-            } else {
+            const snapshot = await db.collection('users')
+                .where('username', '==', target)
+                .get();
+
+            if (snapshot.empty) {
                 msg.textContent = '❌ "' + target + '" ကို မတွေ့ပါ။';
                 msg.style.color = '#ff5252';
+                return;
             }
+
+            const doc = snapshot.docs[0];
+            await db.collection('users').doc(doc.id).update({
+                coins: firebase.firestore.FieldValue.increment(amount)
+            });
+
+            await db.collection('transactions').add({
+                userId: doc.id,
+                type: 'admin_add',
+                amount: amount,
+                description: 'Admin မှ ထည့်ပေးခြင်း',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            msg.textContent = '✅ ' + target + ' အား ' + amount + ' Coin ထည့်ပေးပြီးပါပြီ';
+            msg.style.color = '#4caf50';
+            loadAdminUsers();
             document.getElementById('adminCoinAmount').value = '';
         }
 
@@ -2746,30 +3110,40 @@
                 return;
             }
 
-            if (currentUser && target.toLowerCase() === (userData.username || '').toLowerCase()) {
-                const doc = await db.collection('users').doc(currentUser.uid).get();
-                if (doc.exists && doc.data().coins < amount) {
-                    msg.textContent = '❌ Coin မလုံလောက်ပါ။';
-                    msg.style.color = '#ff5252';
-                    return;
-                }
-                await db.collection('users').doc(currentUser.uid).update({
-                    coins: firebase.firestore.FieldValue.increment(-amount)
-                });
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'admin_remove',
-                    amount: -amount,
-                    description: 'Admin မှ နုတ်ခြင်း',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                msg.textContent = '✅ ' + target + ' အား ' + amount + ' Coin နုတ်ပြီးပါပြီ';
-                msg.style.color = '#ff5252';
-                loadAdminUsers();
-            } else {
+            const snapshot = await db.collection('users')
+                .where('username', '==', target)
+                .get();
+
+            if (snapshot.empty) {
                 msg.textContent = '❌ "' + target + '" ကို မတွေ့ပါ။';
                 msg.style.color = '#ff5252';
+                return;
             }
+
+            const doc = snapshot.docs[0];
+            const data = doc.data();
+
+            if (data.coins < amount) {
+                msg.textContent = '❌ Coin မလုံလောက်ပါ။';
+                msg.style.color = '#ff5252';
+                return;
+            }
+
+            await db.collection('users').doc(doc.id).update({
+                coins: firebase.firestore.FieldValue.increment(-amount)
+            });
+
+            await db.collection('transactions').add({
+                userId: doc.id,
+                type: 'admin_remove',
+                amount: -amount,
+                description: 'Admin မှ နုတ်ခြင်း',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            msg.textContent = '✅ ' + target + ' အား ' + amount + ' Coin နုတ်ပြီးပါပြီ';
+            msg.style.color = '#ff5252';
+            loadAdminUsers();
             document.getElementById('adminCoinAmount').value = '';
         }
 
@@ -2802,7 +3176,8 @@
         console.log('✅ App initialized successfully!');
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
         console.log('📊 Transaction History: Index မလိုတော့ပါ။');
-        console.log('📱 Bottom Nav: dvh ကိုသုံးထားလို့ အားလုံးပေါ်ပါမယ်။');
+        console.log('🔍 YouTube Search: API Key ထည့်ပြီးသား!');
+        console.log('🔗 Ad Management: Admin မှ Ad ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
     </script>
 </body>
 </html>
