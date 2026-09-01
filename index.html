@@ -1123,7 +1123,7 @@
 
     <!-- ===== SPLASH SCREEN ===== -->
     <div id="splash">
-        <div class="logo">Rewards<span>Program</span></div>
+        <div class="logo">Video<span>Coin</span></div>
         <div class="loader"></div>
         <p>Loading...</p>
     </div>
@@ -1135,7 +1135,7 @@
     <div id="authScreen">
         <div class="auth-box">
             <div class="brand">
-                <h1>Rewards<span>Program</span></h1>
+                <h1>Video<span>Coin</span></h1>
                 <p>ဗီဒီယိုကြည့်ပြီး Coin ရယူပါ</p>
             </div>
             <div id="authError" class="error-msg"></div>
@@ -1372,7 +1372,21 @@
 
                 <hr class="divider" />
 
-                <!-- ===== AD MANAGEMENT (UPDATED) ===== -->
+                <!-- ===== YOUTUBE API KEY MANAGEMENT (NEW) ===== -->
+                <div class="admin-section">
+                    <h4>🔑 YouTube API Key ပြောင်းရန်</h4>
+                    <p style="font-size:10px;color:var(--text-muted);">API Limit ကုန်သွားရင် Key အသစ်ထည့်ပါ</p>
+                    <div class="admin-row">
+                        <input type="text" id="adminApiKey" placeholder="YouTube API Key ထည့်ပါ" style="flex:2;" />
+                        <button class="btn-sm green" onclick="adminUpdateApiKey()"><i class="fas fa-save"></i> သိမ်းမည်</button>
+                    </div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">
+                        လက်ရှိ Key: <span id="currentApiKeyDisplay" style="color:var(--text-primary);">Loading...</span>
+                    </div>
+                </div>
+                <hr class="divider" />
+
+                <!-- ===== AD MANAGEMENT ===== -->
                 <div class="admin-section">
                     <h4>🔗 Ad Links & Coin စီမံရန်</h4>
                     <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link အသစ်ထည့်ရန် သို့မဟုတ် ရှိပြီးသားကို ဖျက်ရန်</p>
@@ -1406,7 +1420,7 @@
 
                 <hr class="divider" />
 
-                <!-- ===== EXCHANGE RATE (UPDATED - Firestore) ===== -->
+                <!-- ===== EXCHANGE RATE ===== -->
                 <div class="admin-section">
                     <h4>💰 လဲလှယ်နှုန်းသတ်မှတ်ရန်</h4>
                     <p style="font-size:10px;color:var(--text-muted);">အားလုံးအတူတူပြောင်းလဲမည်</p>
@@ -1511,13 +1525,17 @@
         </div>
     </div>
 
-    <!-- Ad Modal -->
+    <!-- ===== AD MODAL (UPDATED - with close button) ===== -->
     <div id="adModal" class="modal">
         <div class="modal-content" style="text-align:center;">
+            <button class="close" onclick="closeAdModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
             <h3><i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...</h3>
             <p style="font-size:14px;margin:12px 0;">ကျေးဇူးပြု၍ <span id="adTimer" style="font-size:32px;font-weight:700;color:var(--accent);">15</span> စက္ကန့် စောင့်ပါ</p>
             <button id="adSkipBtn" disabled onclick="openAdAndClaim()" style="width:100%;padding:12px;border:none;border-radius:12px;background:var(--bg-input);color:var(--text-primary);font-weight:600;cursor:pointer;transition:var(--transition);">
                 ⏳ စောင့်ဆိုင်နေပါ...
+            </button>
+            <button onclick="closeAdModal()" style="width:100%;padding:10px;margin-top:8px;border:none;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);font-weight:500;cursor:pointer;border:1px solid var(--border-color);">
+                ✕ ပိတ်မည်
             </button>
         </div>
     </div>
@@ -1544,9 +1562,34 @@
         var storage = firebase.storage();
 
         // ============================================================
-        //  🔑 YOUTUBE API KEY
+        //  🔑 YOUTUBE API KEY - FROM FIRESTORE
         // ============================================================
-        const YOUTUBE_API_KEY = 'AIzaSyAg0ufPnsTmjlJgiZG5hdpqrzlAEdt2FOM';
+        let YOUTUBE_API_KEY = 'AIzaSyAg0ufPnsTmjlJgiZG5hdpqrzlAEdt2FOM';
+
+        // ============================================================
+        //  📦 CACHE SYSTEM (24 HOURS)
+        // ============================================================
+        const CACHE_KEY = 'youtube_search_cache';
+        const CACHE_DURATION = 24 * 60 * 60 * 1000;
+
+        function getCachedSearch(query) {
+            try {
+                const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
+                const cached = cache[query];
+                if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+                    return cached.data;
+                }
+                return null;
+            } catch (e) { return null; }
+        }
+
+        function setCachedSearch(query, data) {
+            try {
+                const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
+                cache[query] = { data: data, timestamp: Date.now() };
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+            } catch (e) { console.error('Cache save error:', e); }
+        }
 
         // ============================================================
         //  ADMIN LOCK - 12 TAPS
@@ -1586,7 +1629,7 @@
         let currentUser = null;
         let userData = { coins: 0, usdt: 0, username: 'User', email: '', isBanned: false, lastActive: null };
         let isAdmin = false;
-        let exchangeRate = 3000; // Default
+        let exchangeRate = 3000;
 
         // Ad system
         let adLinks = JSON.parse(localStorage.getItem('adLinks')) || [
@@ -1641,32 +1684,67 @@
         const ADMIN_IDS = ["5586866145", "7625227853"];
 
         // ============================================================
-        //  SPLASH
+        //  LOAD YOUTUBE API KEY FROM FIRESTORE
         // ============================================================
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('splash').classList.add('hide');
-                setTimeout(() => {
-                    document.getElementById('splash').style.display = 'none';
-                }, 600);
-            }, 1200);
-        });
+        async function loadYouTubeApiKey() {
+            try {
+                const doc = await db.collection('settings').doc('youtubeApiKey').get();
+                if (doc.exists && doc.data().apiKey) {
+                    YOUTUBE_API_KEY = doc.data().apiKey;
+                    document.getElementById('currentApiKeyDisplay').textContent = YOUTUBE_API_KEY.substring(0, 15) + '...';
+                } else {
+                    await db.collection('settings').doc('youtubeApiKey').set({
+                        apiKey: 'AIzaSyAg0ufPnsTmjlJgiZG5hdpqrzlAEdt2FOM',
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    document.getElementById('currentApiKeyDisplay').textContent = 'AIzaSyAg0ufPns...';
+                }
+            } catch (error) {
+                console.error('Load API Key error:', error);
+            }
+        }
 
-        // ============================================================
-        //  TOAST
-        // ============================================================
-        function showToast(msg, type = 'success') {
-            const el = document.getElementById('toast');
-            el.textContent = msg;
-            el.className = 'toast show ' + type;
-            clearTimeout(el._timeout);
-            el._timeout = setTimeout(() => {
-                el.classList.remove('show');
-            }, 3500);
+        function listenYouTubeApiKey() {
+            db.collection('settings').doc('youtubeApiKey').onSnapshot((doc) => {
+                if (doc.exists && doc.data().apiKey) {
+                    const newKey = doc.data().apiKey;
+                    if (newKey !== YOUTUBE_API_KEY) {
+                        YOUTUBE_API_KEY = newKey;
+                        document.getElementById('currentApiKeyDisplay').textContent = newKey.substring(0, 15) + '...';
+                        console.log('🔄 YouTube API Key updated:', newKey.substring(0, 10) + '...');
+                        showToast('🔑 YouTube API Key ပြောင်းလဲပြီးပါပြီ!', 'success');
+                    }
+                }
+            });
+        }
+
+        // Admin - Update YouTube API Key
+        async function adminUpdateApiKey() {
+            const newKey = document.getElementById('adminApiKey').value.trim();
+            if (!newKey || newKey.length < 20) {
+                showToast('မှန်ကန်သော API Key ထည့်ပါ။', 'error');
+                return;
+            }
+
+            try {
+                await db.collection('settings').doc('youtubeApiKey').set({
+                    apiKey: newKey,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser?.uid || 'admin'
+                });
+
+                YOUTUBE_API_KEY = newKey;
+                document.getElementById('adminApiKey').value = '';
+                document.getElementById('currentApiKeyDisplay').textContent = newKey.substring(0, 15) + '...';
+                showToast('✅ YouTube API Key ပြောင်းလဲပြီးပါပြီ!', 'success');
+            } catch (error) {
+                console.error('Update API Key error:', error);
+                showToast('❌ ပြောင်းလဲမှု မအောင်မြင်ပါ။', 'error');
+            }
         }
 
         // ============================================================
-        //  EXCHANGE RATE - FIRESTORE (NEW)
+        //  EXCHANGE RATE - FIRESTORE
         // ============================================================
         async function loadExchangeRate() {
             try {
@@ -1697,7 +1775,6 @@
             }
         }
 
-        // Listen for real-time exchange rate changes
         function listenExchangeRate() {
             db.collection('settings').doc('exchangeRate').onSnapshot((doc) => {
                 if (doc.exists) {
@@ -1709,7 +1786,6 @@
             });
         }
 
-        // Admin - Set Exchange Rate (Firestore)
         async function adminSetRate() {
             const rate = parseInt(document.getElementById('adminRate').value);
             if (!rate || rate < 1) {
@@ -1882,9 +1958,10 @@
                     updateUI();
                 }
 
-                // Load exchange rate from Firestore
                 await loadExchangeRate();
                 listenExchangeRate();
+                await loadYouTubeApiKey();
+                listenYouTubeApiKey();
 
                 db.collection('users').doc(user.uid).update({
                     lastActive: firebase.firestore.FieldValue.serverTimestamp()
@@ -1991,6 +2068,15 @@
             document.getElementById(id).classList.remove('show');
         }
 
+        function closeAdModal() {
+            document.getElementById('adModal').classList.remove('show');
+            // Resume video if playing
+            if (player && player.playVideo) {
+                player.playVideo();
+            }
+            watchTime = 0;
+        }
+
         document.querySelectorAll('.modal').forEach(el => {
             el.addEventListener('click', (e) => {
                 if (e.target === el) el.classList.remove('show');
@@ -2055,7 +2141,7 @@
         }
 
         // ============================================================
-        //  🎯 YOUTUBE SEARCH
+        //  🎯 YOUTUBE SEARCH (WITH CACHE)
         // ============================================================
         async function searchYouTube() {
             const query = document.getElementById('searchInput').value.trim();
@@ -2064,6 +2150,7 @@
                 return;
             }
 
+            // 🎬 Check if it's a direct video ID or URL (No API call)
             let videoId = '';
             if (query.includes('youtu.be/')) {
                 videoId = query.split('youtu.be/')[1].split('?')[0];
@@ -2084,6 +2171,17 @@
 
             const container = document.getElementById('playlistContainer');
             const title = document.getElementById('playlistTitle');
+
+            // 🔍 Check cache first
+            const cachedData = getCachedSearch(query);
+            if (cachedData) {
+                console.log('📦 Cache hit for:', query);
+                displaySearchResults(cachedData, query, container, title);
+                switchCategory('search', document.querySelector('.menu-item:last-child'));
+                return;
+            }
+
+            // Show loading
             title.textContent = '🔍 ရှာဖွေနေပါသည်...';
             container.innerHTML = `
                 <div class="search-loading">
@@ -2091,12 +2189,12 @@
                     <p>"${query}" ကိုရှာဖွေနေပါသည်...</p>
                 </div>
             `;
-
             switchCategory('search', document.querySelector('.menu-item:last-child'));
 
             try {
+                // 📉 Only 10 results (was 15) - Save 33% quota
                 const response = await fetch(
-                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`
                 );
 
                 if (!response.ok) {
@@ -2113,22 +2211,9 @@
                         channel: item.snippet.channelTitle
                     }));
 
-                    title.textContent = `🔍 "${query}" ရလဒ် (${results.length})`;
-                    container.innerHTML = '';
-
-                    results.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'video-card';
-                        const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                        card.innerHTML = `
-                            <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
-                            <div class="title">${item.name}</div>
-                        `;
-                        card.onclick = () => {
-                            loadVideo(item.id);
-                        };
-                        container.appendChild(card);
-                    });
+                    // 💾 Save to cache
+                    setCachedSearch(query, results);
+                    displaySearchResults(results, query, container, title);
 
                 } else {
                     title.textContent = '🔍 ရှာဖွေမှုရလဒ်';
@@ -2155,6 +2240,25 @@
                     </div>
                 `;
             }
+        }
+
+        function displaySearchResults(results, query, container, title) {
+            title.textContent = `🔍 "${query}" ရလဒ် (${results.length})`;
+            container.innerHTML = '';
+
+            results.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+                card.innerHTML = `
+                    <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
+                    <div class="title">${item.name}</div>
+                `;
+                card.onclick = () => {
+                    loadVideo(item.id);
+                };
+                container.appendChild(card);
+            });
         }
 
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
@@ -2946,6 +3050,7 @@
                 updateWithdrawBadge();
                 loadAdList();
                 updateExchangeRateUI();
+                document.getElementById('currentApiKeyDisplay').textContent = YOUTUBE_API_KEY.substring(0, 15) + '...';
                 showToast('✅ Admin ဝင်ရောက်ပြီးပါပြီ');
                 closeModal('adminModal');
             } else {
@@ -3241,6 +3346,9 @@
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
         console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
         console.log('🔗 Ad Management: Admin မှ Ad ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
+        console.log('🔑 YouTube API Key: Admin မှ ပြောင်းလို့ရပါပြီ။');
+        console.log('📦 Search Cache: ၂၄ နာရီကြာမှတ်ထားပါမယ်။');
+        console.log('📉 Search Result: ၁၀ ခုအထိ ပြသပါမယ်။');
     </script>
 </body>
 </html>
