@@ -1271,7 +1271,8 @@
                     <div style="font-size:20px;font-weight:700;color:#4caf50;" id="profileUsdt">0.00</div>
                 </div>
             </div>
-            <button class="btn" onclick="claimDailyBonus()"><i class="fas fa-gift" style="margin-right:6px;"></i> နေ့စဉ် Bonus 500 Coins</button>
+            <!-- ===== DAILY BONUS - APP DOWNLOAD ===== -->
+            <button class="btn" onclick="claimDailyBonus()"><i class="fas fa-download" style="margin-right:6px;"></i> App 2 ခု ဒေါင်းပြီး 700 Coins ရယူမည်</button>
             <button class="btn btn-outline" onclick="openHistoryModal()" style="margin-top:6px;">
                 <i class="fas fa-history" style="margin-right:6px;"></i> Transaction History
             </button>
@@ -1389,25 +1390,23 @@
 
                 <hr class="divider" />
 
-                <!-- ===== AD MANAGEMENT ===== -->
+                <!-- ===== AD MANAGEMENT (App Download Links) ===== -->
                 <div class="admin-section">
-                    <h4>🔗 Ad Links & Coin စီမံရန်</h4>
-                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link အသစ်ထည့်ရန် သို့မဟုတ် ရှိပြီးသားကို ဖျက်ရန်</p>
+                    <h4>📱 App Download Links (နေ့စဉ် Bonus အတွက်)</h4>
+                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">App Download Link အသစ်ထည့်ရန် သို့မဟုတ် ရှိပြီးသားကို ဖျက်ရန်</p>
 
-                    <!-- Add New Ad -->
+                    <!-- Add New App Link -->
                     <div class="admin-row" style="margin-bottom:6px;">
-                        <input type="text" id="adminAdLink" placeholder="Ad Link (URL)" style="flex:2;" />
-                        <input type="number" id="adminAdCoin" placeholder="Coin" style="width:80px;" />
+                        <input type="text" id="adminAdLink" placeholder="App Download Link (URL)" style="flex:2;" />
                         <button class="btn-sm green" onclick="adminAddAd()"><i class="fas fa-plus"></i> ထည့်</button>
                     </div>
 
-                    <!-- Ad List -->
+                    <!-- App Link List -->
                     <div id="adListContainer" style="max-height:150px;overflow-y:auto;margin-top:6px;">
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width:50%;">Link</th>
-                                    <th style="width:20%;">Coin</th>
+                                    <th style="width:70%;">App Link</th>
                                     <th style="width:30%;">Action</th>
                                 </tr>
                             </thead>
@@ -1417,7 +1416,7 @@
                         </table>
                     </div>
                     <div id="adListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">
-                        Ad Link မရှိသေးပါ
+                        App Link မရှိသေးပါ
                     </div>
                 </div>
 
@@ -1475,12 +1474,12 @@
 
                 <hr class="divider" />
 
-                <!-- Coin Management -->
+                <!-- Coin Management - EMAIL based search -->
                 <div class="admin-section">
                     <h4>🪙 User Coin စီမံရန်</h4>
-                    <p>User အား Coin ထည့်/နုတ်ရန်</p>
+                    <p>User Email ဖြင့် ရှာပြီး Coin ထည့်/နုတ်ရန်</p>
                     <div class="admin-row">
-                        <input type="text" id="adminTargetUser" placeholder="User နာမည်" />
+                        <input type="email" id="adminTargetEmail" placeholder="User Email" />
                         <input type="number" id="adminCoinAmount" placeholder="ပမာဏ" style="width:80px;" />
                         <button class="btn-sm green" onclick="adminAddCoin()"><i class="fas fa-plus"></i> ထည့်</button>
                         <button class="btn-sm red" onclick="adminRemoveCoin()"><i class="fas fa-minus"></i> နုတ်</button>
@@ -1528,24 +1527,24 @@
         </div>
     </div>
 
-    <!-- ===== AD MODAL ===== -->
+    <!-- ===== AD MODAL (App Download Modal) ===== -->
     <div id="adModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <button class="close" onclick="closeAdModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
-            <h3><i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...</h3>
+            <h3><i class="fa-solid fa-download"></i> App ဒေါင်းနေပါသည်...</h3>
             
             <div style="font-size:48px;margin:10px 0;">
-                <i class="fas fa-ad" style="color:var(--accent);"></i>
+                <i class="fas fa-mobile-screen-button" style="color:var(--accent);"></i>
             </div>
             
-            <p style="font-size:14px;margin:6px 0;">ကျေးဇူးပြု၍ အောက်ပါ ကြော်ငြာကို ကြည့်ရှုပါ</p>
+            <p style="font-size:14px;margin:6px 0;">ကျေးဇူးပြု၍ App 2 ခုကို ဒေါင်းလုဒ်လုပ်ပါ</p>
             
             <div style="background:var(--bg-card);border-radius:12px;padding:15px;margin:10px 0;border:1px solid var(--border-color);">
                 <p style="font-size:13px;color:var(--text-secondary);">
-                    <i class="fas fa-info-circle"></i> ကြော်ငြာကို New Tab တွင်ဖွင့်ပါမည်
+                    <i class="fas fa-info-circle"></i> App ကို New Tab တွင်ဖွင့်ပါမည်
                 </p>
                 <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">
-                    ကြော်ငြာကို ကြည့်ရှုပြီးပါက <span id="adCountdown">30</span> စက္ကန့်အကြာ Coin ရရှိပါမည်
+                    App 2 ခုကို ဒေါင်းပြီးပါက <span id="adCountdown">30</span> စက္ကန့်အကြာ 700 Coins ရရှိပါမည်
                 </p>
             </div>
 
@@ -1564,7 +1563,7 @@
             </div>
             
             <div id="adRewardInfo" style="margin-top:8px;font-size:12px;color:var(--text-muted);">
-                🪙 ရရှိမည့် Coin: <span id="adRewardAmount">10</span>
+                🪙 ရရှိမည့် Coin: <span id="adRewardAmount">700</span>
             </div>
         </div>
     </div>
@@ -1591,7 +1590,7 @@
         var storage = firebase.storage();
 
         // ============================================================
-        //  🔑 YOUTUBE API KEY (UPDATED)
+        //  🔑 YOUTUBE API KEY
         // ============================================================
         const YOUTUBE_API_KEY = 'AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI';
 
@@ -1635,14 +1634,15 @@
         let isAdmin = false;
         let exchangeRate = 3000;
 
-        // ===== AD SYSTEM =====
+        // ===== AD SYSTEM (App Download Links) =====
         let adLinks = JSON.parse(localStorage.getItem('adLinks')) || [
             "https://shrinkme.click/fvVS",
             "https://shrinkme.click/FiBCECr",
             "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d"
         ];
-        let adCoins = JSON.parse(localStorage.getItem('adCoins')) || [10, 20, 10, 20, 10];
         let adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
+        // DAILY BONUS REWARD = 700 COINS
+        const DAILY_BONUS_REWARD = 700;
 
         let isWithdrawOpen = localStorage.getItem('isWithdrawOpen') === 'true';
         let withdrawDate = localStorage.getItem('withdrawDate') || '';
@@ -1816,7 +1816,6 @@
 
                 const sampleTransactions = [
                     { type: 'daily_bonus', amount: 500, description: 'အကောင့်ဖွင့်ပြီး Bonus' },
-                    { type: 'ad_watch', amount: 10, description: 'ပထမဆုံး Ad ကြည့်ခြင်း' },
                 ];
 
                 for (const tx of sampleTransactions) {
@@ -2239,9 +2238,10 @@
         }
 
         function showCoinPopup() {
-            const reward = adCoins[adIndex % adCoins.length] || 10;
+            // Reward is fixed 10 coins for video watch
+            const reward = 10;
             document.getElementById('coinRewardVal').textContent = reward;
-            document.getElementById('adRewardAmount').textContent = reward;
+            document.getElementById('adRewardAmount').textContent = DAILY_BONUS_REWARD; // For daily bonus
             document.getElementById('coinPopup').style.display = 'block';
         }
 
@@ -2259,7 +2259,8 @@
             skipBtn.disabled = true;
             skipBtn.textContent = '⏳ စောင့်ဆိုင်နေပါ...';
 
-            const reward = adCoins[adIndex % adCoins.length] || 10;
+            // For daily bonus (700 coins) or video watch (10 coins)
+            const reward = DAILY_BONUS_REWARD;
             document.getElementById('adRewardAmount').textContent = reward;
 
             const countdown = setInterval(() => {
@@ -2270,14 +2271,15 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     skipBtn.disabled = false;
-                    skipBtn.textContent = '📢 ကြော်ငြာကြည့်ပြီးပါပြီ! Coin ရယူမည်';
+                    skipBtn.textContent = '✅ App ဒေါင်းပြီးပါပြီ! Coin ရယူမည်';
                     progressBar.style.width = '100%';
                 }
             }, 1000);
         }
 
-        // ===== OPEN AD AND CLAIM =====
+        // ===== OPEN AD AND CLAIM (App Download) =====
         async function openAdAndClaim() {
+            // Open first app link
             const link = adLinks[adIndex % adLinks.length];
             
             if (link) {
@@ -2293,15 +2295,31 @@
                 }
             }
 
-            const reward = adCoins[adIndex % adCoins.length] || 10;
-            adIndex = (adIndex + 1) % Math.max(adLinks.length, 1);
+            // Open second app link (if available)
+            const secondLink = adLinks[(adIndex + 1) % adLinks.length];
+            if (secondLink) {
+                setTimeout(() => {
+                    try {
+                        const win2 = window.open(secondLink, '_blank', 'width=400,height=600,scrollbars=yes');
+                        if (win2) win2.focus();
+                        else window.open(secondLink, '_blank');
+                    } catch (e) {
+                        window.open(secondLink, '_blank');
+                    }
+                }, 500);
+            }
+
+            adIndex = (adIndex + 2) % Math.max(adLinks.length, 1);
             localStorage.setItem('currentAdIndex', adIndex);
 
-            await giveAdReward(reward);
+            // Give 700 coins reward for daily bonus
+            await giveDailyBonusReward();
         }
 
-        // ===== GIVE AD REWARD =====
-        async function giveAdReward(reward) {
+        // ===== GIVE DAILY BONUS REWARD (700 COINS) =====
+        async function giveDailyBonusReward() {
+            const reward = DAILY_BONUS_REWARD;
+            
             if (currentUser) {
                 const doc = await db.collection('users').doc(currentUser.uid).get();
                 if (doc.exists) {
@@ -2314,19 +2332,23 @@
 
                 await db.collection('transactions').add({
                     userId: currentUser.uid,
-                    type: 'ad_watch',
+                    type: 'daily_bonus',
                     amount: reward,
-                    description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
+                    description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
                 
+                // Save today's bonus date
+                const today = new Date().toDateString();
+                localStorage.setItem('lastBonusDate', today);
+                
                 document.getElementById('adModal').classList.remove('show');
                 watchTime = 0;
                 if (player && player.playVideo) player.playVideo();
-                showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
+                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
             }
         }
 
@@ -2431,6 +2453,7 @@
             }
         }
 
+        // ===== DAILY BONUS - App Download =====
         async function claimDailyBonus() {
             const today = new Date().toDateString();
             const last = localStorage.getItem('lastBonusDate') || '';
@@ -2438,20 +2461,33 @@
                 showToast('ယနေ့အတွက် Bonus ရယူပြီးပါပြီ။', 'error');
                 return;
             }
-            if (currentUser) {
-                await db.collection('users').doc(currentUser.uid).update({
-                    coins: firebase.firestore.FieldValue.increment(500)
-                });
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'daily_bonus',
-                    amount: 500,
-                    description: 'နေ့စဉ် Bonus',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                localStorage.setItem('lastBonusDate', today);
-                showToast('🎉 +500 Coins ရရှိပါပြီ!');
-            }
+            
+            // Show ad modal with app download links
+            document.getElementById('adModal').classList.add('show');
+            document.getElementById('adRewardAmount').textContent = DAILY_BONUS_REWARD;
+            
+            let timeLeft = 30;
+            const timerEl = document.getElementById('adCountdown');
+            const progressBar = document.getElementById('adProgressBar');
+            const skipBtn = document.getElementById('adSkipBtn');
+            
+            timerEl.textContent = timeLeft;
+            progressBar.style.width = '0%';
+            skipBtn.disabled = true;
+            skipBtn.textContent = '⏳ App ဒေါင်းနေပါ...';
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    skipBtn.disabled = false;
+                    skipBtn.textContent = '✅ App ဒေါင်းပြီးပါပြီ! 700 Coins ရယူမည်';
+                    progressBar.style.width = '100%';
+                }
+            }, 1000);
         }
 
         // ============================================================
@@ -3086,7 +3122,7 @@
         }
 
         // ============================================================
-        //  ADMIN - AD MANAGEMENT
+        //  ADMIN - AD MANAGEMENT (App Download Links)
         // ============================================================
         function loadAdList() {
             const tbody = document.getElementById('adListBody');
@@ -3094,7 +3130,6 @@
             if (!tbody) return;
 
             const links = JSON.parse(localStorage.getItem('adLinks')) || [];
-            const coins = JSON.parse(localStorage.getItem('adCoins')) || [];
 
             if (links.length === 0) {
                 tbody.innerHTML = '';
@@ -3105,14 +3140,12 @@
 
             let html = '';
             links.forEach((link, index) => {
-                const coin = coins[index] || 10;
-                const displayLink = link.length > 30 ? link.substring(0, 30) + '...' : link;
+                const displayLink = link.length > 40 ? link.substring(0, 40) + '...' : link;
                 html += `
                     <tr>
                         <td class="ad-link-cell">
                             <a href="${link}" target="_blank">${displayLink}</a>
                         </td>
-                        <td><strong>${coin}</strong></td>
                         <td>
                             <button class="btn-sm red" onclick="adminRemoveAd(${index})" style="padding:4px 10px;font-size:9px;">
                                 <i class="fas fa-trash"></i> ဖျက်
@@ -3126,58 +3159,44 @@
 
         function adminAddAd() {
             const link = document.getElementById('adminAdLink').value.trim();
-            const coin = parseInt(document.getElementById('adminAdCoin').value);
 
             if (!link) {
-                showToast('Ad Link ထည့်ပါ။', 'error');
-                return;
-            }
-            if (!coin || (coin !== 10 && coin !== 20)) {
-                showToast('Coin ပမာဏက 10 သို့မဟုတ် 20 သာထည့်ပါ။', 'error');
+                showToast('App Download Link ထည့်ပါ။', 'error');
                 return;
             }
 
             let currentLinks = JSON.parse(localStorage.getItem('adLinks')) || [];
-            let currentCoins = JSON.parse(localStorage.getItem('adCoins')) || [];
 
             currentLinks.push(link);
-            currentCoins.push(coin);
 
             localStorage.setItem('adLinks', JSON.stringify(currentLinks));
-            localStorage.setItem('adCoins', JSON.stringify(currentCoins));
 
             adLinks = currentLinks;
-            adCoins = currentCoins;
 
             document.getElementById('adminAdLink').value = '';
-            document.getElementById('adminAdCoin').value = '';
 
             loadAdList();
-            showToast('✅ Ad ထည့်သွင်းပြီးပါပြီ!', 'success');
+            showToast('✅ App Link ထည့်သွင်းပြီးပါပြီ!', 'success');
         }
 
         function adminRemoveAd(index) {
-            if (!confirm('ဒီ Ad ကို ဖျက်မည်?')) return;
+            if (!confirm('ဒီ App Link ကို ဖျက်မည်?')) return;
 
             let currentLinks = JSON.parse(localStorage.getItem('adLinks')) || [];
-            let currentCoins = JSON.parse(localStorage.getItem('adCoins')) || [];
 
             if (index < 0 || index >= currentLinks.length) {
-                showToast('Ad မတွေ့ပါ။', 'error');
+                showToast('Link မတွေ့ပါ။', 'error');
                 return;
             }
 
             currentLinks.splice(index, 1);
-            currentCoins.splice(index, 1);
 
             localStorage.setItem('adLinks', JSON.stringify(currentLinks));
-            localStorage.setItem('adCoins', JSON.stringify(currentCoins));
 
             adLinks = currentLinks;
-            adCoins = currentCoins;
 
             loadAdList();
-            showToast('✅ Ad ဖျက်ပြီးပါပြီ!', 'success');
+            showToast('✅ App Link ဖျက်ပြီးပါပြီ!', 'success');
         }
 
         // ============================================================
@@ -3211,25 +3230,25 @@
         }
 
         // ============================================================
-        //  ADMIN - COIN MANAGEMENT
+        //  ADMIN - COIN MANAGEMENT (EMAIL based search)
         // ============================================================
         async function adminAddCoin() {
-            const target = document.getElementById('adminTargetUser').value.trim();
+            const targetEmail = document.getElementById('adminTargetEmail').value.trim();
             const amount = parseInt(document.getElementById('adminCoinAmount').value);
             const msg = document.getElementById('adminCoinMsg');
 
-            if (!target || !amount) {
-                msg.textContent = '❌ User နာမည်နှင့် ပမာဏထည့်ပါ။';
+            if (!targetEmail || !amount) {
+                msg.textContent = '❌ User Email နှင့် ပမာဏထည့်ပါ။';
                 msg.style.color = '#ff5252';
                 return;
             }
 
             const snapshot = await db.collection('users')
-                .where('username', '==', target)
+                .where('email', '==', targetEmail)
                 .get();
 
             if (snapshot.empty) {
-                msg.textContent = '❌ "' + target + '" ကို မတွေ့ပါ။';
+                msg.textContent = '❌ "' + targetEmail + '" ကို မတွေ့ပါ။';
                 msg.style.color = '#ff5252';
                 return;
             }
@@ -3247,29 +3266,29 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            msg.textContent = '✅ ' + target + ' အား ' + amount + ' Coin ထည့်ပေးပြီးပါပြီ';
+            msg.textContent = '✅ ' + targetEmail + ' အား ' + amount + ' Coin ထည့်ပေးပြီးပါပြီ';
             msg.style.color = '#4caf50';
             loadAdminUsers();
             document.getElementById('adminCoinAmount').value = '';
         }
 
         async function adminRemoveCoin() {
-            const target = document.getElementById('adminTargetUser').value.trim();
+            const targetEmail = document.getElementById('adminTargetEmail').value.trim();
             const amount = parseInt(document.getElementById('adminCoinAmount').value);
             const msg = document.getElementById('adminCoinMsg');
 
-            if (!target || !amount) {
-                msg.textContent = '❌ User နာမည်နှင့် ပမာဏထည့်ပါ။';
+            if (!targetEmail || !amount) {
+                msg.textContent = '❌ User Email နှင့် ပမာဏထည့်ပါ။';
                 msg.style.color = '#ff5252';
                 return;
             }
 
             const snapshot = await db.collection('users')
-                .where('username', '==', target)
+                .where('email', '==', targetEmail)
                 .get();
 
             if (snapshot.empty) {
-                msg.textContent = '❌ "' + target + '" ကို မတွေ့ပါ။';
+                msg.textContent = '❌ "' + targetEmail + '" ကို မတွေ့ပါ။';
                 msg.style.color = '#ff5252';
                 return;
             }
@@ -3295,7 +3314,7 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            msg.textContent = '✅ ' + target + ' အား ' + amount + ' Coin နုတ်ပြီးပါပြီ';
+            msg.textContent = '✅ ' + targetEmail + ' အား ' + amount + ' Coin နုတ်ပြီးပါပြီ';
             msg.style.color = '#ff5252';
             loadAdminUsers();
             document.getElementById('adminCoinAmount').value = '';
@@ -3330,9 +3349,8 @@
         console.log('✅ App initialized successfully!');
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
         console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
-        console.log('🔗 Ad Management: Admin မှ Ad ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
-        console.log('🪙 Ad Coin: 10 နှင့် 20 သာ ရရှိမည်။');
-        console.log('📢 Ad: Website မသွားဘဲ New Tab မှာဖွင့်ပါမည်။');
+        console.log('📱 App Download Links: Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
+        console.log('🎁 Daily Bonus: App 2 ခု ဒေါင်းပြီး 700 Coins ရမယ်');
         console.log('🔑 YouTube API Key: AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI');
     </script>
 </body>
