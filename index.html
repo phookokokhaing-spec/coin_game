@@ -17,7 +17,7 @@
     <script src="https://www.youtube.com/iframe_api">
     </script>
     <style>
-        /* ===== ALL STYLES (Same as before) ===== */
+        /* ===== ALL STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -1140,7 +1140,7 @@
 
     <!-- ===== SPLASH SCREEN ===== -->
     <div id="splash">
-        <div class="logo">Rewards<span>Program</span></div>
+        <div class="logo">Video<span>Coin</span></div>
         <div class="loader"></div>
         <p>Loading...</p>
     </div>
@@ -1152,7 +1152,7 @@
     <div id="authScreen">
         <div class="auth-box">
             <div class="brand">
-                <h1>Rewards<span>Program</span></h1>
+                <h1>Video<span>Coin</span></h1>
                 <p>ဗီဒီယိုကြည့်ပြီး Coin ရယူပါ</p>
             </div>
             <div id="authError" class="error-msg"></div>
@@ -1528,7 +1528,7 @@
         </div>
     </div>
 
-    <!-- ===== AD MODAL (UPDATED) ===== -->
+    <!-- ===== AD MODAL ===== -->
     <div id="adModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <button class="close" onclick="closeAdModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
@@ -1591,7 +1591,7 @@
         var storage = firebase.storage();
 
         // ============================================================
-        //  🔑 YOUTUBE API KEY
+        //  🔑 YOUTUBE API KEY (UPDATED)
         // ============================================================
         const YOUTUBE_API_KEY = 'AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI';
 
@@ -2249,7 +2249,6 @@
             document.getElementById('coinPopup').style.display = 'none';
             document.getElementById('adModal').classList.add('show');
             
-            // Reset progress
             let timeLeft = 30;
             const timerEl = document.getElementById('adCountdown');
             const progressBar = document.getElementById('adProgressBar');
@@ -2260,11 +2259,9 @@
             skipBtn.disabled = true;
             skipBtn.textContent = '⏳ စောင့်ဆိုင်နေပါ...';
 
-            // Store the reward for later
             const reward = adCoins[adIndex % adCoins.length] || 10;
             document.getElementById('adRewardAmount').textContent = reward;
 
-            // Countdown timer
             const countdown = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = timeLeft;
@@ -2279,11 +2276,10 @@
             }, 1000);
         }
 
-        // ===== OPEN AD AND CLAIM (NO WEBSITE REDIRECT) =====
+        // ===== OPEN AD AND CLAIM =====
         async function openAdAndClaim() {
             const link = adLinks[adIndex % adLinks.length];
             
-            // Open ad in new tab (user can close it)
             if (link) {
                 try {
                     const adWindow = window.open(link, '_blank', 'width=400,height=600,scrollbars=yes');
@@ -2301,25 +2297,21 @@
             adIndex = (adIndex + 1) % Math.max(adLinks.length, 1);
             localStorage.setItem('currentAdIndex', adIndex);
 
-            // Give coins immediately after opening ad
             await giveAdReward(reward);
         }
 
         // ===== GIVE AD REWARD =====
         async function giveAdReward(reward) {
             if (currentUser) {
-                // Reload user data first
                 const doc = await db.collection('users').doc(currentUser.uid).get();
                 if (doc.exists) {
                     userData = doc.data();
                 }
 
-                // Update coins
                 await db.collection('users').doc(currentUser.uid).update({
                     coins: firebase.firestore.FieldValue.increment(reward)
                 });
 
-                // Add transaction record
                 await db.collection('transactions').add({
                     userId: currentUser.uid,
                     type: 'ad_watch',
@@ -2328,7 +2320,6 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                // Update local userData
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
                 
@@ -3342,6 +3333,7 @@
         console.log('🔗 Ad Management: Admin မှ Ad ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
         console.log('🪙 Ad Coin: 10 နှင့် 20 သာ ရရှိမည်။');
         console.log('📢 Ad: Website မသွားဘဲ New Tab မှာဖွင့်ပါမည်။');
+        console.log('🔑 YouTube API Key: AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI');
     </script>
 </body>
 </html>
