@@ -2454,63 +2454,54 @@
             await giveAdReward(AD_REWARD);
         }
 
-        // ===== GIVE AD REWARD (20 coins fixed) - FIXED: Use transaction =====
+        // ===== GIVE AD REWARD (20 coins fixed) - FIXED: Use simple update =====
         async function giveAdReward(reward) {
-            if (currentUser) {
+            if (!currentUser) return;
+            
+            try {
                 // Set pending flag to prevent snapshot from overwriting
                 _pendingCoinUpdate = true;
                 
-                // Update local UI immediately
+                // Update Firestore directly with increment
+                const userRef = db.collection('users').doc(currentUser.uid);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(reward)
+                });
+                
+                // Add transaction record
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'ad_watch',
+                    amount: reward,
+                    description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update local userData
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
                 
-                // Show toast
                 showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
-                
-                try {
-                    // Use Firestore transaction to ensure consistency
-                    const userRef = db.collection('users').doc(currentUser.uid);
-                    await db.runTransaction(async (transaction) => {
-                        const doc = await transaction.get(userRef);
-                        if (!doc.exists) return;
-                        const currentCoins = doc.data().coins || 0;
-                        transaction.update(userRef, {
-                            coins: currentCoins + reward
-                        });
-                    });
-                    
-                    // Add transaction record
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'ad_watch',
-                        amount: reward,
-                        description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                } catch (error) {
-                    console.error('Ad reward error:', error);
-                    // If transaction fails, revert local change
-                    userData.coins = (userData.coins || 0) - reward;
-                    updateUI();
-                    showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
-                } finally {
-                    // Clear pending flag after 2 seconds
-                    setTimeout(() => {
-                        _pendingCoinUpdate = false;
-                        // Force refresh from server
-                        db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                            if (doc.exists) {
-                                userData.coins = doc.data().coins || 0;
-                                updateUI();
-                            }
-                        });
-                    }, 2000);
-                }
                 
                 document.getElementById('adModal').classList.remove('show');
                 watchTime = 0;
                 if (player && player.playVideo) player.playVideo();
+                
+            } catch (error) {
+                console.error('Ad reward error:', error);
+                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
+            } finally {
+                // Clear pending flag after 2 seconds
+                setTimeout(() => {
+                    _pendingCoinUpdate = false;
+                    // Force refresh from server
+                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            userData.coins = doc.data().coins || 0;
+                            updateUI();
+                        }
+                    });
+                }, 2000);
             }
         }
 
@@ -2721,59 +2712,54 @@
         async function giveDailyBonusReward() {
             const reward = DAILY_BONUS_REWARD;
 
-            if (currentUser) {
+            if (!currentUser) return;
+            
+            try {
                 // Set pending flag
                 _pendingCoinUpdate = true;
                 
-                // Update local UI immediately
+                // Update Firestore directly with increment
+                const userRef = db.collection('users').doc(currentUser.uid);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(reward)
+                });
+                
+                // Add transaction record
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'daily_bonus',
+                    amount: reward,
+                    description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update local userData
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
                 
-                try {
-                    const userRef = db.collection('users').doc(currentUser.uid);
-                    await db.runTransaction(async (transaction) => {
-                        const doc = await transaction.get(userRef);
-                        if (!doc.exists) return;
-                        const currentCoins = doc.data().coins || 0;
-                        transaction.update(userRef, {
-                            coins: currentCoins + reward
-                        });
-                    });
-                    
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'daily_bonus',
-                        amount: reward,
-                        description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    // Save today's bonus date
-                    const today = new Date().toDateString();
-                    localStorage.setItem('lastBonusDate', today);
-                    
-                    showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
-                    
-                } catch (error) {
-                    console.error('Daily bonus error:', error);
-                    userData.coins = (userData.coins || 0) - reward;
-                    updateUI();
-                    showToast('❌ Bonus ရယူမအောင်မြင်ပါ။', 'error');
-                } finally {
-                    setTimeout(() => {
-                        _pendingCoinUpdate = false;
-                        db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                            if (doc.exists) {
-                                userData.coins = doc.data().coins || 0;
-                                updateUI();
-                            }
-                        });
-                    }, 2000);
-                }
+                // Save today's bonus date
+                const today = new Date().toDateString();
+                localStorage.setItem('lastBonusDate', today);
+                
+                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
                 
                 document.getElementById('dailyBonusModal').classList.remove('show');
                 watchTime = 0;
                 if (player && player.playVideo) player.playVideo();
+                
+            } catch (error) {
+                console.error('Daily bonus error:', error);
+                showToast('❌ Bonus ရယူမအောင်မြင်ပါ။', 'error');
+            } finally {
+                setTimeout(() => {
+                    _pendingCoinUpdate = false;
+                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            userData.coins = doc.data().coins || 0;
+                            updateUI();
+                        }
+                    });
+                }, 2000);
             }
         }
 
