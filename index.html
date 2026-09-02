@@ -2274,13 +2274,56 @@
             document.getElementById(id).classList.remove('show');
         }
 
+        // ============================================================
+        //  AD MODAL FUNCTIONS - FIXED
+        // ============================================================
         function closeAdModal() {
+            // Clear any running countdown
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+                window._adCountdownInterval = null;
+            }
+
+            // Clear iframe
+            const iframe = document.getElementById('adIframe');
+            iframe.src = 'about:blank';
+            
+            // Close modal
             document.getElementById('adModal').classList.remove('show');
-            document.getElementById('adIframe').src = 'about:blank';
+            document.getElementById('coinPopup').style.display = 'none';
+            
+            // Resume video
+            watchTime = 0;
             if (player && player.playVideo) {
                 player.playVideo();
             }
-            watchTime = 0;
+            
+            showToast('⏭️ ကြော်ငြာကိုကျော်သွားပါပြီ။', 'warning');
+        }
+
+        // ===== CLOSE AD AND CLAIM - NEW FUNCTION =====
+        function closeAdAndClaim() {
+            // Clear any running countdown
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+                window._adCountdownInterval = null;
+            }
+
+            // Clear iframe
+            const iframe = document.getElementById('adIframe');
+            iframe.src = 'about:blank';
+            
+            // Close modal
+            document.getElementById('adModal').classList.remove('show');
+            
+            // Update ad index for next time
+            if (adLinks && adLinks.length > 0) {
+                adIndex = (adIndex + 1) % adLinks.length;
+                localStorage.setItem('currentAdIndex', adIndex);
+            }
+            
+            // Give reward
+            giveAdReward(AD_REWARD);
         }
 
         function closeDailyBonusModal() {
@@ -2464,7 +2507,7 @@
         });
 
         // ============================================================
-        //  WATCH TIMER & AD COIN (IFrame Version)
+        //  WATCH TIMER & AD COIN (IFrame Version) - FIXED
         // ============================================================
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
@@ -2491,7 +2534,7 @@
             document.getElementById('coinPopup').style.display = 'block';
         }
 
-        // ===== CLAIM COIN - IFrame Version =====
+        // ===== CLAIM COIN - IFrame Version FIXED =====
         function claimCoin() {
             if (!adLinks || adLinks.length === 0) {
                 showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
@@ -2502,33 +2545,32 @@
             document.getElementById('coinPopup').style.display = 'none';
             document.getElementById('adModal').classList.add('show');
 
-            // Get ad link
             const link = adLinks[adIndex % adLinks.length];
             const iframe = document.getElementById('adIframe');
             const loading = document.getElementById('adLoading');
-            const container = document.getElementById('adIframeContainer');
 
-            // Show loading
+            // Reset iframe
+            iframe.src = 'about:blank';
             loading.style.display = 'block';
             iframe.style.display = 'none';
 
             // Load ad in iframe
-            iframe.src = link;
+            setTimeout(() => {
+                iframe.src = link;
+            }, 300);
 
-            // Hide loading when iframe loads
             iframe.onload = function() {
                 loading.style.display = 'none';
                 iframe.style.display = 'block';
             };
 
-            // If iframe fails to load after 10 seconds, show fallback
             setTimeout(() => {
                 if (iframe.style.display === 'none') {
                     loading.style.display = 'none';
                     iframe.style.display = 'block';
                     iframe.src = link;
                 }
-            }, 10000);
+            }, 8000);
 
             // Start countdown
             let timeLeft = 30;
@@ -2542,19 +2584,28 @@
             skipBtn.disabled = true;
             skipBtn.innerHTML = `⏳ <span id="adCountdown">${timeLeft}</span> စက္ကန့်စောင့်ပါ...`;
             skipBtn.className = 'claim-btn';
+            // ✅ Remove old onclick and set new one when ready
+            skipBtn.onclick = null;
             statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
             statusText.className = 'status-text';
 
-            const countdown = setInterval(() => {
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+            }
+
+            window._adCountdownInterval = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = timeLeft;
                 progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
 
                 if (timeLeft <= 0) {
-                    clearInterval(countdown);
+                    clearInterval(window._adCountdownInterval);
+                    window._adCountdownInterval = null;
                     skipBtn.disabled = false;
                     skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
                     skipBtn.className = 'claim-btn active';
+                    // ✅ Set onclick to closeAdAndClaim
+                    skipBtn.onclick = closeAdAndClaim;
                     progressBar.style.width = '100%';
                     statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
                     statusText.className = 'status-text done';
@@ -2562,22 +2613,12 @@
             }, 1000);
         }
 
-        // ===== CLOSE AD AND CLAIM (IFrame) =====
-        function closeAdAndClaim() {
-            const iframe = document.getElementById('adIframe');
-            iframe.src = 'about:blank';
-            
-            document.getElementById('adModal').classList.remove('show');
-            
-            adIndex = (adIndex + 1) % Math.max(adLinks.length, 1);
-            localStorage.setItem('currentAdIndex', adIndex);
-            
-            giveAdReward(AD_REWARD);
-        }
-
         // ===== GIVE AD REWARD =====
         async function giveAdReward(reward) {
-            if (!currentUser) return;
+            if (!currentUser) {
+                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
+                return;
+            }
             
             try {
                 _pendingCoinUpdate = true;
@@ -2605,17 +2646,19 @@
                 
             } catch (error) {
                 console.error('Ad reward error:', error);
-                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
+                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။ နောက်တစ်ကြိမ်ထပ်စမ်းပါ။', 'error');
             } finally {
                 setTimeout(() => {
                     _pendingCoinUpdate = false;
-                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                        if (doc.exists) {
-                            userData.coins = doc.data().coins || 0;
-                            updateUI();
-                        }
-                    });
-                }, 2000);
+                    if (currentUser) {
+                        db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                            if (doc.exists) {
+                                userData.coins = doc.data().coins || 0;
+                                updateUI();
+                            }
+                        }).catch(() => {});
+                    }
+                }, 3000);
             }
         }
 
