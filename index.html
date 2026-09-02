@@ -36,6 +36,7 @@
             --success: #2e7d32;
             --success-hover: #1b5e20;
             --warning: #ffa726;
+            --gold: #ffd700;
             --border-color: rgba(255, 255, 255, 0.06);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
             --radius: 16px;
@@ -697,6 +698,13 @@
             border-top: 1px solid var(--border-color);
             margin: 14px 0;
         }
+        .modal-content .btn-gold {
+            background: linear-gradient(145deg, #f7c948, #f5a623);
+            color: #1a1a2e;
+        }
+        .modal-content .btn-gold:hover {
+            transform: scale(1.02);
+        }
 
         /* Profile */
         .profile-pic {
@@ -830,6 +838,10 @@
         .btn-sm.warning {
             background: var(--warning);
             color: #fff;
+        }
+        .btn-sm.gold {
+            background: #f5a623;
+            color: #1a1a2e;
         }
         .btn-sm.green:hover {
             background: var(--success-hover);
@@ -1271,7 +1283,21 @@
                     <div style="font-size:20px;font-weight:700;color:#4caf50;" id="profileUsdt">0.00</div>
                 </div>
             </div>
-            <!-- ===== DAILY BONUS - APP DOWNLOAD (SEPARATE) ===== -->
+
+            <!-- ===== COIN GIFT SYSTEM ===== -->
+            <div style="background:var(--bg-card);border-radius:12px;padding:12px;margin:10px 0;border:1px solid var(--border-color);">
+                <h4 style="font-size:13px;color:var(--gold);margin-bottom:6px;"><i class="fas fa-gift"></i> Coin Gift ပို့ရန်</h4>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <input type="email" id="giftReceiverEmail" placeholder="လက်ခံသူ Email" style="flex:2;min-width:100px;padding:8px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--bg-input);color:var(--text-primary);font-size:12px;outline:none;" />
+                    <input type="number" id="giftAmount" placeholder="ပမာဏ" style="flex:1;min-width:60px;padding:8px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--bg-input);color:var(--text-primary);font-size:12px;outline:none;" />
+                    <button class="btn-sm gold" onclick="sendCoinGift()" style="padding:8px 16px;"><i class="fas fa-paper-plane"></i> ပို့မည်</button>
+                </div>
+                <p style="font-size:9px;color:var(--text-muted);margin-top:4px;">
+                    <i class="fas fa-info-circle"></i> Gift ပို့တဲ့သူဆီက 20 Coin ဖြတ်မည်
+                </p>
+                <div id="giftMsg" style="font-size:11px;margin-top:4px;"></div>
+            </div>
+
             <button class="btn" onclick="claimDailyBonus()"><i class="fas fa-download" style="margin-right:6px;"></i> App 2 ခု ဒေါင်းပြီး 700 Coins ရယူမည်</button>
             <button class="btn btn-outline" onclick="openHistoryModal()" style="margin-top:6px;">
                 <i class="fas fa-history" style="margin-right:6px;"></i> Transaction History
@@ -1562,13 +1588,13 @@
         <div class="modal-content" style="text-align:center;">
             <button class="close" onclick="closeAdModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
             <h3><i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...</h3>
-            
+
             <div style="font-size:48px;margin:10px 0;">
                 <i class="fas fa-ad" style="color:var(--accent);"></i>
             </div>
-            
+
             <p style="font-size:14px;margin:6px 0;">ကျေးဇူးပြု၍ အောက်ပါ ကြော်ငြာကို ကြည့်ရှုပါ</p>
-            
+
             <div style="background:var(--bg-card);border-radius:12px;padding:15px;margin:10px 0;border:1px solid var(--border-color);">
                 <p style="font-size:13px;color:var(--text-secondary);">
                     <i class="fas fa-info-circle"></i> ကြော်ငြာကို New Tab တွင်ဖွင့်ပါမည်
@@ -1591,7 +1617,7 @@
                     ✕
                 </button>
             </div>
-            
+
             <div id="adRewardInfo" style="margin-top:8px;font-size:12px;color:var(--text-muted);">
                 🪙 ရရှိမည့် Coin: <span id="adRewardAmount">10</span>
             </div>
@@ -1603,13 +1629,13 @@
         <div class="modal-content" style="text-align:center;">
             <button class="close" onclick="closeDailyBonusModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
             <h3><i class="fa-solid fa-download"></i> App ဒေါင်းနေပါသည်...</h3>
-            
+
             <div style="font-size:48px;margin:10px 0;">
                 <i class="fas fa-mobile-screen-button" style="color:var(--accent);"></i>
             </div>
-            
+
             <p style="font-size:14px;margin:6px 0;">ကျေးဇူးပြု၍ App 2 ခုကို ဒေါင်းလုဒ်လုပ်ပါ</p>
-            
+
             <div style="background:var(--bg-card);border-radius:12px;padding:15px;margin:10px 0;border:1px solid var(--border-color);">
                 <p style="font-size:13px;color:var(--text-secondary);">
                     <i class="fas fa-info-circle"></i> App ကို New Tab တွင်ဖွင့်ပါမည်
@@ -1632,7 +1658,7 @@
                     ✕
                 </button>
             </div>
-            
+
             <div id="dailyRewardInfo" style="margin-top:8px;font-size:12px;color:var(--text-muted);">
                 🪙 ရရှိမည့် Coin: <span id="dailyRewardAmount">700</span>
             </div>
@@ -1721,6 +1747,9 @@
         ];
         let adCoins = JSON.parse(localStorage.getItem('adCoins')) || [10, 20, 10, 20, 10];
         let adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
+
+        // ===== GIFT FEE =====
+        const GIFT_FEE = 20;
 
         let isWithdrawOpen = localStorage.getItem('isWithdrawOpen') === 'true';
         let withdrawDate = localStorage.getItem('withdrawDate') || '';
@@ -2323,8 +2352,8 @@
         }
 
         function showCoinPopup() {
-            // Get next ad reward
-            const reward = adCoins[adIndex % adCoins.length] || 10;
+            // Get next ad reward - stable from adCoins array
+            const reward = adCoins.length > 0 ? adCoins[adIndex % adCoins.length] : 10;
             document.getElementById('coinRewardVal').textContent = reward;
             document.getElementById('adRewardAmount').textContent = reward;
             document.getElementById('coinPopup').style.display = 'block';
@@ -2334,25 +2363,27 @@
         function claimCoin() {
             document.getElementById('coinPopup').style.display = 'none';
             document.getElementById('adModal').classList.add('show');
-            
+
             let timeLeft = 30;
             const timerEl = document.getElementById('adCountdown');
             const progressBar = document.getElementById('adProgressBar');
             const skipBtn = document.getElementById('adSkipBtn');
-            
+
             timerEl.textContent = timeLeft;
             progressBar.style.width = '0%';
             skipBtn.disabled = true;
             skipBtn.textContent = '⏳ စောင့်ဆိုင်နေပါ...';
 
-            const reward = adCoins[adIndex % adCoins.length] || 10;
+            // Stable reward from adCoins array
+            const reward = adCoins.length > 0 ? adCoins[adIndex % adCoins.length] : 10;
             document.getElementById('adRewardAmount').textContent = reward;
+            document.getElementById('coinRewardVal').textContent = reward;
 
             const countdown = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = timeLeft;
                 progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     skipBtn.disabled = false;
@@ -2364,8 +2395,8 @@
 
         // ===== OPEN AD AND CLAIM (Video Watch Ad) =====
         async function openAdAndClaim() {
-            const link = adLinks[adIndex % adLinks.length];
-            
+            const link = adLinks.length > 0 ? adLinks[adIndex % adLinks.length] : null;
+
             if (link) {
                 try {
                     const adWindow = window.open(link, '_blank', 'width=400,height=600,scrollbars=yes');
@@ -2379,7 +2410,7 @@
                 }
             }
 
-            const reward = adCoins[adIndex % adCoins.length] || 10;
+            const reward = adCoins.length > 0 ? adCoins[adIndex % adCoins.length] : 10;
             adIndex = (adIndex + 1) % Math.max(adLinks.length, 1);
             localStorage.setItem('currentAdIndex', adIndex);
 
@@ -2408,11 +2439,109 @@
 
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
-                
+
                 document.getElementById('adModal').classList.remove('show');
                 watchTime = 0;
                 if (player && player.playVideo) player.playVideo();
                 showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
+            }
+        }
+
+        // ============================================================
+        //  COIN GIFT SYSTEM - User to User
+        // ============================================================
+        async function sendCoinGift() {
+            const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
+            const amount = parseInt(document.getElementById('giftAmount').value);
+            const msgEl = document.getElementById('giftMsg');
+
+            if (!receiverEmail) {
+                msgEl.textContent = '❌ လက်ခံသူ Email ထည့်ပါ။';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            if (!amount || amount < 1) {
+                msgEl.textContent = '❌ ပမာဏ ထည့်ပါ။';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            if (receiverEmail === userData.email) {
+                msgEl.textContent = '❌ ကိုယ်တိုင်ကိုယ်တိုင်မပို့ရပါ။';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            const totalCost = amount + GIFT_FEE;
+            if (userData.coins < totalCost) {
+                msgEl.textContent = '❌ Coin မလုံလောက်ပါ။ လိုအပ်သော Coin: ' + totalCost + ' (Gift ' + amount +
+                    ' + Fee ' + GIFT_FEE + ')';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            try {
+                // Find receiver by email
+                const snapshot = await db.collection('users')
+                    .where('email', '==', receiverEmail)
+                    .get();
+
+                if (snapshot.empty) {
+                    msgEl.textContent = '❌ "' + receiverEmail + '" ကို မတွေ့ပါ။';
+                    msgEl.style.color = '#ff5252';
+                    return;
+                }
+
+                const receiverDoc = snapshot.docs[0];
+                const receiverId = receiverDoc.id;
+                const receiverData = receiverDoc.data();
+
+                // Update sender (current user)
+                await db.collection('users').doc(currentUser.uid).update({
+                    coins: firebase.firestore.FieldValue.increment(-totalCost)
+                });
+
+                // Update receiver
+                await db.collection('users').doc(receiverId).update({
+                    coins: firebase.firestore.FieldValue.increment(amount)
+                });
+
+                // Transaction for sender
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'gift_sent',
+                    amount: -totalCost,
+                    description: 'Coin Gift ပို့ခြင်း (' + amount + ' Coins → ' + receiverData.username +
+                        ' | Fee ' + GIFT_FEE + ' Coins)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Transaction for receiver
+                await db.collection('transactions').add({
+                    userId: receiverId,
+                    type: 'gift_received',
+                    amount: amount,
+                    description: 'Coin Gift ရရှိခြင်း (' + amount + ' Coins from ' + userData.username + ')',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                userData.coins = (userData.coins || 0) - totalCost;
+                updateUI();
+
+                msgEl.textContent = '✅ ' + receiverData.username + ' ဆီကို ' + amount +
+                    ' Coins ပို့ပြီးပါပြီ! (Fee ' + GIFT_FEE + ' Coins ဖြတ်ပါပြီ)';
+                msgEl.style.color = '#4caf50';
+
+                document.getElementById('giftReceiverEmail').value = '';
+                document.getElementById('giftAmount').value = '';
+
+                showToast('🎁 ' + receiverData.username + ' ဆီကို ' + amount + ' Coins ပို့ပြီးပါပြီ!', 'success');
+
+            } catch (error) {
+                console.error('Gift error:', error);
+                msgEl.textContent = '❌ Gift ပို့မအောင်မြင်ပါ: ' + error.message;
+                msgEl.style.color = '#ff5252';
             }
         }
 
@@ -2426,16 +2555,16 @@
                 showToast('ယနေ့အတွက် Bonus ရယူပြီးပါပြီ။', 'error');
                 return;
             }
-            
+
             // Show daily bonus modal
             document.getElementById('dailyBonusModal').classList.add('show');
             document.getElementById('dailyRewardAmount').textContent = DAILY_BONUS_REWARD;
-            
+
             let timeLeft = 30;
             const timerEl = document.getElementById('dailyCountdown');
             const progressBar = document.getElementById('dailyProgressBar');
             const skipBtn = document.getElementById('dailySkipBtn');
-            
+
             timerEl.textContent = timeLeft;
             progressBar.style.width = '0%';
             skipBtn.disabled = true;
@@ -2445,7 +2574,7 @@
                 timeLeft--;
                 timerEl.textContent = timeLeft;
                 progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     skipBtn.disabled = false;
@@ -2459,7 +2588,7 @@
         async function openDailyBonusApps() {
             // Open first app link
             const link = appLinks[appIndex % appLinks.length];
-            
+
             if (link) {
                 try {
                     const adWindow = window.open(link, '_blank', 'width=400,height=600,scrollbars=yes');
@@ -2497,7 +2626,7 @@
         // ===== GIVE DAILY BONUS REWARD (700 COINS) =====
         async function giveDailyBonusReward() {
             const reward = DAILY_BONUS_REWARD;
-            
+
             if (currentUser) {
                 const doc = await db.collection('users').doc(currentUser.uid).get();
                 if (doc.exists) {
@@ -2518,11 +2647,11 @@
 
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
-                
+
                 // Save today's bonus date
                 const today = new Date().toDateString();
                 localStorage.setItem('lastBonusDate', today);
-                
+
                 document.getElementById('dailyBonusModal').classList.remove('show');
                 watchTime = 0;
                 if (player && player.playVideo) player.playVideo();
@@ -2692,16 +2821,18 @@
                     'exchange': { icon: '🔄', label: 'Exchange' },
                     'admin_add': { icon: '➕', label: 'Admin Added' },
                     'admin_remove': { icon: '➖', label: 'Admin Removed' },
-                    'withdraw': { icon: '🏦', label: 'Withdraw' }
+                    'withdraw': { icon: '🏦', label: 'Withdraw' },
+                    'gift_sent': { icon: '🎁', label: 'Gift Sent' },
+                    'gift_received': { icon: '🎁', label: 'Gift Received' }
                 };
 
                 transactions.forEach(item => {
                     const type = typeMap[item.type] || { icon: '📝', label: item.type || 'Unknown' };
                     const amount = item.amount || 0;
                     const isPositive = item.type === 'ad_watch' || item.type === 'daily_bonus' || item.type ===
-                        'admin_add';
-                    const sign = isPositive ? '+' : (item.type === 'admin_remove' || item.type === 'withdraw' ? '-' :
-                        '');
+                        'admin_add' || item.type === 'gift_received';
+                    const sign = isPositive ? '+' : (item.type === 'admin_remove' || item.type === 'withdraw' ||
+                        item.type === 'gift_sent' ? '-' : '');
                     const time = item._date.toLocaleString();
 
                     html += `
@@ -3583,6 +3714,7 @@
         console.log('📢 Ad Links (Video Watch): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။ (Coin 10/20)');
         console.log('🎁 Daily Bonus: App 2 ခု ဒေါင်းပြီး 700 Coins ရမယ် (သီးခြား)');
         console.log('🎬 Video Watch: 2 မိနစ်ကြည့်ရင် Ad ပေါ်မယ်၊ Ad ကြည့်ပြီး 10/20 Coins ရမယ်');
+        console.log('🎁 Coin Gift: User အချင်းချင်း Coin ပို့လို့ရမယ် (Fee 20 Coin)');
         console.log('🔑 YouTube API Key: AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI');
     </script>
 </body>
