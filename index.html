@@ -1169,6 +1169,107 @@
                 padding: 3px 6px;
             }
         }
+
+        /* ===== IFRAME AD MODAL STYLES ===== */
+        .ad-iframe-container {
+            background: #fff;
+            position: relative;
+            min-height: 350px;
+        }
+        .ad-iframe-container iframe {
+            width: 100%;
+            height: 420px;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+        .ad-iframe-container .loading-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-size: 14px;
+            text-align: center;
+        }
+        .ad-iframe-container .loading-overlay i {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 8px;
+            animation: spin 1s linear infinite;
+        }
+        .ad-footer {
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+        }
+        .ad-footer .progress-container {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .ad-footer .progress-container .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        .ad-footer .ad-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .ad-footer .ad-actions .claim-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+        }
+        .ad-footer .ad-actions .claim-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .ad-footer .ad-actions .claim-btn.active {
+            background: linear-gradient(145deg, var(--accent), var(--accent-hover));
+            color: #fff;
+        }
+        .ad-footer .ad-actions .close-btn {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            font-size: 16px;
+        }
+        .ad-footer .ad-status {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+        .ad-footer .ad-status .reward-text {
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .ad-footer .ad-status .status-text {
+            color: var(--text-secondary);
+        }
+        .ad-footer .ad-status .status-text.done {
+            color: #4caf50;
+        }
     </style>
 </head>
 <body>
@@ -1607,43 +1708,43 @@
         </div>
     </div>
 
-    <!-- ===== AD MODAL (Video Watch Ad) - Coin fixed 20 ===== -->
+    <!-- ===== AD MODAL (IFrame Version) ===== -->
     <div id="adModal" class="modal">
-        <div class="modal-content" style="text-align:center;">
-            <button class="close" onclick="closeAdModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
-            <h3><i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...</h3>
-
-            <div style="font-size:48px;margin:10px 0;">
-                <i class="fas fa-ad" style="color:var(--accent);"></i>
+        <div class="modal-content" style="text-align:center; padding:0; max-width:500px; border-radius:16px; overflow:hidden;">
+            <!-- Header -->
+            <div style="padding:12px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:15px; color:var(--accent);">
+                    <i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...
+                </h3>
+                <button onclick="closeAdModal()" style="background:none;border:none;color:var(--text-secondary);font-size:20px;cursor:pointer;padding:4px 8px;">✕</button>
             </div>
-
-            <p style="font-size:14px;margin:6px 0;">ကျေးဇူးပြု၍ အောက်ပါ ကြော်ငြာကို ကြည့်ရှုပါ</p>
-
-            <div style="background:var(--bg-card);border-radius:12px;padding:15px;margin:10px 0;border:1px solid var(--border-color);">
-                <p style="font-size:13px;color:var(--text-secondary);">
-                    <i class="fas fa-info-circle"></i> ကြော်ငြာကို New Tab တွင်ဖွင့်ပါမည်
-                </p>
-                <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">
-                    ကြော်ငြာကို ကြည့်ရှုပြီးပါက <span id="adCountdown">30</span> စက္ကန့်အကြာ 20 Coins ရရှိပါမည်
-                </p>
+            
+            <!-- IFrame Container -->
+            <div class="ad-iframe-container" id="adIframeContainer">
+                <div class="loading-overlay" id="adLoading">
+                    <i class="fas fa-spinner"></i>
+                    ကြော်ငြာကိုဖွင့်နေပါသည်...
+                </div>
+                <iframe id="adIframe" src="about:blank"></iframe>
             </div>
-
-            <!-- Progress Bar -->
-            <div class="ad-progress-container">
-                <div class="ad-progress-bar" id="adProgressBar"></div>
-            </div>
-
-            <div style="display:flex;gap:8px;margin-top:10px;">
-                <button id="adSkipBtn" disabled onclick="openAdAndClaim()" style="flex:1;padding:12px;border:none;border-radius:12px;background:var(--bg-input);color:var(--text-primary);font-weight:600;cursor:pointer;transition:var(--transition);">
-                    ⏳ စောင့်ဆိုင်နေပါ...
-                </button>
-                <button onclick="closeAdModal()" style="padding:12px 16px;border:none;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);font-weight:500;cursor:pointer;border:1px solid var(--border-color);">
-                    ✕
-                </button>
-            </div>
-
-            <div id="adRewardInfo" style="margin-top:8px;font-size:12px;color:var(--text-muted);">
-                🪙 ရရှိမည့် Coin: <span id="adRewardAmount">20</span>
+            
+            <!-- Footer -->
+            <div class="ad-footer">
+                <div class="progress-container">
+                    <div class="progress-bar" id="adProgressBar"></div>
+                </div>
+                
+                <div class="ad-actions">
+                    <button class="claim-btn" id="adSkipBtn" disabled>
+                        ⏳ <span id="adCountdown">30</span> စက္ကန့်စောင့်ပါ...
+                    </button>
+                    <button class="close-btn" onclick="closeAdModal()">✕</button>
+                </div>
+                
+                <div class="ad-status">
+                    <span>🪙 ရရှိမည့် Coin: <span class="reward-text" id="adRewardAmount">20</span></span>
+                    <span class="status-text" id="adStatusText">⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1669,7 +1770,6 @@
                 </p>
             </div>
 
-            <!-- Progress Bar -->
             <div class="ad-progress-container">
                 <div class="ad-progress-bar" id="dailyProgressBar"></div>
             </div>
@@ -1752,7 +1852,6 @@
         // ============================================================
         let currentUser = null;
         let userData = { coins: 0, usdt: 0, username: 'User', email: '', isBanned: false, lastActive: null };
-        // Flag to prevent snapshot from overwriting local coin updates
         let _pendingCoinUpdate = false;
         let isAdmin = false;
         let exchangeRate = 3000;
@@ -1772,7 +1871,7 @@
             "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d"
         ];
         let adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
-        const AD_REWARD = 20; // Fixed 20 coins for ad watch
+        const AD_REWARD = 20;
 
         // ===== GIFT FEE =====
         const GIFT_FEE = 20;
@@ -1784,7 +1883,7 @@
         let player = null;
         let watchInterval = null;
         let watchTime = 0;
-        const TARGET_WATCH = 120; // 2 minutes
+        const TARGET_WATCH = 120;
 
         // Video lists
         const defaultVideos = [
@@ -2037,7 +2136,7 @@
         }
 
         // ============================================================
-        //  AUTH STATE - FIXED: Don't override local coin on snapshot
+        //  AUTH STATE
         // ============================================================
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -2066,7 +2165,6 @@
                     lastActive: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(() => {});
 
-                // ===== FIX: Don't override userData completely =====
                 db.collection('users').doc(user.uid).onSnapshot((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
@@ -2076,16 +2174,11 @@
                             location.reload();
                             return;
                         }
-                        // Update only non-coin fields if pending update
                         if (!_pendingCoinUpdate) {
-                            // No pending update - safe to update coins
                             userData.coins = data.coins || 0;
-                        } else {
-                            // Pending update - only update other fields
-                            console.log('⏳ Pending coin update, skipping coin sync');
                         }
                         userData.username = data.username || userData.username;
-                        userData.email = data.email || userData.email;
+                        userData.email = data.email || userData.email || '';
                         userData.usdt = data.usdt || userData.usdt;
                         userData.isBanned = data.isBanned || false;
                         userData.lastActive = data.lastActive || userData.lastActive;
@@ -2183,6 +2276,7 @@
 
         function closeAdModal() {
             document.getElementById('adModal').classList.remove('show');
+            document.getElementById('adIframe').src = 'about:blank';
             if (player && player.playVideo) {
                 player.playVideo();
             }
@@ -2260,7 +2354,7 @@
         }
 
         // ============================================================
-        //  🎯 YOUTUBE SEARCH
+        //  YOUTUBE SEARCH
         // ============================================================
         async function searchYouTube() {
             const query = document.getElementById('searchInput').value.trim();
@@ -2370,7 +2464,7 @@
         });
 
         // ============================================================
-        //  WATCH TIMER & AD COIN (Video Watch → Ad) - Fixed 20 coins
+        //  WATCH TIMER & AD COIN (IFrame Version)
         // ============================================================
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
@@ -2392,30 +2486,64 @@
         }
 
         function showCoinPopup() {
-            // Fixed reward 20 coins
             document.getElementById('coinRewardVal').textContent = AD_REWARD;
             document.getElementById('adRewardAmount').textContent = AD_REWARD;
             document.getElementById('coinPopup').style.display = 'block';
         }
 
-        // ===== CLAIM COIN FROM VIDEO WATCH =====
+        // ===== CLAIM COIN - IFrame Version =====
         function claimCoin() {
+            if (!adLinks || adLinks.length === 0) {
+                showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
+                document.getElementById('coinPopup').style.display = 'none';
+                return;
+            }
+
             document.getElementById('coinPopup').style.display = 'none';
             document.getElementById('adModal').classList.add('show');
 
+            // Get ad link
+            const link = adLinks[adIndex % adLinks.length];
+            const iframe = document.getElementById('adIframe');
+            const loading = document.getElementById('adLoading');
+            const container = document.getElementById('adIframeContainer');
+
+            // Show loading
+            loading.style.display = 'block';
+            iframe.style.display = 'none';
+
+            // Load ad in iframe
+            iframe.src = link;
+
+            // Hide loading when iframe loads
+            iframe.onload = function() {
+                loading.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+
+            // If iframe fails to load after 10 seconds, show fallback
+            setTimeout(() => {
+                if (iframe.style.display === 'none') {
+                    loading.style.display = 'none';
+                    iframe.style.display = 'block';
+                    iframe.src = link;
+                }
+            }, 10000);
+
+            // Start countdown
             let timeLeft = 30;
             const timerEl = document.getElementById('adCountdown');
             const progressBar = document.getElementById('adProgressBar');
             const skipBtn = document.getElementById('adSkipBtn');
+            const statusText = document.getElementById('adStatusText');
 
             timerEl.textContent = timeLeft;
             progressBar.style.width = '0%';
             skipBtn.disabled = true;
-            skipBtn.textContent = '⏳ စောင့်ဆိုင်နေပါ...';
-
-            // Fixed reward 20 coins
-            document.getElementById('adRewardAmount').textContent = AD_REWARD;
-            document.getElementById('coinRewardVal').textContent = AD_REWARD;
+            skipBtn.innerHTML = `⏳ <span id="adCountdown">${timeLeft}</span> စက္ကန့်စောင့်ပါ...`;
+            skipBtn.className = 'claim-btn';
+            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
+            statusText.className = 'status-text';
 
             const countdown = setInterval(() => {
                 timeLeft--;
@@ -2425,50 +2553,40 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     skipBtn.disabled = false;
-                    skipBtn.textContent = '📢 ကြော်ငြာကြည့်ပြီးပါပြီ! 20 Coins ရယူမည်';
+                    skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
+                    skipBtn.className = 'claim-btn active';
                     progressBar.style.width = '100%';
+                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
+                    statusText.className = 'status-text done';
                 }
             }, 1000);
         }
 
-        // ===== OPEN AD AND CLAIM (Video Watch Ad) - Fixed 20 coins =====
-        async function openAdAndClaim() {
-            const link = adLinks.length > 0 ? adLinks[adIndex % adLinks.length] : null;
-
-            if (link) {
-                try {
-                    const adWindow = window.open(link, '_blank', 'width=400,height=600,scrollbars=yes');
-                    if (adWindow) {
-                        adWindow.focus();
-                    } else {
-                        window.open(link, '_blank');
-                    }
-                } catch (e) {
-                    window.open(link, '_blank');
-                }
-            }
-
+        // ===== CLOSE AD AND CLAIM (IFrame) =====
+        function closeAdAndClaim() {
+            const iframe = document.getElementById('adIframe');
+            iframe.src = 'about:blank';
+            
+            document.getElementById('adModal').classList.remove('show');
+            
             adIndex = (adIndex + 1) % Math.max(adLinks.length, 1);
             localStorage.setItem('currentAdIndex', adIndex);
-
-            await giveAdReward(AD_REWARD);
+            
+            giveAdReward(AD_REWARD);
         }
 
-        // ===== GIVE AD REWARD (20 coins fixed) - FIXED: Use simple update =====
+        // ===== GIVE AD REWARD =====
         async function giveAdReward(reward) {
             if (!currentUser) return;
             
             try {
-                // Set pending flag to prevent snapshot from overwriting
                 _pendingCoinUpdate = true;
                 
-                // Update Firestore directly with increment
                 const userRef = db.collection('users').doc(currentUser.uid);
                 await userRef.update({
                     coins: firebase.firestore.FieldValue.increment(reward)
                 });
                 
-                // Add transaction record
                 await db.collection('transactions').add({
                     userId: currentUser.uid,
                     type: 'ad_watch',
@@ -2477,13 +2595,11 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                // Update local userData
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
                 
                 showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
                 
-                document.getElementById('adModal').classList.remove('show');
                 watchTime = 0;
                 if (player && player.playVideo) player.playVideo();
                 
@@ -2491,10 +2607,8 @@
                 console.error('Ad reward error:', error);
                 showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
             } finally {
-                // Clear pending flag after 2 seconds
                 setTimeout(() => {
                     _pendingCoinUpdate = false;
-                    // Force refresh from server
                     db.collection('users').doc(currentUser.uid).get().then((doc) => {
                         if (doc.exists) {
                             userData.coins = doc.data().coins || 0;
@@ -2506,7 +2620,7 @@
         }
 
         // ============================================================
-        //  COIN GIFT SYSTEM - User to User - FIXED
+        //  COIN GIFT SYSTEM
         // ============================================================
         async function sendCoinGift() {
             const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
@@ -2540,7 +2654,6 @@
             }
 
             try {
-                // Find receiver by email
                 const snapshot = await db.collection('users')
                     .where('email', '==', receiverEmail)
                     .get();
@@ -2555,14 +2668,10 @@
                 const receiverId = receiverDoc.id;
                 const receiverData = receiverDoc.data();
 
-                // Set pending flag
                 _pendingCoinUpdate = true;
-                
-                // Update local UI immediately
                 userData.coins = (userData.coins || 0) - totalCost;
                 updateUI();
 
-                // Use transaction for both updates
                 const senderRef = db.collection('users').doc(currentUser.uid);
                 const receiverRef = db.collection('users').doc(receiverId);
                 
@@ -2573,17 +2682,15 @@
                     if (!senderDoc.exists || !receiverDoc2.exists) return;
                     
                     const senderCoins = senderDoc.data().coins || 0;
-                    const receiverCoins = receiverDoc2.data().coins || 0;
                     
                     if (senderCoins < totalCost) {
                         throw new Error('Sender insufficient coins');
                     }
                     
                     transaction.update(senderRef, { coins: senderCoins - totalCost });
-                    transaction.update(receiverRef, { coins: receiverCoins + amount });
+                    transaction.update(receiverRef, { coins: (receiverDoc2.data().coins || 0) + amount });
                 });
 
-                // Transactions for both users
                 await db.collection('transactions').add({
                     userId: currentUser.uid,
                     type: 'gift_sent',
@@ -2612,7 +2719,6 @@
 
             } catch (error) {
                 console.error('Gift error:', error);
-                // Revert local change
                 userData.coins = (userData.coins || 0) + totalCost;
                 updateUI();
                 msgEl.textContent = '❌ Gift ပို့မအောင်မြင်ပါ: ' + error.message;
@@ -2631,7 +2737,7 @@
         }
 
         // ============================================================
-        //  DAILY BONUS - APP DOWNLOAD (SEPARATE) - FIXED
+        //  DAILY BONUS - APP DOWNLOAD
         // ============================================================
         async function claimDailyBonus() {
             const today = new Date().toDateString();
@@ -2641,7 +2747,6 @@
                 return;
             }
 
-            // Show daily bonus modal
             document.getElementById('dailyBonusModal').classList.add('show');
             document.getElementById('dailyRewardAmount').textContent = DAILY_BONUS_REWARD;
 
@@ -2669,16 +2774,18 @@
             }, 1000);
         }
 
-        // ===== OPEN DAILY BONUS APPS =====
         async function openDailyBonusApps() {
-            // Open first app link
             const link = appLinks[appIndex % appLinks.length];
 
             if (link) {
                 try {
-                    const adWindow = window.open(link, '_blank', 'width=400,height=600,scrollbars=yes');
-                    if (adWindow) {
-                        adWindow.focus();
+                    const popup = window.open(
+                        link,
+                        'appPopup',
+                        'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+                    );
+                    if (popup) {
+                        popup.focus();
                     } else {
                         window.open(link, '_blank');
                     }
@@ -2687,14 +2794,20 @@
                 }
             }
 
-            // Open second app link (if available)
             const secondLink = appLinks[(appIndex + 1) % appLinks.length];
             if (secondLink) {
                 setTimeout(() => {
                     try {
-                        const win2 = window.open(secondLink, '_blank', 'width=400,height=600,scrollbars=yes');
-                        if (win2) win2.focus();
-                        else window.open(secondLink, '_blank');
+                        const popup2 = window.open(
+                            secondLink,
+                            'appPopup2',
+                            'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+                        );
+                        if (popup2) {
+                            popup2.focus();
+                        } else {
+                            window.open(secondLink, '_blank');
+                        }
                     } catch (e) {
                         window.open(secondLink, '_blank');
                     }
@@ -2704,27 +2817,22 @@
             appIndex = (appIndex + 2) % Math.max(appLinks.length, 1);
             localStorage.setItem('currentAppIndex', appIndex);
 
-            // Give 700 coins reward for daily bonus
             await giveDailyBonusReward();
         }
 
-        // ===== GIVE DAILY BONUS REWARD (700 COINS) - FIXED =====
         async function giveDailyBonusReward() {
             const reward = DAILY_BONUS_REWARD;
 
             if (!currentUser) return;
             
             try {
-                // Set pending flag
                 _pendingCoinUpdate = true;
                 
-                // Update Firestore directly with increment
                 const userRef = db.collection('users').doc(currentUser.uid);
                 await userRef.update({
                     coins: firebase.firestore.FieldValue.increment(reward)
                 });
                 
-                // Add transaction record
                 await db.collection('transactions').add({
                     userId: currentUser.uid,
                     type: 'daily_bonus',
@@ -2733,11 +2841,9 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                // Update local userData
                 userData.coins = (userData.coins || 0) + reward;
                 updateUI();
                 
-                // Save today's bonus date
                 const today = new Date().toDateString();
                 localStorage.setItem('lastBonusDate', today);
                 
@@ -3289,7 +3395,7 @@
         }
 
         // ============================================================
-        //  ADMIN - LOAD ALL USERS with Active/Offline status
+        //  ADMIN - LOAD ALL USERS
         // ============================================================
         let allUsersData = [];
 
@@ -3340,7 +3446,6 @@
                 const isCurrentUser = currentUser && userId === currentUser.uid;
                 const isAdminUser = ADMIN_IDS.includes(userId);
 
-                // Check if user is online (active within last 5 minutes)
                 let isOnline = false;
                 let lastActiveStr = 'N/A';
                 if (data.lastActive) {
@@ -3396,9 +3501,6 @@
             table.innerHTML = html;
         }
 
-        // ============================================================
-        //  ADMIN - FILTER USERS
-        // ============================================================
         function filterUsers() {
             const input = document.getElementById('userSearchInput');
             const query = input.value.toLowerCase().trim();
@@ -3414,20 +3516,15 @@
             const rows = document.querySelectorAll('#adminUserTable tbody tr');
             rows.forEach(row => {
                 const text = row.textContent;
-                // Show only offline users
                 if (text.includes('🔴 Offline') || text.includes('⛔ Banned')) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
                 }
             });
-            // Also show active filter button hint
             document.getElementById('userSearchInput').value = '🔴 Offline users';
         }
 
-        // ============================================================
-        //  ADMIN - TOGGLE BAN
-        // ============================================================
         async function toggleBan(uid) {
             if (!uid) return;
 
@@ -3534,7 +3631,7 @@
         }
 
         // ============================================================
-        //  ADMIN - APP LINKS (Daily Bonus)
+        //  ADMIN - APP LINKS
         // ============================================================
         function loadAppList() {
             const tbody = document.getElementById('appListBody');
@@ -3605,7 +3702,7 @@
         }
 
         // ============================================================
-        //  ADMIN - AD LINKS (Video Watch) - No coin input needed
+        //  ADMIN - AD LINKS
         // ============================================================
         function loadAdList() {
             const tbody = document.getElementById('adListBody');
@@ -3706,7 +3803,7 @@
         }
 
         // ============================================================
-        //  ADMIN - COIN MANAGEMENT (EMAIL based search)
+        //  ADMIN - COIN MANAGEMENT
         // ============================================================
         async function adminAddCoin() {
             const targetEmail = document.getElementById('adminTargetEmail').value.trim();
