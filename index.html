@@ -17,7 +17,7 @@
     <script src="https://www.youtube.com/iframe_api">
     </script>
     <style>
-        /* ===== ALL STYLES - Same as before ===== */
+        /* ===== ALL STYLES ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg-primary: #0b0b0f;
@@ -708,13 +708,18 @@
             <div id="adminDashboard" style="display:none;">
                 <p style="color:#4caf50;font-weight:600;font-size:13px;margin-bottom:12px;">✅ ဝင်ရောက်ပြီးပါပြီ</p>
 
-                <!-- Video Upload -->
+                <!-- ===== VIDEO UPLOAD - LOCAL ONLY ===== -->
                 <div class="admin-section">
-                    <h4>📹 ဗီဒီယိုတင်ရန်</h4>
-                    <p>YouTube URL သို့မဟုတ် Video ID</p>
+                    <h4>📹 ဗီဒီယိုတင်ရန် (Local Storage)</h4>
+                    <p>YouTube URL သို့မဟုတ် Video ID (Local Storage မှာ သိမ်းမည်)</p>
                     <input type="text" id="adminVidTitle" placeholder="ဗီဒီယိုခေါင်းစဉ်" />
                     <input type="text" id="adminVidUrl" placeholder="YouTube URL သို့မဟုတ် ID" />
-                    <button class="btn" onclick="adminAddVideo()"><i class="fa-solid fa-upload"></i> တင်မည်</button>
+                    <button class="btn" onclick="adminAddVideoLocal()"><i class="fa-solid fa-upload"></i> တင်မည် (Local)</button>
+                    
+                    <!-- Video List with Delete -->
+                    <div id="adminVideoList" style="max-height:200px;overflow-y:auto;margin-top:10px;">
+                        <!-- Dynamic content -->
+                    </div>
                 </div>
 
                 <hr class="divider" />
@@ -991,7 +996,6 @@
                 const data = localStorage.getItem('userCoins_' + currentUser.uid);
                 if (data) {
                     const parsed = JSON.parse(data);
-                    // Use if less than 7 days old
                     if (Date.now() - parsed.timestamp < 604800000) {
                         return parsed.coins;
                     }
@@ -1059,6 +1063,217 @@
         }
 
         // ============================================================
+        //  LOCAL VIDEO MANAGEMENT - NO FIRESTORE READS
+        // ============================================================
+        const defaultMyVideos = [
+            { name: "မြန်မာသီချင်းအသစ်", id: "fHnXtisVCGs" },
+            { name: "ရွှေချစ်သူ - အောင်လ", id: "iIW2nSg8HQY" },
+            { name: "မြန်မာရုပ်ရှင်ဇာတ်ကား", id: "X6Hur8jbfNo" },
+            { name: "ဆိုင်းဝိုင်း - ဝင်းမင်းထက်", id: "2qc_vi9qOtY" },
+            { name: "အိပ်မက်ဆိုး - ဇော်ဇော်", id: "3Ss9AYC6N7M" },
+            { name: "ရင်ခုန်သံ - အေးမြတ်", id: "WR3EwCf0myY" }
+        ];
+
+        const defaultSongList = [
+            { name: "သီချင်း 1 - တို့ဗမာ", id: "EnpWs20HZiY" },
+            { name: "သီချင်း 2 - ရင်ခုန်သံ", id: "H0GOhtVdC3Y" },
+            { name: "သီချင်း 3 - မြစ်ကမ်းနား", id: "6g9vqvklR_I" },
+            { name: "သီချင်း 4 - ချစ်တဲ့သူ", id: "WRMcoFCQb1s" }
+        ];
+
+        const defaultVideoList = [
+            { name: "ဗီဒီယို 1", id: "I54Chzm_YUY" },
+            { name: "ဗီဒီယို 2", id: "WRMcoFCQb1s" }
+        ];
+
+        const defaultCartoonList = [
+            { name: "ကာတွန်း 1", id: "EnpWs20HZiY" },
+            { name: "ကာတွန်း 2", id: "H0GOhtVdC3Y" }
+        ];
+
+        function getVideosFromLocal(category) {
+            const key = 'videos_' + category;
+            const stored = localStorage.getItem(key);
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error parsing videos:', e);
+                }
+            }
+            switch(category) {
+                case 'myvideo': return defaultMyVideos;
+                case 'song': return defaultSongList;
+                case 'video': return defaultVideoList;
+                case 'cartoon': return defaultCartoonList;
+                default: return defaultMyVideos;
+            }
+        }
+
+        function saveVideosToLocal(category, videos) {
+            const key = 'videos_' + category;
+            localStorage.setItem(key, JSON.stringify(videos));
+        }
+
+        function adminAddVideoLocal() {
+            const title = document.getElementById('adminVidTitle').value.trim();
+            const url = document.getElementById('adminVidUrl').value.trim();
+            
+            if (!title || !url) {
+                showToast('အချက်အလက် အပြည့်အစုံထည့်ပါ။', 'error');
+                return;
+            }
+
+            let id = url;
+            if (url.includes('youtu.be/')) {
+                id = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('watch?v=')) {
+                id = url.split('watch?v=').pop().split('&')[0];
+            } else if (url.includes('shorts/')) {
+                id = url.split('shorts/')[1].split('?')[0];
+            } else if (url.length === 11) {
+                id = url;
+            }
+
+            if (id.length !== 11) {
+                showToast('မှန်ကန်သော Video ID မဟုတ်ပါ။', 'error');
+                return;
+            }
+
+            const currentVideos = getVideosFromLocal('myvideo');
+            const newVideo = { name: title, id: id };
+            currentVideos.push(newVideo);
+            saveVideosToLocal('myvideo', currentVideos);
+            
+            showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ (Local)');
+            document.getElementById('adminVidTitle').value = '';
+            document.getElementById('adminVidUrl').value = '';
+            
+            renderPlaylist('myvideo');
+            loadAdminVideoList();
+        }
+
+        function adminDeleteVideoLocal(index) {
+            if (!confirm('ဒီ Video ကို ဖျက်မည်?')) return;
+            
+            const currentVideos = getVideosFromLocal('myvideo');
+            if (index < 0 || index >= currentVideos.length) {
+                showToast('Video မတွေ့ပါ။', 'error');
+                return;
+            }
+            
+            currentVideos.splice(index, 1);
+            saveVideosToLocal('myvideo', currentVideos);
+            
+            showToast('✅ Video ဖျက်ပြီးပါပြီ (Local)');
+            renderPlaylist('myvideo');
+            loadAdminVideoList();
+        }
+
+        function loadAdminVideoList() {
+            const container = document.getElementById('adminVideoList');
+            if (!container) return;
+            
+            const videos = getVideosFromLocal('myvideo');
+            let html = '<table><thead><tr><th style="width:70%;">Video Title</th><th style="width:30%;">Action</th></tr></thead><tbody>';
+            
+            videos.forEach((video, index) => {
+                const displayName = video.name.length > 30 ? video.name.substring(0, 30) + '...' : video.name;
+                html += `
+                    <tr>
+                        <td style="font-size:10px;text-align:left;">${displayName}</td>
+                        <td>
+                            <button class="btn-sm red" onclick="adminDeleteVideoLocal(${index})" style="padding:2px 8px;font-size:9px;">
+                                <i class="fas fa-trash"></i> ဖျက်
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function renderPlaylist(category) {
+            const container = document.getElementById('playlistContainer');
+            const title = document.getElementById('playlistTitle');
+            const count = document.getElementById('playlistCount');
+            container.innerHTML = '';
+            
+            let list = [];
+            
+            switch(category) {
+                case 'myvideo': {
+                    list = getVideosFromLocal('myvideo');
+                    title.textContent = 'My Videos';
+                    break;
+                }
+                case 'song': {
+                    list = getVideosFromLocal('song');
+                    title.textContent = 'သီချင်းများ';
+                    break;
+                }
+                case 'video': {
+                    list = getVideosFromLocal('video');
+                    title.textContent = 'ဗီဒီယိုများ';
+                    break;
+                }
+                case 'cartoon': {
+                    list = getVideosFromLocal('cartoon');
+                    title.textContent = 'ကာတွန်းများ';
+                    break;
+                }
+                case 'search': {
+                    title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
+                    const q = document.getElementById('searchInput').value.trim();
+                    if (q) {
+                        list = [{ name: '🔍 ' + q + ' (ရှာဖွေရန်)', id: 'fHnXtisVCGs' }];
+                    } else {
+                        list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
+                    }
+                    break;
+                }
+                default: {
+                    list = getVideosFromLocal('myvideo');
+                    title.textContent = 'My Videos';
+                }
+            }
+
+            if (!list || list.length === 0) {
+                list = [{ name: 'ဗီဒီယိုမရှိပါ', id: 'fHnXtisVCGs' }];
+            }
+
+            count.textContent = list.length;
+
+            list.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+                card.innerHTML = `
+                    <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
+                    <div class="title">${item.name}</div>
+                    ${category === 'myvideo' && currentUser ? `
+                        <div style="padding:2px 6px;text-align:right;">
+                            <button onclick="adminDeleteVideoLocal(${index})" style="background:var(--accent);color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:9px;cursor:pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                `;
+                card.onclick = (e) => {
+                    if (e.target.closest('button')) return;
+                    if (item.id && item.id.length === 11) {
+                        loadVideo(item.id);
+                    } else {
+                        searchYouTube();
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        // ============================================================
         //  STATE
         // ============================================================
         let currentUser = null;
@@ -1076,7 +1291,7 @@
         let appIndex = parseInt(localStorage.getItem('currentAppIndex')) || 0;
         const DAILY_BONUS_REWARD = 700;
 
-        // ===== AD LINKS (Video Watch) - Coin fixed 20 =====
+        // ===== AD LINKS (Video Watch) =====
         let adLinks = JSON.parse(localStorage.getItem('adLinks')) || [
             "https://shrinkme.click/fvVS",
             "https://shrinkme.click/FiBCECr",
@@ -1097,34 +1312,8 @@
         let watchTime = 0;
         const TARGET_WATCH = 120;
 
-        // Video lists
-        const defaultVideos = [
-            { name: "မြန်မာသီချင်းအသစ်", id: "fHnXtisVCGs" },
-            { name: "ရွှေချစ်သူ - အောင်လ", id: "iIW2nSg8HQY" },
-            { name: "မြန်မာရုပ်ရှင်ဇာတ်ကား", id: "X6Hur8jbfNo" },
-            { name: "ဆိုင်းဝိုင်း - ဝင်းမင်းထက်", id: "2qc_vi9qOtY" },
-            { name: "အိပ်မက်ဆိုး - ဇော်ဇော်", id: "3Ss9AYC6N7M" },
-            { name: "ရင်ခုန်သံ - အေးမြတ်", id: "WR3EwCf0myY" }
-        ];
-
-        const songList = [
-            { name: "သီချင်း 1 - တို့ဗမာ", id: "EnpWs20HZiY" },
-            { name: "သီချင်း 2 - ရင်ခုန်သံ", id: "H0GOhtVdC3Y" },
-            { name: "သီချင်း 3 - မြစ်ကမ်းနား", id: "6g9vqvklR_I" },
-            { name: "သီချင်း 4 - ချစ်တဲ့သူ", id: "WRMcoFCQb1s" }
-        ];
-        const videoList = [
-            { name: "ဗီဒီယို 1", id: "I54Chzm_YUY" },
-            { name: "ဗီဒီယို 2", id: "WRMcoFCQb1s" }
-        ];
-        const cartoonList = [
-            { name: "ကာတွန်း 1", id: "EnpWs20HZiY" },
-            { name: "ကာတွန်း 2", id: "H0GOhtVdC3Y" }
-        ];
-
-        let myVideoList = JSON.parse(localStorage.getItem('globalAdminVideos')) || defaultVideos;
         let currentCategory = 'myvideo';
-        let currentVideoId = myVideoList[0]?.id || "fHnXtisVCGs";
+        let currentVideoId = "fHnXtisVCGs";
 
         // ============================================================
         //  ADMIN IDS
@@ -1272,7 +1461,6 @@
                     });
                 }
 
-                // Save to local immediately
                 saveCoinsToLocal(1000);
 
                 showToast('✅ အကောင့်ဖွင့်ပြီးပါပြီ!');
@@ -1382,12 +1570,10 @@
                             location.reload();
                             return;
                         }
-                        // Use Firestore data if it's newer or higher
                         if (data.coins !== undefined && data.coins > (userData.coins || 0)) {
                             userData.coins = data.coins;
                             saveCoinsToLocal(data.coins);
                         } else if (localCoins !== null && localCoins > (data.coins || 0)) {
-                            // If local has more coins, update Firestore
                             await db.collection('users').doc(user.uid).update({
                                 coins: localCoins
                             });
@@ -1401,8 +1587,6 @@
                         updateUI();
                         usingLocalData = false;
                         showLocalModeIndicator(false);
-                        
-                        // Sync local transactions
                         syncLocalTransactions();
                     }
                 } catch (error) {
@@ -1417,13 +1601,11 @@
                 await loadExchangeRate();
                 listenExchangeRate();
 
-                // Update lastActive less frequently
                 db.collection('users').doc(user.uid).update({
                     lastActive: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(() => {});
 
-                // ===== USE onSnapshot ONLY FOR CRITICAL DATA =====
-                // Only listen for ban status, not coins
+                // ===== ONLY LISTEN FOR BAN STATUS =====
                 db.collection('users').doc(user.uid).onSnapshot((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
@@ -1433,7 +1615,6 @@
                             location.reload();
                             return;
                         }
-                        // Only update coins from Firestore if not updating
                         if (!isUpdatingCoins && !usingLocalData) {
                             if (data.coins !== undefined && data.coins > (userData.coins || 0)) {
                                 userData.coins = data.coins;
@@ -1449,13 +1630,9 @@
                     }
                 });
 
-                loadVideos();
+                renderPlaylist(currentCategory);
                 if (!player) initPlayer();
 
-                // Remove auto-listen for withdraw requests - load on demand
-                // listenWithdrawRequests(); // COMMENTED OUT
-
-                // Update lastActive every 5 minutes
                 let lastActiveUpdate = Date.now();
                 setInterval(() => {
                     const now = Date.now();
@@ -1467,14 +1644,12 @@
                     }
                 }, 60000);
 
-                // Save coins to local every 30 seconds
                 setInterval(() => {
                     if (currentUser && userData.coins !== undefined) {
                         saveCoinsToLocal(userData.coins);
                     }
                 }, 30000);
 
-                // Try to sync local transactions every minute
                 setInterval(syncLocalTransactions, 60000);
 
             } else {
@@ -1491,7 +1666,6 @@
         //  UI UPDATE - WITH LOCAL STORAGE
         // ============================================================
         function updateUI() {
-            // Get coins from local storage first
             const localCoins = getCoinsFromLocal();
             if (localCoins !== null && !isUpdatingCoins) {
                 userData.coins = localCoins;
@@ -1514,8 +1688,6 @@
 
             updateWithdrawUI();
             updateExchangeRateUI();
-
-            // Save to local
             saveCoinsToLocal(coins);
         }
 
@@ -1814,7 +1986,7 @@
             document.getElementById('coinPopup').style.display = 'block';
         }
 
-        // ===== CLAIM COIN - WITH LOCAL STORAGE SUPPORT =====
+        // ===== CLAIM COIN =====
         function claimCoin() {
             if (!adLinks || adLinks.length === 0) {
                 showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
@@ -1827,7 +1999,6 @@
                 return;
             }
 
-            // Check local balance first
             const localCoins = getCoinsFromLocal();
             if (localCoins !== null) {
                 userData.coins = localCoins;
@@ -1845,7 +2016,6 @@
             const skipBtn = document.getElementById('adSkipBtn');
             const statusText = document.getElementById('adStatusText');
 
-            // Reset everything
             iframe.src = 'about:blank';
             loading.style.display = 'block';
             iframe.style.display = 'none';
@@ -1903,7 +2073,7 @@
             }, 1000);
         }
 
-        // ===== GIVE AD REWARD - WITH LOCAL STORAGE SUPPORT =====
+        // ===== GIVE AD REWARD =====
         async function giveAdReward(reward) {
             if (!currentUser) {
                 showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
@@ -1918,14 +2088,12 @@
             try {
                 isUpdatingCoins = true;
 
-                // Update local coins FIRST (optimistic update)
                 const currentCoins = userData.coins || 0;
                 const newCoins = currentCoins + reward;
                 userData.coins = newCoins;
                 saveCoinsToLocal(newCoins);
                 updateUI();
 
-                // Try to update Firestore
                 try {
                     const userRef = db.collection('users').doc(currentUser.uid);
                     await userRef.update({
@@ -1950,7 +2118,6 @@
                     usingLocalData = true;
                 }
 
-                // Reset watch time
                 watchTime = 0;
                 if (watchInterval) {
                     clearInterval(watchInterval);
@@ -1982,7 +2149,6 @@
             console.log('🔄 Back online, syncing data...');
             if (currentUser) {
                 syncLocalTransactions();
-                // Refresh user data
                 db.collection('users').doc(currentUser.uid).get()
                     .then((doc) => {
                         if (doc.exists) {
@@ -2009,7 +2175,7 @@
         });
 
         // ============================================================
-        //  COIN GIFT SYSTEM - WITH LOCAL STORAGE SUPPORT
+        //  COIN GIFT SYSTEM
         // ============================================================
         async function sendCoinGift() {
             const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
@@ -2057,7 +2223,6 @@
                 const receiverId = receiverDoc.id;
                 const receiverData = receiverDoc.data();
 
-                // Update local first
                 userData.coins = (userData.coins || 0) - totalCost;
                 saveCoinsToLocal(userData.coins);
                 updateUI();
@@ -2217,7 +2382,6 @@
             if (!currentUser) return;
 
             try {
-                // Update local first
                 userData.coins = (userData.coins || 0) + reward;
                 saveCoinsToLocal(userData.coins);
                 updateUI();
@@ -2269,80 +2433,13 @@
         }
 
         // ============================================================
-        //  PLAYLIST
+        //  CATEGORY SWITCH
         // ============================================================
         function switchCategory(category, el) {
             currentCategory = category;
             document.querySelectorAll('.menu-item').forEach(e => e.classList.remove('active'));
             if (el) el.classList.add('active');
             renderPlaylist(category);
-        }
-
-        function renderPlaylist(category) {
-            const container = document.getElementById('playlistContainer');
-            const title = document.getElementById('playlistTitle');
-            const count = document.getElementById('playlistCount');
-            container.innerHTML = '';
-            let list = [];
-
-            if (category === 'myvideo') {
-                title.textContent = 'My Videos';
-                list = JSON.parse(localStorage.getItem('globalAdminVideos')) || myVideoList;
-            } else if (category === 'song') {
-                title.textContent = 'သီချင်းများ';
-                list = songList;
-            } else if (category === 'video') {
-                title.textContent = 'ဗီဒီယိုများ';
-                list = videoList;
-            } else if (category === 'cartoon') {
-                title.textContent = 'ကာတွန်းများ';
-                list = cartoonList;
-            } else if (category === 'search') {
-                title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
-                const q = document.getElementById('searchInput').value.trim();
-                if (q) {
-                    list = [{ name: '🔍 ' + q + ' (ရှာဖွေရန်)', id: 'fHnXtisVCGs' }];
-                } else {
-                    list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
-                }
-            }
-
-            if (!list || list.length === 0) {
-                list = [{ name: 'ဗီဒီယိုမရှိပါ', id: 'fHnXtisVCGs' }];
-            }
-
-            count.textContent = list.length;
-
-            list.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                card.innerHTML = `
-                    <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
-                    <div class="title">${item.name}</div>
-                `;
-                card.onclick = () => {
-                    if (item.id && item.id.length === 11) {
-                        loadVideo(item.id);
-                    } else {
-                        searchYouTube();
-                    }
-                };
-                container.appendChild(card);
-            });
-        }
-
-        async function loadVideos() {
-            try {
-                const snapshot = await db.collection('videos').get();
-                if (!snapshot.empty) {
-                    const videos = [];
-                    snapshot.forEach(doc => videos.push(doc.data()));
-                    myVideoList = videos;
-                    localStorage.setItem('globalAdminVideos', JSON.stringify(videos));
-                    renderPlaylist('myvideo');
-                }
-            } catch (e) { console.error('Load videos error:', e); }
         }
 
         // ============================================================
@@ -2389,7 +2486,6 @@
                     </div>
                 `;
 
-                // Get from Firestore
                 let transactions = [];
                 try {
                     const snapshot = await db.collection('transactions')
@@ -2418,7 +2514,6 @@
                     console.error('Firestore transaction error:', error);
                 }
 
-                // Get from local storage
                 try {
                     const localTxs = JSON.parse(localStorage.getItem('localTransactions_' + currentUser.uid) || '[]');
                     localTxs.forEach(tx => {
@@ -2529,7 +2624,6 @@
             if (!confirm(`🪙 ${amt} Coins → $${usdt.toFixed(2)} USDT လဲလှယ်မည်?`)) return;
 
             if (currentUser) {
-                // Update local first
                 userData.coins = (userData.coins || 0) - amt;
                 userData.usdt = (userData.usdt || 0) + usdt;
                 saveCoinsToLocal(userData.coins);
@@ -2605,13 +2699,8 @@
         }
 
         // ============================================================
-        //  ADMIN WITHDRAW REQUESTS - LOAD ON DEMAND
+        //  ADMIN WITHDRAW REQUESTS
         // ============================================================
-        function listenWithdrawRequests() {
-            // Disabled to reduce Firestore reads
-            // Only load when admin opens the panel
-        }
-
         function updateWithdrawBadge() {
             db.collection('withdrawals')
                 .where('status', '==', 'pending')
@@ -2753,81 +2842,8 @@
         }
 
         // ============================================================
-        //  ADMIN BANNED USERS LIST
-        // ============================================================
-        async function loadBannedUsers() {
-            const tbody = document.getElementById('bannedUsersBody');
-            const badge = document.getElementById('bannedBadge');
-            if (!tbody) return;
-
-            try {
-                const snapshot = await db.collection('users')
-                    .where('isBanned', '==', true)
-                    .get();
-
-                const count = snapshot.size;
-                if (badge) badge.textContent = count;
-
-                if (snapshot.empty) {
-                    tbody.innerHTML =
-                        '<tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Banned User မရှိပါ</td></tr>';
-                    return;
-                }
-
-                let html = '';
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    const time = d.bannedAt ? new Date(d.bannedAt.seconds * 1000).toLocaleString() : 'N/A';
-                    const reason = d.banReason || (d.isAutoBanned ? 'Auto-ban: ၃ ရက်မသုံးခြင်း' : 'Admin မှ Ban');
-
-                    html += `
-                        <tr>
-                            <td><strong>${d.username || 'User'}</strong></td>
-                            <td style="font-size:10px;color:var(--text-muted);">${d.email || ''}</td>
-                            <td style="font-size:10px;color:var(--text-muted);">${time}</td>
-                            <td style="font-size:10px;color:var(--text-muted);">${reason}</td>
-                            <td>
-                                <button class="btn-sm green" onclick="unbanUser('${doc.id}')">Unban</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-
-                tbody.innerHTML = html;
-
-            } catch (error) {
-                console.error('Load banned users error:', error);
-                tbody.innerHTML =
-                    '<tr><td colspan="5" style="color:var(--text-muted);text-align:center;">ပြဿနာရှိနေပါသည်</td></tr>';
-            }
-        }
-
-        async function unbanUser(userId) {
-            if (!confirm('ဒီ User ကို Unban လုပ်မည်?')) return;
-
-            try {
-                await db.collection('users').doc(userId).update({
-                    isBanned: false,
-                    isAutoBanned: false,
-                    banReason: null,
-                    unbannedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                showToast('✅ User ကို Unban လုပ်ပြီးပါပြီ။');
-                loadBannedUsers();
-                loadAdminUsers();
-
-            } catch (error) {
-                console.error('Unban error:', error);
-                showToast('❌ Unban မအောင်မြင်ပါ။', 'error');
-            }
-        }
-
-        // ============================================================
         //  ADMIN - LOAD ALL USERS
         // ============================================================
-        let allUsersData = [];
-
         async function loadAdminUsers() {
             const table = document.getElementById('adminUserTable');
             const countEl = document.getElementById('userCount');
@@ -2845,7 +2861,6 @@
                     table.innerHTML =
                         '<tr><td colspan="6" style="color:var(--text-muted);text-align:center;">User မရှိသေးပါ</td></tr>';
                     if (countEl) countEl.textContent = '0';
-                    allUsersData = [];
                     return;
                 }
 
@@ -2854,81 +2869,74 @@
                     users.push({ id: doc.id, ...doc.data() });
                 });
 
-                allUsersData = users;
                 if (countEl) countEl.textContent = users.length;
 
-                renderUserTable(users);
+                const now = new Date();
+                let html = '';
+                users.forEach(data => {
+                    const userId = data.id;
+                    const isCurrentUser = currentUser && userId === currentUser.uid;
+                    const isAdminUser = ADMIN_IDS.includes(userId);
+
+                    let isOnline = false;
+                    let lastActiveStr = 'N/A';
+                    if (data.lastActive) {
+                        try {
+                            const date = data.lastActive.toDate ? data.lastActive.toDate() : new Date(data.lastActive);
+                            lastActiveStr = date.toLocaleString();
+                            const diffMinutes = (now - date) / (1000 * 60);
+                            isOnline = diffMinutes < 5;
+                        } catch (e) {
+                            lastActiveStr = 'N/A';
+                        }
+                    }
+
+                    let statusHtml = '';
+                    if (data.isBanned) {
+                        statusHtml = '<span class="status-banned">⛔ Banned</span>';
+                    } else if (isOnline) {
+                        statusHtml = '<span class="status-online"><span class="status-dot online"></span>🟢 Active</span>';
+                    } else {
+                        statusHtml = '<span class="status-offline"><span class="status-dot offline"></span>🔴 Offline</span>';
+                    }
+
+                    html += `
+                        <tr>
+                            <td>
+                                <strong>${data.username || 'User'}</strong>
+                                ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
+                                ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
+                                <br>
+                                <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
+                            </td>
+                            <td><strong>${data.coins || 0}</strong></td>
+                            <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
+                            <td>${statusHtml}</td>
+                            <td style="font-size:10px;color:var(--text-muted);">${lastActiveStr}</td>
+                            <td>
+                                <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+                                    ${!isAdminUser ? `
+                                        <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
+                                                onclick="toggleBan('${userId}')" 
+                                                style="width:100%;">
+                                            ${data.isBanned ? 'Unban' : 'Ban'}
+                                        </button>
+                                    ` : `
+                                        <span style="font-size:9px;color:var(--text-muted);">Admin</span>
+                                    `}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                table.innerHTML = html;
 
             } catch (error) {
                 console.error('Load admin users error:', error);
                 table.innerHTML =
                     `<tr><td colspan="6" style="color:var(--text-muted);text-align:center;">ပြဿနာရှိနေပါသည်: ${error.message}</td></tr>`;
             }
-        }
-
-        function renderUserTable(users) {
-            const table = document.getElementById('adminUserTable');
-            const now = new Date();
-
-            let html = '';
-            users.forEach(data => {
-                const userId = data.id;
-                const isCurrentUser = currentUser && userId === currentUser.uid;
-                const isAdminUser = ADMIN_IDS.includes(userId);
-
-                let isOnline = false;
-                let lastActiveStr = 'N/A';
-                if (data.lastActive) {
-                    try {
-                        const date = data.lastActive.toDate ? data.lastActive.toDate() : new Date(data.lastActive);
-                        lastActiveStr = date.toLocaleString();
-                        const diffMinutes = (now - date) / (1000 * 60);
-                        isOnline = diffMinutes < 5;
-                    } catch (e) {
-                        lastActiveStr = 'N/A';
-                    }
-                }
-
-                let statusHtml = '';
-                if (data.isBanned) {
-                    statusHtml = '<span class="status-banned">⛔ Banned</span>';
-                } else if (isOnline) {
-                    statusHtml = '<span class="status-online"><span class="status-dot online"></span>🟢 Active</span>';
-                } else {
-                    statusHtml = '<span class="status-offline"><span class="status-dot offline"></span>🔴 Offline</span>';
-                }
-
-                html += `
-                    <tr>
-                        <td>
-                            <strong>${data.username || 'User'}</strong>
-                            ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
-                            ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
-                            <br>
-                            <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
-                        </td>
-                        <td><strong>${data.coins || 0}</strong></td>
-                        <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
-                        <td>${statusHtml}</td>
-                        <td style="font-size:10px;color:var(--text-muted);">${lastActiveStr}</td>
-                        <td>
-                            <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
-                                ${!isAdminUser ? `
-                                    <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
-                                            onclick="toggleBan('${userId}')" 
-                                            style="width:100%;">
-                                        ${data.isBanned ? 'Unban' : 'Ban'}
-                                    </button>
-                                ` : `
-                                    <span style="font-size:9px;color:var(--text-muted);">Admin</span>
-                                `}
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            table.innerHTML = html;
         }
 
         function filterUsers() {
@@ -2980,7 +2988,6 @@
                 showToast(`✅ User ${current ? 'Unban' : 'Ban'} လုပ်ပြီးပါပြီ။`);
 
                 loadAdminUsers();
-                loadBannedUsers();
 
                 if (!current && uid === currentUser?.uid) {
                     await auth.signOut();
@@ -3006,10 +3013,10 @@
                 document.getElementById('toggleWithdrawBtn').textContent = isWithdrawOpen ? '🔒 ပိတ်ရန်' : '🔓 ဖွင့်ရန်';
                 loadAdminUsers();
                 loadWithdrawRequests();
-                loadBannedUsers();
                 updateWithdrawBadge();
                 loadAppList();
                 loadAdList();
+                loadAdminVideoList();
                 updateExchangeRateUI();
                 showToast('✅ Admin ဝင်ရောက်ပြီးပါပြီ');
                 closeModal('adminModal');
@@ -3024,40 +3031,6 @@
             document.getElementById('adminDashboard').style.display = 'none';
             document.getElementById('adminIdInput').value = '';
             showToast('👋 Admin ထွက်ပြီးပါပြီ');
-        }
-
-        // ============================================================
-        //  ADMIN - VIDEO
-        // ============================================================
-        async function adminAddVideo() {
-            const title = document.getElementById('adminVidTitle').value.trim();
-            const url = document.getElementById('adminVidUrl').value.trim();
-            if (!title || !url) { showToast('အချက်အလက် အပြည့်အစုံထည့်ပါ။', 'error'); return; }
-
-            let id = url;
-            if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1].split('?')[0];
-            else if (url.includes('watch?v=')) id = url.split('watch?v=').pop().split('&')[0];
-            else if (url.includes('shorts/')) id = url.split('shorts/')[1].split('?')[0];
-            else if (url.length === 11) id = url;
-
-            if (id.length !== 11) { showToast('မှန်ကန်သော Video ID မဟုတ်ပါ။', 'error'); return; }
-
-            if (currentUser) {
-                await db.collection('videos').add({
-                    name: title,
-                    id: id,
-                    uploadedBy: currentUser.uid,
-                    uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }
-
-            const list = JSON.parse(localStorage.getItem('globalAdminVideos')) || defaultVideos;
-            list.push({ name: title, id: id });
-            localStorage.setItem('globalAdminVideos', JSON.stringify(list));
-            showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ');
-            document.getElementById('adminVidTitle').value = '';
-            document.getElementById('adminVidUrl').value = '';
-            renderPlaylist('myvideo');
         }
 
         // ============================================================
@@ -3350,17 +3323,11 @@
             'https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72';
 
         console.log('✅ App initialized successfully!');
-        console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
-        console.log('💾 Local Storage: Coin တွေကို Local မှာ သိမ်းထားပါမယ်');
-        console.log('🔄 Sync: Firestore ပြန်ရတဲ့အခါ Local Data တွေကို Sync လုပ်ပါမယ်');
-        console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
-        console.log('📱 App Download Links (Daily Bonus): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
-        console.log('📢 Ad Links (Video Watch): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။ (Coin 20 သတ်မှတ်ထားသည်)');
-        console.log('🎁 Daily Bonus: App 2 ခု ဒေါင်းပြီး 700 Coins ရမယ် (သီးခြား)');
-        console.log('🎬 Video Watch: 2 မိနစ်ကြည့်ရင် Ad ပေါ်မယ်၊ Ad ကြည့်ပြီး 20 Coins ရမယ်');
-        console.log('🎁 Coin Gift: User အချင်းချင်း Coin ပို့လို့ရမယ် (Fee 20 Coin)');
-        console.log('👥 User Status: Active (5min အတွင်း) / Offline ခွဲပြထားသည်');
-        console.log('🔑 YouTube API Key: AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI');
+        console.log('📹 Video Management: LOCAL ONLY (No Firestore reads for videos)');
+        console.log('💾 Local Storage: Coin & Video data stored locally');
+        console.log('🔥 Firebase: Auth, Coins, USDT, Exchange Rate only');
+        console.log('🔄 Sync: Firestore sync when online');
+        console.log('🎬 Video Watch: 2 min watch → Ad → 20 Coins');
     </script>
 </body>
 </html>
