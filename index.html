@@ -2560,11 +2560,38 @@
             const link = adLinks[adIndex % adLinks.length];
             const iframe = document.getElementById('adIframe');
             const loading = document.getElementById('adLoading');
+            const progressBar = document.getElementById('adProgressBar');
+            const timerEl = document.getElementById('adCountdown');
+            const skipBtn = document.getElementById('adSkipBtn');
+            const statusText = document.getElementById('adStatusText');
 
+            // ========== RESET EVERYTHING ==========
             // Reset iframe
             iframe.src = 'about:blank';
             loading.style.display = 'block';
             iframe.style.display = 'none';
+
+            // Reset progress bar to 0%
+            progressBar.style.width = '0%';
+            
+            // Reset timer to 30
+            timerEl.textContent = '30';
+            
+            // Reset button
+            skipBtn.disabled = true;
+            skipBtn.innerHTML = '⏳ <span id="adCountdown">30</span> စက္ကန့်စောင့်ပါ...';
+            skipBtn.className = 'claim-btn';
+            skipBtn.onclick = null;
+            
+            // Reset status text
+            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
+            statusText.className = 'status-text';
+
+            // Clear any existing countdown
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+                window._adCountdownInterval = null;
+            }
 
             // Load ad in iframe
             setTimeout(() => {
@@ -2584,26 +2611,10 @@
                 }
             }, 8000);
 
-            // Start countdown
+            // Start new countdown
             let timeLeft = 30;
-            const timerEl = document.getElementById('adCountdown');
-            const progressBar = document.getElementById('adProgressBar');
-            const skipBtn = document.getElementById('adSkipBtn');
-            const statusText = document.getElementById('adStatusText');
-
             timerEl.textContent = timeLeft;
             progressBar.style.width = '0%';
-            skipBtn.disabled = true;
-            skipBtn.innerHTML = `⏳ <span id="adCountdown">${timeLeft}</span> စက္ကန့်စောင့်ပါ...`;
-            skipBtn.className = 'claim-btn';
-            // Remove old onclick and set new one when ready
-            skipBtn.onclick = null;
-            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
-            statusText.className = 'status-text';
-
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-            }
 
             window._adCountdownInterval = setInterval(() => {
                 timeLeft--;
@@ -2616,7 +2627,6 @@
                     skipBtn.disabled = false;
                     skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
                     skipBtn.className = 'claim-btn active';
-                    // Set onclick to closeAdAndClaim
                     skipBtn.onclick = closeAdAndClaim;
                     progressBar.style.width = '100%';
                     statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
