@@ -1795,14 +1795,13 @@
         //  🔥 FIREBASE CONFIG
         // ============================================================
         const firebaseConfig = {
-            apiKey: "AIzaSyB0uzVr7YNL17tultmG6rtGBZBN2z1tD4s",
-            authDomain: "mini-e8864.firebaseapp.com",
-            databaseURL: "https://mini-e8864-default-rtdb.firebaseio.com",
-            projectId: "mini-e8864",
-            storageBucket: "mini-e8864.firebasestorage.app",
-            messagingSenderId: "228491639997",
-            appId: "1:228491639997:web:619ebf911f1bb64d158bd4",
-            measurementId: "G-L9R3BHXE9C"
+            apiKey: "AIzaSyDbqhEDwJXwzK2OmGkZnZ6pMOvXzaiqBTg",
+            authDomain: "reward-program-fbbd3.firebaseapp.com",
+            projectId: "reward-program-fbbd3",
+            storageBucket: "reward-program-fbbd3.firebasestorage.app",
+            messagingSenderId: "301316327614",
+            appId: "1:301316327614:web:030a2856f136f39fe4f6ef",
+            measurementId: "G-Y57H2BK4VW"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -1852,6 +1851,7 @@
         // ============================================================
         let currentUser = null;
         let userData = { coins: 0, usdt: 0, username: 'User', email: '', isBanned: false, lastActive: null };
+        let isUpdatingCoins = false;
         let isAdmin = false;
         let exchangeRate = 3000;
 
@@ -2173,7 +2173,9 @@
                             location.reload();
                             return;
                         }
-                        userData.coins = data.coins || 0;
+                        if (!isUpdatingCoins) {
+                            userData.coins = data.coins || 0;
+                        }
                         userData.username = data.username || userData.username;
                         userData.email = data.email || userData.email || '';
                         userData.usdt = data.usdt || userData.usdt;
@@ -2208,32 +2210,23 @@
         //  UI UPDATE
         // ============================================================
         function updateUI() {
-            if (currentUser) {
-                db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        userData.coins = data.coins || 0;
-                        userData.usdt = data.usdt || 0;
-                        userData.username = data.username || userData.username;
-                        userData.email = data.email || userData.email || '';
+            const coins = userData.coins || 0;
+            const usdt = userData.usdt || 0;
+            const username = userData.username || 'User';
 
-                        document.getElementById('totalCoins').textContent = userData.coins;
-                        document.getElementById('profileCoins').textContent = userData.coins;
-                        document.getElementById('profileUsdt').textContent = userData.usdt.toFixed(2);
-                        document.getElementById('profileName').value = userData.username;
-                        document.getElementById('profileEmail').value = userData.email;
-                        document.getElementById('marketUsdt').textContent = '$' + userData.usdt.toFixed(2);
-                        document.getElementById('exchangeCoins').textContent = userData.coins;
+            document.getElementById('totalCoins').textContent = coins;
+            document.getElementById('profileCoins').textContent = coins;
+            document.getElementById('profileUsdt').textContent = usdt.toFixed(2);
+            document.getElementById('profileName').value = username;
+            document.getElementById('profileEmail').value = userData.email || '';
+            document.getElementById('marketUsdt').textContent = '$' + usdt.toFixed(2);
+            document.getElementById('exchangeCoins').textContent = coins;
 
-                        const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.username) +
-                            '&background=d32f2f&color=fff&size=72';
-                        document.getElementById('profileImg').src = localStorage.getItem('profileImg') || avatar;
+            const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(username) + '&background=d32f2f&color=fff&size=72';
+            document.getElementById('profileImg').src = localStorage.getItem('profileImg') || avatar;
 
-                        updateWithdrawUI();
-                        updateExchangeRateUI();
-                    }
-                }).catch(() => {});
-            }
+            updateWithdrawUI();
+            updateExchangeRateUI();
         }
 
         function updateWithdrawUI() {
@@ -2284,235 +2277,50 @@
         //  AD MODAL FUNCTIONS - FIXED
         // ============================================================
         function closeAdModal() {
+            // Clear any running countdown
             if (window._adCountdownInterval) {
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
+
+            // Clear iframe
             const iframe = document.getElementById('adIframe');
             iframe.src = 'about:blank';
-            document.getElementById('adModal').classList.remove('show');
             
-            // ✅ Reset watch timer and hide popup
-            watchTime = 0;
+            // Close modal
+            document.getElementById('adModal').classList.remove('show');
             document.getElementById('coinPopup').style.display = 'none';
             
+            // Resume video
+            watchTime = 0;
             if (player && player.playVideo) {
                 player.playVideo();
             }
-            showToast('⏭️ ကြော်ငြာကိုကျော်သွားပါပြီ။', 'warning');
-        }
-
-        // ============================================================
-        //  CLAIM COIN - FIXED
-        // ============================================================
-        function claimCoin() {
-            if (!adLinks || adLinks.length === 0) {
-                showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
-                document.getElementById('coinPopup').style.display = 'none';
-                return;
-            }
-
-            if (!currentUser) {
-                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
-                document.getElementById('coinPopup').style.display = 'none';
-                return;
-            }
-
-            document.getElementById('coinPopup').style.display = 'none';
-            document.getElementById('adModal').classList.add('show');
-
-            const link = adLinks[adIndex % adLinks.length];
-            const iframe = document.getElementById('adIframe');
-            const loading = document.getElementById('adLoading');
-
-            iframe.src = 'about:blank';
-            loading.style.display = 'block';
-            iframe.style.display = 'none';
-
-            setTimeout(() => {
-                iframe.src = link;
-            }, 300);
-
-            iframe.onload = function() {
-                loading.style.display = 'none';
-                iframe.style.display = 'block';
-            };
-
-            setTimeout(() => {
-                if (iframe.style.display === 'none') {
-                    loading.style.display = 'none';
-                    iframe.style.display = 'block';
-                    iframe.src = link;
-                }
-            }, 8000);
-
-            let timeLeft = 30;
-            const timerEl = document.getElementById('adCountdown');
-            const progressBar = document.getElementById('adProgressBar');
-            const skipBtn = document.getElementById('adSkipBtn');
-            const statusText = document.getElementById('adStatusText');
-
-            timerEl.textContent = timeLeft;
-            progressBar.style.width = '0%';
-            skipBtn.disabled = true;
-            skipBtn.innerHTML = `⏳ <span id="adCountdown">${timeLeft}</span> စက္ကန့်စောင့်ပါ...`;
-            skipBtn.className = 'claim-btn';
-            skipBtn.onclick = null;
-            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
-            statusText.className = 'status-text';
-
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-            }
-
-            window._adCountdownInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.textContent = timeLeft;
-                progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
-
-                if (timeLeft <= 0) {
-                    clearInterval(window._adCountdownInterval);
-                    window._adCountdownInterval = null;
-                    skipBtn.disabled = false;
-                    skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
-                    skipBtn.className = 'claim-btn active';
-                    skipBtn.onclick = closeAdAndClaim;
-                    progressBar.style.width = '100%';
-                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
-                    statusText.className = 'status-text done';
-                }
-            }, 1000);
         }
 
         // ===== CLOSE AD AND CLAIM - FIXED =====
         function closeAdAndClaim() {
+            // Clear any running countdown
             if (window._adCountdownInterval) {
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
+
+            // Clear iframe
             const iframe = document.getElementById('adIframe');
             iframe.src = 'about:blank';
+            
+            // Close modal
             document.getElementById('adModal').classList.remove('show');
-
+            
+            // Update ad index for next time
             if (adLinks && adLinks.length > 0) {
                 adIndex = (adIndex + 1) % adLinks.length;
                 localStorage.setItem('currentAdIndex', adIndex);
             }
             
+            // Give reward
             giveAdReward(AD_REWARD);
-        }
-
-        // ===== GIVE AD REWARD - FIXED (Reset timer and hide popup) =====
-        async function giveAdReward(reward) {
-            if (!currentUser) {
-                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
-                return;
-            }
-
-            try {
-                await db.collection('users').doc(currentUser.uid).update({
-                    coins: firebase.firestore.FieldValue.increment(reward)
-                });
-
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'ad_watch',
-                    amount: reward,
-                    description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
-                
-                // ✅ Reset watch timer and hide popup
-                watchTime = 0;
-                document.getElementById('coinPopup').style.display = 'none';
-                
-                // Play video again
-                if (player && player.playVideo) {
-                    player.playVideo();
-                }
-                
-                setTimeout(updateUI, 500);
-
-            } catch (error) {
-                console.error('Ad reward error:', error);
-                if (error.code === 'resource-exhausted' || error.message.includes('429')) {
-                    showToast('⚠️ Server busy. Please try again in a moment.', 'warning');
-                } else {
-                    showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
-                }
-            }
-        }
-
-        // ============================================================
-        //  SHOW COIN POPUP - FIXED (Prevent duplicate popups)
-        // ============================================================
-        function showCoinPopup() {
-            // Check if popup is already showing
-            if (document.getElementById('coinPopup').style.display === 'block') {
-                return;
-            }
-            document.getElementById('coinRewardVal').textContent = AD_REWARD;
-            document.getElementById('adRewardAmount').textContent = AD_REWARD;
-            document.getElementById('coinPopup').style.display = 'block';
-        }
-
-        // ============================================================
-        //  DAILY BONUS - FIXED (Once per day)
-        // ============================================================
-        async function claimDailyBonus() {
-            if (!currentUser) {
-                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
-                return;
-            }
-
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                const bonusRef = db.collection('dailyBonus').doc(currentUser.uid);
-                const bonusDoc = await bonusRef.get();
-
-                if (bonusDoc.exists && bonusDoc.data().date === today) {
-                    showToast('⚠️ ယနေ့အတွက် Bonus ရယူပြီးပါပြီ။', 'warning');
-                    return;
-                }
-
-                document.getElementById('dailyBonusModal').classList.add('show');
-                document.getElementById('dailyRewardAmount').textContent = DAILY_BONUS_REWARD;
-
-                let timeLeft = 30;
-                const timerEl = document.getElementById('dailyCountdown');
-                const progressBar = document.getElementById('dailyProgressBar');
-                const skipBtn = document.getElementById('dailySkipBtn');
-
-                timerEl.textContent = timeLeft;
-                progressBar.style.width = '0%';
-                skipBtn.disabled = true;
-                skipBtn.textContent = '⏳ App ဒေါင်းနေပါ...';
-
-                if (window._dailyCountdown) {
-                    clearInterval(window._dailyCountdown);
-                }
-
-                window._dailyCountdown = setInterval(() => {
-                    timeLeft--;
-                    timerEl.textContent = timeLeft;
-                    progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
-
-                    if (timeLeft <= 0) {
-                        clearInterval(window._dailyCountdown);
-                        window._dailyCountdown = null;
-                        skipBtn.disabled = false;
-                        skipBtn.textContent = '✅ App ဒေါင်းပြီးပါပြီ! 700 Coins ရယူမည်';
-                        progressBar.style.width = '100%';
-                        skipBtn.onclick = openDailyBonusApps;
-                    }
-                }, 1000);
-
-            } catch (error) {
-                console.error('Daily bonus claim error:', error);
-                showToast('❌ Bonus ရယူမအောင်မြင်ပါ။', 'error');
-            }
         }
 
         function closeDailyBonusModal() {
@@ -2522,96 +2330,20 @@
             }
         }
 
-        async function openDailyBonusApps() {
-            if (!currentUser) {
-                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
-                return;
-            }
+        document.querySelectorAll('.modal').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (e.target === el) el.classList.remove('show');
+            });
+        });
 
-            if (window._dailyCountdown) {
-                clearInterval(window._dailyCountdown);
-                window._dailyCountdown = null;
-            }
-
-            const link = appLinks[appIndex % appLinks.length];
-
-            if (link) {
-                try {
-                    const popup = window.open(
-                        link,
-                        'appPopup',
-                        'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
-                    );
-                    if (popup) popup.focus();
-                    else window.open(link, '_blank');
-                } catch (e) {
-                    window.open(link, '_blank');
-                }
-            }
-
-            const secondLink = appLinks[(appIndex + 1) % appLinks.length];
-            if (secondLink) {
-                setTimeout(() => {
-                    try {
-                        const popup2 = window.open(
-                            secondLink,
-                            'appPopup2',
-                            'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
-                        );
-                        if (popup2) popup2.focus();
-                        else window.open(secondLink, '_blank');
-                    } catch (e) {
-                        window.open(secondLink, '_blank');
-                    }
-                }, 500);
-            }
-
-            appIndex = (appIndex + 2) % Math.max(appLinks.length, 1);
-            localStorage.setItem('currentAppIndex', appIndex);
-
-            await giveDailyBonusReward();
-        }
-
-        // ===== GIVE DAILY BONUS REWARD - FIXED (Once per day) =====
-        async function giveDailyBonusReward() {
-            const reward = DAILY_BONUS_REWARD;
-            if (!currentUser) return;
-
-            try {
-                const userRef = db.collection('users').doc(currentUser.uid);
-                const bonusRef = db.collection('dailyBonus').doc(currentUser.uid);
-                const today = new Date().toISOString().split('T')[0];
-
-                await userRef.update({
-                    coins: firebase.firestore.FieldValue.increment(reward)
-                });
-
-                await bonusRef.set({
-                    date: today,
-                    claimedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'daily_bonus',
-                    amount: reward,
-                    description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ!');
-                document.getElementById('dailyBonusModal').classList.remove('show');
-                if (player && player.playVideo) player.playVideo();
-                setTimeout(updateUI, 500);
-
-            } catch (error) {
-                console.error('Daily bonus reward error:', error);
-                if (error.code === 'resource-exhausted' || error.message.includes('429')) {
-                    showToast('⚠️ Server busy. Please try again in a moment.', 'warning');
-                } else {
-                    showToast('❌ Bonus ရယူမအောင်မြင်ပါ။', 'error');
-                }
-            }
+        // ============================================================
+        //  OPEN HISTORY MODAL
+        // ============================================================
+        function openHistoryModal() {
+            openModal('historyModal');
+            setTimeout(() => {
+                loadTransactionHistory();
+            }, 300);
         }
 
         // ============================================================
@@ -2692,8 +2424,12 @@
             const container = document.getElementById('playlistContainer');
             const title = document.getElementById('playlistTitle');
             title.textContent = '🔍 ရှာဖွေနေပါသည်...';
-            container.innerHTML =
-                `<div class="search-loading"><i class="fas fa-spinner"></i><p>"${query}" ကိုရှာဖွေနေပါသည်...</p></div>`;
+            container.innerHTML = `
+                <div class="search-loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>"${query}" ကိုရှာဖွေနေပါသည်...</p>
+                </div>
+            `;
 
             switchCategory('search', document.querySelector('.menu-item:last-child'));
 
@@ -2723,8 +2459,7 @@
                         const card = document.createElement('div');
                         card.className = 'video-card';
                         const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                        card.innerHTML =
-                            `
+                        card.innerHTML = `
                             <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
                             <div class="title">${item.name}</div>
                         `;
@@ -2736,8 +2471,7 @@
 
                 } else {
                     title.textContent = '🔍 ရှာဖွေမှုရလဒ်';
-                    container.innerHTML =
-                        `
+                    container.innerHTML = `
                         <div class="search-no-results">
                             <i class="fas fa-search"></i>
                             <p>"${query}" အတွက် ရလဒ်မတွေ့ပါ။</p>
@@ -2749,8 +2483,7 @@
             } catch (error) {
                 console.error('Search error:', error);
                 title.textContent = '❌ ရှာဖွေမှုမအောင်မြင်ပါ';
-                container.innerHTML =
-                    `
+                container.innerHTML = `
                     <div class="search-no-results">
                         <i class="fas fa-exclamation-circle" style="color:var(--accent);"></i>
                         <p>ရှာဖွေမှုမအောင်မြင်ပါ။</p>
@@ -2771,7 +2504,7 @@
         });
 
         // ============================================================
-        //  WATCH TIMER
+        //  WATCH TIMER & AD COIN (IFrame Version) - FIXED
         // ============================================================
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
@@ -2789,6 +2522,406 @@
             } else {
                 if (watchInterval) { clearInterval(watchInterval);
                     watchInterval = null; }
+            }
+        }
+
+        function showCoinPopup() {
+            document.getElementById('coinRewardVal').textContent = AD_REWARD;
+            document.getElementById('adRewardAmount').textContent = AD_REWARD;
+            document.getElementById('coinPopup').style.display = 'block';
+        }
+
+        // ===== CLAIM COIN - IFrame Version FIXED =====
+        function claimCoin() {
+            if (!adLinks || adLinks.length === 0) {
+                showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
+                document.getElementById('coinPopup').style.display = 'none';
+                return;
+            }
+
+            // Don't allow multiple ad claims at once
+            if (isUpdatingCoins) {
+                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
+                return;
+            }
+
+            document.getElementById('coinPopup').style.display = 'none';
+            document.getElementById('adModal').classList.add('show');
+
+            const link = adLinks[adIndex % adLinks.length];
+            const iframe = document.getElementById('adIframe');
+            const loading = document.getElementById('adLoading');
+
+            // Reset iframe
+            iframe.src = 'about:blank';
+            loading.style.display = 'block';
+            iframe.style.display = 'none';
+
+            // Load ad in iframe
+            setTimeout(() => {
+                iframe.src = link;
+            }, 300);
+
+            iframe.onload = function() {
+                loading.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+
+            setTimeout(() => {
+                if (iframe.style.display === 'none') {
+                    loading.style.display = 'none';
+                    iframe.style.display = 'block';
+                    iframe.src = link;
+                }
+            }, 8000);
+
+            // Start countdown
+            let timeLeft = 30;
+            const timerEl = document.getElementById('adCountdown');
+            const progressBar = document.getElementById('adProgressBar');
+            const skipBtn = document.getElementById('adSkipBtn');
+            const statusText = document.getElementById('adStatusText');
+
+            timerEl.textContent = timeLeft;
+            progressBar.style.width = '0%';
+            skipBtn.disabled = true;
+            skipBtn.innerHTML = `⏳ <span id="adCountdown">${timeLeft}</span> စက္ကန့်စောင့်ပါ...`;
+            skipBtn.className = 'claim-btn';
+            // Remove old onclick and set new one when ready
+            skipBtn.onclick = null;
+            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
+            statusText.className = 'status-text';
+
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+            }
+
+            window._adCountdownInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
+
+                if (timeLeft <= 0) {
+                    clearInterval(window._adCountdownInterval);
+                    window._adCountdownInterval = null;
+                    skipBtn.disabled = false;
+                    skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
+                    skipBtn.className = 'claim-btn active';
+                    // Set onclick to closeAdAndClaim
+                    skipBtn.onclick = closeAdAndClaim;
+                    progressBar.style.width = '100%';
+                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
+                    statusText.className = 'status-text done';
+                }
+            }, 1000);
+        }
+
+        // ===== GIVE AD REWARD - FIXED =====
+        async function giveAdReward(reward) {
+            if (!currentUser) {
+                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
+                return;
+            }
+            
+            // Prevent multiple simultaneous updates
+            if (isUpdatingCoins) {
+                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
+                return;
+            }
+            
+            try {
+                isUpdatingCoins = true;
+                
+                const userRef = db.collection('users').doc(currentUser.uid);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(reward)
+                });
+                
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'ad_watch',
+                    amount: reward,
+                    description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update local userData
+                userData.coins = (userData.coins || 0) + reward;
+                updateUI();
+                
+                showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
+                
+                // Reset watch timer
+                watchTime = 0;
+                if (player && player.playVideo) player.playVideo();
+                
+            } catch (error) {
+                console.error('Ad reward error:', error);
+                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။ နောက်တစ်ကြိမ်ထပ်စမ်းပါ။', 'error');
+            } finally {
+                // Reset the flag after a short delay
+                setTimeout(() => {
+                    isUpdatingCoins = false;
+                    // Refresh data from Firestore to ensure consistency
+                    if (currentUser) {
+                        db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                            if (doc.exists) {
+                                userData.coins = doc.data().coins || 0;
+                                updateUI();
+                            }
+                        }).catch(() => {});
+                    }
+                }, 2000);
+            }
+        }
+
+        // ============================================================
+        //  COIN GIFT SYSTEM
+        // ============================================================
+        async function sendCoinGift() {
+            const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
+            const amount = parseInt(document.getElementById('giftAmount').value);
+            const msgEl = document.getElementById('giftMsg');
+
+            if (!receiverEmail) {
+                msgEl.textContent = '❌ လက်ခံသူ Email ထည့်ပါ။';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            if (!amount || amount < 1) {
+                msgEl.textContent = '❌ ပမာဏ ထည့်ပါ။';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            if (receiverEmail === userData.email) {
+                msgEl.textContent = '❌ ကိုယ်တိုင်ကိုယ်တိုင်မပို့ရပါ။';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            const totalCost = amount + GIFT_FEE;
+            if (userData.coins < totalCost) {
+                msgEl.textContent = '❌ Coin မလုံလောက်ပါ။ လိုအပ်သော Coin: ' + totalCost + ' (Gift ' + amount +
+                    ' + Fee ' + GIFT_FEE + ')';
+                msgEl.style.color = '#ff5252';
+                return;
+            }
+
+            try {
+                const snapshot = await db.collection('users')
+                    .where('email', '==', receiverEmail)
+                    .get();
+
+                if (snapshot.empty) {
+                    msgEl.textContent = '❌ "' + receiverEmail + '" ကို မတွေ့ပါ။';
+                    msgEl.style.color = '#ff5252';
+                    return;
+                }
+
+                const receiverDoc = snapshot.docs[0];
+                const receiverId = receiverDoc.id;
+                const receiverData = receiverDoc.data();
+
+                isUpdatingCoins = true;
+                userData.coins = (userData.coins || 0) - totalCost;
+                updateUI();
+
+                const senderRef = db.collection('users').doc(currentUser.uid);
+                const receiverRef = db.collection('users').doc(receiverId);
+                
+                await db.runTransaction(async (transaction) => {
+                    const senderDoc = await transaction.get(senderRef);
+                    const receiverDoc2 = await transaction.get(receiverRef);
+                    
+                    if (!senderDoc.exists || !receiverDoc2.exists) return;
+                    
+                    const senderCoins = senderDoc.data().coins || 0;
+                    
+                    if (senderCoins < totalCost) {
+                        throw new Error('Sender insufficient coins');
+                    }
+                    
+                    transaction.update(senderRef, { coins: senderCoins - totalCost });
+                    transaction.update(receiverRef, { coins: (receiverDoc2.data().coins || 0) + amount });
+                });
+
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'gift_sent',
+                    amount: -totalCost,
+                    description: 'Coin Gift ပို့ခြင်း (' + amount + ' Coins → ' + receiverData.username +
+                        ' | Fee ' + GIFT_FEE + ' Coins)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await db.collection('transactions').add({
+                    userId: receiverId,
+                    type: 'gift_received',
+                    amount: amount,
+                    description: 'Coin Gift ရရှိခြင်း (' + amount + ' Coins from ' + userData.username + ')',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                msgEl.textContent = '✅ ' + receiverData.username + ' ဆီကို ' + amount +
+                    ' Coins ပို့ပြီးပါပြီ! (Fee ' + GIFT_FEE + ' Coins ဖြတ်ပါပြီ)';
+                msgEl.style.color = '#4caf50';
+
+                document.getElementById('giftReceiverEmail').value = '';
+                document.getElementById('giftAmount').value = '';
+
+                showToast('🎁 ' + receiverData.username + ' ဆီကို ' + amount + ' Coins ပို့ပြီးပါပြီ!', 'success');
+
+            } catch (error) {
+                console.error('Gift error:', error);
+                userData.coins = (userData.coins || 0) + totalCost;
+                updateUI();
+                msgEl.textContent = '❌ Gift ပို့မအောင်မြင်ပါ: ' + error.message;
+                msgEl.style.color = '#ff5252';
+            } finally {
+                setTimeout(() => {
+                    isUpdatingCoins = false;
+                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            userData.coins = doc.data().coins || 0;
+                            updateUI();
+                        }
+                    });
+                }, 2000);
+            }
+        }
+
+        // ============================================================
+        //  DAILY BONUS - APP DOWNLOAD
+        // ============================================================
+        async function claimDailyBonus() {
+            const today = new Date().toDateString();
+            const last = localStorage.getItem('lastBonusDate') || '';
+            if (last === today) {
+                showToast('ယနေ့အတွက် Bonus ရယူပြီးပါပြီ။', 'error');
+                return;
+            }
+
+            document.getElementById('dailyBonusModal').classList.add('show');
+            document.getElementById('dailyRewardAmount').textContent = DAILY_BONUS_REWARD;
+
+            let timeLeft = 30;
+            const timerEl = document.getElementById('dailyCountdown');
+            const progressBar = document.getElementById('dailyProgressBar');
+            const skipBtn = document.getElementById('dailySkipBtn');
+
+            timerEl.textContent = timeLeft;
+            progressBar.style.width = '0%';
+            skipBtn.disabled = true;
+            skipBtn.textContent = '⏳ App ဒေါင်းနေပါ...';
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    skipBtn.disabled = false;
+                    skipBtn.textContent = '✅ App ဒေါင်းပြီးပါပြီ! 700 Coins ရယူမည်';
+                    progressBar.style.width = '100%';
+                }
+            }, 1000);
+        }
+
+        async function openDailyBonusApps() {
+            const link = appLinks[appIndex % appLinks.length];
+
+            if (link) {
+                try {
+                    const popup = window.open(
+                        link,
+                        'appPopup',
+                        'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+                    );
+                    if (popup) {
+                        popup.focus();
+                    } else {
+                        window.open(link, '_blank');
+                    }
+                } catch (e) {
+                    window.open(link, '_blank');
+                }
+            }
+
+            const secondLink = appLinks[(appIndex + 1) % appLinks.length];
+            if (secondLink) {
+                setTimeout(() => {
+                    try {
+                        const popup2 = window.open(
+                            secondLink,
+                            'appPopup2',
+                            'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+                        );
+                        if (popup2) {
+                            popup2.focus();
+                        } else {
+                            window.open(secondLink, '_blank');
+                        }
+                    } catch (e) {
+                        window.open(secondLink, '_blank');
+                    }
+                }, 500);
+            }
+
+            appIndex = (appIndex + 2) % Math.max(appLinks.length, 1);
+            localStorage.setItem('currentAppIndex', appIndex);
+
+            await giveDailyBonusReward();
+        }
+
+        async function giveDailyBonusReward() {
+            const reward = DAILY_BONUS_REWARD;
+
+            if (!currentUser) return;
+            
+            try {
+                isUpdatingCoins = true;
+                
+                const userRef = db.collection('users').doc(currentUser.uid);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(reward)
+                });
+                
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'daily_bonus',
+                    amount: reward,
+                    description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                userData.coins = (userData.coins || 0) + reward;
+                updateUI();
+                
+                const today = new Date().toDateString();
+                localStorage.setItem('lastBonusDate', today);
+                
+                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
+                
+                document.getElementById('dailyBonusModal').classList.remove('show');
+                watchTime = 0;
+                if (player && player.playVideo) player.playVideo();
+                
+            } catch (error) {
+                console.error('Daily bonus error:', error);
+                showToast('❌ Bonus ရယူမအောင်မြင်ပါ။', 'error');
+            } finally {
+                setTimeout(() => {
+                    isUpdatingCoins = false;
+                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            userData.coins = doc.data().coins || 0;
+                            updateUI();
+                        }
+                    });
+                }, 2000);
             }
         }
 
@@ -2841,8 +2974,7 @@
                 const card = document.createElement('div');
                 card.className = 'video-card';
                 const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                card.innerHTML =
-                    `
+                card.innerHTML = `
                     <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
                     <div class="title">${item.name}</div>
                 `;
@@ -2897,13 +3029,6 @@
         // ============================================================
         //  TRANSACTION HISTORY
         // ============================================================
-        function openHistoryModal() {
-            openModal('historyModal');
-            setTimeout(() => {
-                loadTransactionHistory();
-            }, 300);
-        }
-
         async function loadTransactionHistory() {
             const container = document.getElementById('transactionList');
 
@@ -2914,8 +3039,7 @@
             }
 
             try {
-                container.innerHTML =
-                    `
+                container.innerHTML = `
                     <div style="text-align:center;padding:20px;color:var(--text-muted);">
                         <i class="fas fa-spinner fa-spin" style="font-size:24px;"></i>
                         <p style="margin-top:8px;">မှတ်တမ်းများ ရယူနေပါသည်...</p>
@@ -2927,8 +3051,7 @@
                     .get();
 
                 if (snapshot.empty) {
-                    container.innerHTML =
-                        `
+                    container.innerHTML = `
                         <div style="text-align:center;padding:30px;color:var(--text-muted);">
                             <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:10px;opacity:0.3;"></i>
                             <p>မှတ်တမ်းမရှိသေးပါ</p>
@@ -2996,8 +3119,7 @@
 
             } catch (error) {
                 console.error('Load transaction error:', error);
-                container.innerHTML =
-                    `
+                container.innerHTML = `
                     <div style="text-align:center;padding:20px;color:var(--text-muted);">
                         <i class="fas fa-exclamation-circle" style="font-size:24px;display:block;margin-bottom:8px;color:var(--accent);"></i>
                         <p>မှတ်တမ်းများ ရယူမရပါ</p>
@@ -3007,114 +3129,6 @@
                         </button>
                     </div>
                 `;
-            }
-        }
-
-        // ============================================================
-        //  COIN GIFT SYSTEM
-        // ============================================================
-        async function sendCoinGift() {
-            const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
-            const amount = parseInt(document.getElementById('giftAmount').value);
-            const msgEl = document.getElementById('giftMsg');
-
-            if (!receiverEmail) {
-                msgEl.textContent = '❌ လက်ခံသူ Email ထည့်ပါ။';
-                msgEl.style.color = '#ff5252';
-                return;
-            }
-
-            if (!amount || amount < 1) {
-                msgEl.textContent = '❌ ပမာဏ ထည့်ပါ။';
-                msgEl.style.color = '#ff5252';
-                return;
-            }
-
-            if (receiverEmail === userData.email) {
-                msgEl.textContent = '❌ ကိုယ်တိုင်ကိုယ်တိုင်မပို့ရပါ။';
-                msgEl.style.color = '#ff5252';
-                return;
-            }
-
-            const totalCost = amount + GIFT_FEE;
-            if (userData.coins < totalCost) {
-                msgEl.textContent = '❌ Coin မလုံလောက်ပါ။ လိုအပ်သော Coin: ' + totalCost + ' (Gift ' + amount +
-                    ' + Fee ' + GIFT_FEE + ')';
-                msgEl.style.color = '#ff5252';
-                return;
-            }
-
-            try {
-                const snapshot = await db.collection('users')
-                    .where('email', '==', receiverEmail)
-                    .get();
-
-                if (snapshot.empty) {
-                    msgEl.textContent = '❌ "' + receiverEmail + '" ကို မတွေ့ပါ။';
-                    msgEl.style.color = '#ff5252';
-                    return;
-                }
-
-                const receiverDoc = snapshot.docs[0];
-                const receiverId = receiverDoc.id;
-                const receiverData = receiverDoc.data();
-
-                userData.coins = (userData.coins || 0) - totalCost;
-                updateUI();
-
-                const senderRef = db.collection('users').doc(currentUser.uid);
-                const receiverRef = db.collection('users').doc(receiverId);
-
-                await db.runTransaction(async (transaction) => {
-                    const senderDoc = await transaction.get(senderRef);
-                    const receiverDoc2 = await transaction.get(receiverRef);
-
-                    if (!senderDoc.exists || !receiverDoc2.exists) return;
-
-                    const senderCoins = senderDoc.data().coins || 0;
-
-                    if (senderCoins < totalCost) {
-                        throw new Error('Sender insufficient coins');
-                    }
-
-                    transaction.update(senderRef, { coins: senderCoins - totalCost });
-                    transaction.update(receiverRef, { coins: (receiverDoc2.data().coins || 0) + amount });
-                });
-
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'gift_sent',
-                    amount: -totalCost,
-                    description: 'Coin Gift ပို့ခြင်း (' + amount + ' Coins → ' + receiverData.username +
-                        ' | Fee ' + GIFT_FEE + ' Coins)',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                await db.collection('transactions').add({
-                    userId: receiverId,
-                    type: 'gift_received',
-                    amount: amount,
-                    description: 'Coin Gift ရရှိခြင်း (' + amount + ' Coins from ' + userData.username + ')',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                msgEl.textContent = '✅ ' + receiverData.username + ' ဆီကို ' + amount +
-                    ' Coins ပို့ပြီးပါပြီ! (Fee ' + GIFT_FEE + ' Coins ဖြတ်ပါပြီ)';
-                msgEl.style.color = '#4caf50';
-
-                document.getElementById('giftReceiverEmail').value = '';
-                document.getElementById('giftAmount').value = '';
-
-                showToast('🎁 ' + receiverData.username + ' ဆီကို ' + amount + ' Coins ပို့ပြီးပါပြီ!', 'success');
-
-            } catch (error) {
-                console.error('Gift error:', error);
-                userData.coins = (userData.coins || 0) + totalCost;
-                updateUI();
-                msgEl.textContent = '❌ Gift ပို့မအောင်မြင်ပါ: ' + error.message;
-                msgEl.style.color = '#ff5252';
-            } finally {
-                updateUI();
             }
         }
 
@@ -3162,7 +3176,6 @@
                 });
                 showToast(`✅ ${amt} Coin → $${usdt.toFixed(2)} USDT လဲလှယ်ပြီးပါပြီ`);
                 closeModal('exchangeModal');
-                updateUI();
             }
         }
 
@@ -3886,7 +3899,6 @@
             msg.style.color = '#4caf50';
             loadAdminUsers();
             document.getElementById('adminCoinAmount').value = '';
-            updateUI();
         }
 
         async function adminRemoveCoin() {
@@ -3935,7 +3947,6 @@
             msg.style.color = '#ff5252';
             loadAdminUsers();
             document.getElementById('adminCoinAmount').value = '';
-            updateUI();
         }
 
         // ============================================================
@@ -3964,14 +3975,16 @@
         document.getElementById('profileImg').src = localStorage.getItem('profileImg') ||
             'https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72';
 
-        console.log('✅ App initialized successfully with FIXED coin claiming and daily bonus!');
+        console.log('✅ App initialized successfully!');
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
         console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
         console.log('📱 App Download Links (Daily Bonus): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
         console.log('📢 Ad Links (Video Watch): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။ (Coin 20 သတ်မှတ်ထားသည်)');
-        console.log('🎁 Daily Bonus: တစ်နေ့တစ်ခါသာ ရယူနိုင်ပါပြီ။');
+        console.log('🎁 Daily Bonus: App 2 ခု ဒေါင်းပြီး 700 Coins ရမယ် (သီးခြား)');
         console.log('🎬 Video Watch: 2 မိနစ်ကြည့်ရင် Ad ပေါ်မယ်၊ Ad ကြည့်ပြီး 20 Coins ရမယ်');
-        console.log('🔄 Coin ယူပြီးရင် နောက်ထပ် 2 မိနစ်စောင့်မှ ပြန်ပေါ်ပါမယ်။');
+        console.log('🎁 Coin Gift: User အချင်းချင်း Coin ပို့လို့ရမယ် (Fee 20 Coin)');
+        console.log('👥 User Status: Active (5min အတွင်း) / Offline ခွဲပြထားသည်');
+        console.log('🔑 YouTube API Key: AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI');
     </script>
 </body>
 </html>
