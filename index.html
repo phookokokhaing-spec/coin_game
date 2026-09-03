@@ -17,28 +17,24 @@
     <script src="https://www.youtube.com/iframe_api">
     </script>
     <style>
-        /* ===== ALL STYLES ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ===== ALL STYLES - Same as before ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg-primary: #0b0b0f;
             --bg-secondary: #14141e;
             --bg-card: #1e1e2e;
-            --bg-input: rgba(255, 255, 255, 0.05);
+            --bg-input: rgba(255,255,255,0.05);
             --text-primary: #f0f0f5;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-muted: rgba(255, 255, 255, 0.3);
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.3);
             --accent: #d32f2f;
             --accent-hover: #b71c1c;
             --success: #2e7d32;
             --success-hover: #1b5e20;
             --warning: #ffa726;
             --gold: #ffd700;
-            --border-color: rgba(255, 255, 255, 0.06);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --border-color: rgba(255,255,255,0.06);
+            --shadow: 0 8px 32px rgba(0,0,0,0.6);
             --radius: 16px;
             --radius-full: 60px;
             --transition: 0.25s ease;
@@ -47,21 +43,14 @@
             --bg-primary: #f0f0f5;
             --bg-secondary: #ffffff;
             --bg-card: #e8e8f0;
-            --bg-input: rgba(0, 0, 0, 0.05);
+            --bg-input: rgba(0,0,0,0.05);
             --text-primary: #0b0b0f;
-            --text-secondary: rgba(0, 0, 0, 0.6);
-            --text-muted: rgba(0, 0, 0, 0.3);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --text-secondary: rgba(0,0,0,0.6);
+            --text-muted: rgba(0,0,0,0.3);
+            --border-color: rgba(0,0,0,0.08);
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
-
-        html,
-        body {
-            height: 100%;
-            height: 100dvh;
-            overflow: hidden;
-        }
-
+        html, body { height: 100%; height: 100dvh; overflow: hidden; }
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg-primary);
@@ -72,1204 +61,391 @@
             position: relative;
             transition: background var(--transition), color var(--transition);
         }
-
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 10px;
-        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
         /* ===== SPLASH SCREEN ===== */
         #splash {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
+            position: fixed; inset: 0; z-index: 9999;
             background: var(--bg-primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             transition: opacity 0.6s, transform 0.6s;
         }
-        #splash.hide {
-            opacity: 0;
-            transform: scale(1.05);
-            pointer-events: none;
-        }
-        #splash .logo {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--accent);
-            letter-spacing: -1px;
-        }
-        #splash .logo span {
-            color: var(--text-primary);
-        }
+        #splash.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
+        #splash .logo { font-size: 48px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+        #splash .logo span { color: var(--text-primary); }
         #splash .loader {
-            margin-top: 24px;
-            width: 40px;
-            height: 40px;
+            margin-top: 24px; width: 40px; height: 40px;
             border: 3px solid var(--border-color);
             border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        #splash p {
-            margin-top: 16px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #splash p { margin-top: 16px; font-size: 13px; color: var(--text-secondary); }
 
         /* ===== AUTH SCREEN ===== */
-        #authScreen {
-            display: none;
-            flex: 1;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            min-height: 0;
-        }
-        #authScreen.active {
-            display: flex;
-        }
+        #authScreen { display: none; flex: 1; align-items: center; justify-content: center; padding: 20px; min-height: 0; }
+        #authScreen.active { display: flex; }
         .auth-box {
             background: var(--bg-secondary);
-            border-radius: 28px;
-            padding: 32px 24px;
-            width: 100%;
-            max-width: 380px;
+            border-radius: 28px; padding: 32px 24px;
+            width: 100%; max-width: 380px;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
         }
-        .auth-box .brand {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .auth-box .brand h1 {
-            font-size: 28px;
-            font-weight: 800;
-        }
-        .auth-box .brand h1 span {
-            color: var(--accent);
-        }
-        .auth-box .brand p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .auth-box .form-group {
-            margin-bottom: 14px;
-        }
-        .auth-box .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
+        .auth-box .brand { text-align: center; margin-bottom: 24px; }
+        .auth-box .brand h1 { font-size: 28px; font-weight: 800; }
+        .auth-box .brand h1 span { color: var(--accent); }
+        .auth-box .brand p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+        .auth-box .form-group { margin-bottom: 14px; }
+        .auth-box .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
         .auth-box .form-group input {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 12px;
+            width: 100%; padding: 10px 14px; border-radius: 12px;
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
+            font-size: 14px; outline: none;
             transition: var(--transition);
         }
-        .auth-box .form-group input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
-        }
+        .auth-box .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(211,47,47,0.15); }
         .auth-box .btn {
-            width: 100%;
-            padding: 11px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
+            width: 100%; padding: 11px; border: none; border-radius: 12px;
+            font-weight: 700; font-size: 14px; cursor: pointer;
             transition: var(--transition);
             background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(211, 47, 47, 0.3);
+            color: #fff; box-shadow: 0 4px 20px rgba(211,47,47,0.3);
         }
-        .auth-box .btn:hover {
-            transform: scale(1.02);
-        }
-        .auth-box .btn-outline {
-            background: transparent;
-            box-shadow: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-        .auth-box .btn-outline:hover {
-            background: var(--bg-input);
-        }
-        .auth-box .toggle-link {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .auth-box .toggle-link span {
-            color: var(--accent);
-            font-weight: 600;
-        }
-        .auth-box .toggle-link span:hover {
-            text-decoration: underline;
-        }
-        .auth-box .error-msg {
-            background: rgba(211, 47, 47, 0.15);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 13px;
-            color: var(--accent);
-            margin-bottom: 12px;
-            display: none;
-        }
-        .auth-box .error-msg.show {
-            display: block;
-        }
+        .auth-box .btn:hover { transform: scale(1.02); }
+        .auth-box .btn-outline { background: transparent; box-shadow: none; border: 1px solid var(--border-color); color: var(--text-primary); }
+        .auth-box .btn-outline:hover { background: var(--bg-input); }
+        .auth-box .toggle-link { text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+        .auth-box .toggle-link span { color: var(--accent); font-weight: 600; }
+        .auth-box .toggle-link span:hover { text-decoration: underline; }
+        .auth-box .error-msg { background: rgba(211,47,47,0.15); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--accent); margin-bottom: 12px; display: none; }
+        .auth-box .error-msg.show { display: block; }
 
         /* ===== MAIN APP ===== */
-        #appContainer {
-            display: none;
-            flex: 1;
-            flex-direction: column;
-            min-height: 0;
-            height: 100%;
-            padding: 6px 6px 0;
-            overflow: hidden;
-        }
-        #appContainer.active {
-            display: flex;
-        }
+        #appContainer { display: none; flex: 1; flex-direction: column; min-height: 0; height: 100%; padding: 6px 6px 0; overflow: hidden; }
+        #appContainer.active { display: flex; }
 
         /* ===== TOP BAR ===== */
         .top-bar {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            background: var(--bg-secondary);
-            backdrop-filter: blur(12px);
-            padding: 8px 12px;
-            border-radius: var(--radius-full);
+            display: flex; gap: 6px; align-items: center;
+            background: var(--bg-secondary); backdrop-filter: blur(12px);
+            padding: 8px 12px; border-radius: var(--radius-full);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
-            margin-bottom: 6px;
-            flex-shrink: 0;
-            min-height: 48px;
+            margin-bottom: 6px; flex-shrink: 0; min-height: 48px;
         }
         .top-bar input {
-            flex: 1;
-            padding: 6px 14px;
-            border: none;
-            background: var(--bg-input);
-            color: var(--text-primary);
-            border-radius: var(--radius-full);
-            outline: none;
-            font-size: 12px;
-            border: 1px solid transparent;
-            transition: var(--transition);
-            min-width: 0;
+            flex: 1; padding: 6px 14px; border: none;
+            background: var(--bg-input); color: var(--text-primary);
+            border-radius: var(--radius-full); outline: none;
+            font-size: 12px; border: 1px solid transparent;
+            transition: var(--transition); min-width: 0;
         }
-        .top-bar input:focus {
-            border-color: var(--accent);
-        }
-        .top-bar input::placeholder {
-            color: var(--text-muted);
-        }
+        .top-bar input:focus { border-color: var(--accent); }
+        .top-bar input::placeholder { color: var(--text-muted); }
         .top-bar .btn-icon {
             background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-            color: #fff;
-            border: none;
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 11px;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-            flex-shrink: 0;
+            color: #fff; border: none; padding: 6px 14px;
+            border-radius: var(--radius-full); font-weight: 600; font-size: 11px;
+            cursor: pointer; transition: var(--transition); white-space: nowrap; flex-shrink: 0;
         }
-        .top-bar .btn-icon:hover {
-            transform: scale(1.03);
-        }
+        .top-bar .btn-icon:hover { transform: scale(1.03); }
         .top-bar .coin-box {
             background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: var(--radius-full);
-            font-weight: 700;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-            flex-shrink: 0;
+            color: #fff; padding: 4px 12px; border-radius: var(--radius-full);
+            font-weight: 700; font-size: 13px;
+            display: flex; align-items: center; gap: 4px;
+            white-space: nowrap; flex-shrink: 0;
         }
         .top-bar .icon-btn {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-            flex-shrink: 0;
+            background: var(--bg-input); border: 1px solid var(--border-color);
+            color: var(--text-secondary); width: 32px; height: 32px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: var(--transition); font-size: 14px; flex-shrink: 0;
         }
-        .top-bar .icon-btn:hover {
-            background: rgba(211, 47, 47, 0.15);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-
-        .admin-lock-btn {
-            position: relative;
-        }
+        .top-bar .icon-btn:hover { background: rgba(211,47,47,0.15); border-color: var(--accent); color: var(--text-primary); }
+        .admin-lock-btn { position: relative; }
         .admin-lock-btn .tap-counter {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            background: var(--accent);
-            color: #fff;
-            font-size: 8px;
-            font-weight: 700;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
+            position: absolute; top: -6px; right: -6px;
+            background: var(--accent); color: #fff;
+            font-size: 8px; font-weight: 700; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s;
         }
-        .admin-lock-btn .tap-counter.show {
-            opacity: 1;
-        }
+        .admin-lock-btn .tap-counter.show { opacity: 1; }
 
         /* ===== VIDEO ===== */
         .video-container {
-            width: 100%;
-            aspect-ratio: 16/9;
-            max-height: 220px;
-            background: #000;
-            position: relative;
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-bottom: 6px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            flex-shrink: 0;
-            min-height: 120px;
+            width: 100%; aspect-ratio: 16/9; max-height: 220px;
+            background: #000; position: relative;
+            border-radius: var(--radius); overflow: hidden;
+            margin-bottom: 6px; border: 1px solid var(--border-color);
+            box-shadow: var(--shadow); flex-shrink: 0; min-height: 120px;
         }
-        #player {
-            width: 100%;
-            height: 100%;
-        }
+        #player { width: 100%; height: 100%; }
         .video-error {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--text-secondary);
-            font-size: 14px;
-            text-align: center;
-            padding: 20px;
-            pointer-events: none;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: var(--text-secondary); font-size: 14px; text-align: center; padding: 20px; pointer-events: none;
         }
-        .video-error i {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 8px;
-            color: var(--accent);
-        }
-
+        .video-error i { font-size: 32px; display: block; margin-bottom: 8px; color: var(--accent); }
         #coinPopup {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
+            position: absolute; bottom: 12px; right: 12px;
             background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-            color: #fff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: var(--radius-full);
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 8px 32px rgba(211, 47, 47, 0.5);
-            animation: bounce 1.4s infinite ease-in-out;
-            z-index: 10;
+            color: #fff; border: none; padding: 8px 18px;
+            border-radius: var(--radius-full); font-weight: 700; font-size: 13px;
+            cursor: pointer; display: none;
+            box-shadow: 0 8px 32px rgba(211,47,47,0.5);
+            animation: bounce 1.4s infinite ease-in-out; z-index: 10;
         }
-        @keyframes bounce {
-            0%,
-            100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-6px) scale(1.03);
-            }
-        }
+        @keyframes bounce { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-6px) scale(1.03); } }
 
         /* ===== CATEGORIES ===== */
         .menu-categories {
-            display: flex;
-            justify-content: space-around;
-            background: var(--bg-secondary);
-            backdrop-filter: blur(16px);
-            padding: 6px 4px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            margin-bottom: 6px;
-            flex-shrink: 0;
-            overflow-x: auto;
-            min-height: 44px;
+            display: flex; justify-content: space-around;
+            background: var(--bg-secondary); backdrop-filter: blur(16px);
+            padding: 6px 4px; border-radius: var(--radius-full);
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            margin-bottom: 6px; flex-shrink: 0; overflow-x: auto; min-height: 44px;
         }
         .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 9px;
-            cursor: pointer;
-            padding: 2px 12px;
-            border-radius: var(--radius-full);
-            transition: var(--transition);
-            font-weight: 500;
-            white-space: nowrap;
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-muted); font-size: 9px; cursor: pointer;
+            padding: 2px 12px; border-radius: var(--radius-full);
+            transition: var(--transition); font-weight: 500; white-space: nowrap;
         }
-        .menu-item i {
-            font-size: 16px;
-            margin-bottom: 1px;
-            transition: var(--transition);
-        }
-        .menu-item.active {
-            color: #fff;
-            background: rgba(211, 47, 47, 0.15);
-        }
-        .menu-item.active i {
-            color: var(--accent);
-            text-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
-        }
-        .menu-item.active span {
-            color: var(--accent);
-            opacity: 1;
-        }
-        .menu-item:hover {
-            color: var(--text-primary);
-        }
+        .menu-item i { font-size: 16px; margin-bottom: 1px; transition: var(--transition); }
+        .menu-item.active { color: #fff; background: rgba(211,47,47,0.15); }
+        .menu-item.active i { color: var(--accent); text-shadow: 0 0 20px rgba(211,47,47,0.3); }
+        .menu-item.active span { color: var(--accent); opacity: 1; }
+        .menu-item:hover { color: var(--text-primary); }
 
         /* ===== PLAYLIST ===== */
         .playlist-section {
-            flex: 1;
-            min-height: 0;
-            background: var(--bg-secondary);
-            backdrop-filter: blur(12px);
-            padding: 10px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            overflow-y: auto;
-            margin-bottom: 6px;
+            flex: 1; min-height: 0;
+            background: var(--bg-secondary); backdrop-filter: blur(12px);
+            padding: 10px; border-radius: var(--radius);
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            overflow-y: auto; margin-bottom: 6px;
         }
-        .playlist-section .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .playlist-section .header h4 {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-        .playlist-section .header span {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-        .video-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .video-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-        }
-        .video-card img {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .video-card .title {
-            padding: 6px 8px;
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        .playlist-section .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border-color); }
+        .playlist-section .header h4 { font-size: 13px; font-weight: 700; color: var(--accent); }
+        .playlist-section .header span { font-size: 11px; color: var(--text-secondary); }
+        .video-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .video-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; cursor: pointer; transition: var(--transition); }
+        .video-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+        .video-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-bottom: 1px solid var(--border-color); }
+        .video-card .title { padding: 6px 8px; font-size: 10px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* ===== BOTTOM NAV ===== */
         .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background: var(--bg-secondary);
-            backdrop-filter: blur(16px);
-            padding: 6px 0 10px;
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            border-radius: var(--radius) var(--radius) 0 0;
-            min-height: 56px;
-            margin-top: auto;
+            display: flex; justify-content: space-around;
+            background: var(--bg-secondary); backdrop-filter: blur(16px);
+            padding: 6px 0 10px; border-top: 1px solid var(--border-color);
+            flex-shrink: 0; border-radius: var(--radius) var(--radius) 0 0;
+            min-height: 56px; margin-top: auto;
         }
         .bottom-nav .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 9px;
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 2px 12px;
-            border-radius: 12px;
-            position: relative;
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-muted); font-size: 9px; cursor: pointer;
+            transition: var(--transition); padding: 2px 12px; border-radius: 12px; position: relative;
         }
-        .bottom-nav .nav-item i {
-            font-size: 20px;
-            transition: var(--transition);
-        }
-        .bottom-nav .nav-item.active {
-            color: var(--accent);
-        }
-        .bottom-nav .nav-item.active i {
-            text-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
-        }
+        .bottom-nav .nav-item i { font-size: 20px; transition: var(--transition); }
+        .bottom-nav .nav-item.active { color: var(--accent); }
+        .bottom-nav .nav-item.active i { text-shadow: 0 0 20px rgba(211,47,47,0.3); }
         .bottom-nav .nav-item .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--accent);
-            color: #fff;
-            font-size: 8px;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 20px;
-            min-width: 16px;
-            text-align: center;
+            position: absolute; top: -4px; right: -4px;
+            background: var(--accent); color: #fff;
+            font-size: 8px; font-weight: 700; padding: 1px 6px;
+            border-radius: 20px; min-width: 16px; text-align: center;
         }
 
         /* ===== MODALS ===== */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(16px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 16px;
-        }
-        .modal.show {
-            display: flex;
-        }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(16px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 16px; }
+        .modal.show { display: flex; }
         .modal-content {
-            background: var(--bg-secondary);
-            border-radius: 28px;
-            padding: 24px 20px;
-            width: 100%;
-            max-width: 400px;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+            background: var(--bg-secondary); border-radius: 28px; padding: 24px 20px;
+            width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto;
+            position: relative; border: 1px solid var(--border-color); box-shadow: var(--shadow);
         }
-        .modal-content .close {
-            position: absolute;
-            top: 14px;
-            right: 18px;
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: var(--transition);
-            background: none;
-            border: none;
+        .modal-content .close { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: var(--text-muted); transition: var(--transition); background: none; border: none; }
+        .modal-content .close:hover { color: var(--text-primary); transform: rotate(90deg); }
+        .modal-content h3 { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .modal-content label { font-size: 12px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+        .modal-content input, .modal-content select, .modal-content textarea {
+            width: 100%; padding: 10px 14px; border-radius: 12px;
+            border: 1px solid var(--border-color); background: var(--bg-input);
+            color: var(--text-primary); font-size: 13px; outline: none;
+            transition: var(--transition); margin-bottom: 10px;
         }
-        .modal-content .close:hover {
-            color: var(--text-primary);
-            transform: rotate(90deg);
-        }
-        .modal-content h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .modal-content label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            display: block;
-            margin-bottom: 4px;
-        }
-        .modal-content input,
-        .modal-content select,
-        .modal-content textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-primary);
-            font-size: 13px;
-            outline: none;
-            transition: var(--transition);
-            margin-bottom: 10px;
-        }
-        .modal-content input:focus {
-            border-color: var(--accent);
-        }
+        .modal-content input:focus { border-color: var(--accent); }
         .modal-content .btn {
-            width: 100%;
-            padding: 11px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-            color: #fff;
+            width: 100%; padding: 11px; border: none; border-radius: 12px;
+            font-weight: 700; font-size: 14px; cursor: pointer; transition: var(--transition);
+            background: linear-gradient(145deg, var(--accent), var(--accent-hover)); color: #fff;
         }
-        .modal-content .btn:hover {
-            transform: scale(1.02);
-        }
-        .modal-content .btn-success {
-            background: linear-gradient(145deg, var(--success), var(--success-hover));
-        }
-        .modal-content .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-        .modal-content .btn-outline:hover {
-            background: var(--bg-input);
-        }
-        .modal-content .divider {
-            border: none;
-            border-top: 1px solid var(--border-color);
-            margin: 14px 0;
-        }
-        .modal-content .btn-gold {
-            background: linear-gradient(145deg, #f7c948, #f5a623);
-            color: #1a1a2e;
-        }
-        .modal-content .btn-gold:hover {
-            transform: scale(1.02);
-        }
+        .modal-content .btn:hover { transform: scale(1.02); }
+        .modal-content .btn-success { background: linear-gradient(145deg, var(--success), var(--success-hover)); }
+        .modal-content .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); }
+        .modal-content .btn-outline:hover { background: var(--bg-input); }
+        .modal-content .divider { border: none; border-top: 1px solid var(--border-color); margin: 14px 0; }
+        .modal-content .btn-gold { background: linear-gradient(145deg, #f7c948, #f5a623); color: #1a1a2e; }
+        .modal-content .btn-gold:hover { transform: scale(1.02); }
 
         /* Profile */
-        .profile-pic {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .profile-pic img {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent);
-            box-shadow: 0 8px 24px rgba(211, 47, 47, 0.2);
-        }
-        .profile-pic input {
-            display: block;
-            margin: 8px auto 0;
-            width: auto;
-            font-size: 11px;
-            padding: 4px 8px;
-        }
+        .profile-pic { text-align: center; margin-bottom: 16px; }
+        .profile-pic img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); box-shadow: 0 8px 24px rgba(211,47,47,0.2); }
+        .profile-pic input { display: block; margin: 8px auto 0; width: auto; font-size: 11px; padding: 4px 8px; }
 
         /* Market */
-        .market-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .market-card .label {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-        .market-card .value {
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .market-card .value.gold {
-            color: #ffd700;
-        }
-        .market-card .value.green {
-            color: #4caf50;
-        }
+        .market-card { background: var(--bg-card); border-radius: 14px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .market-card .label { font-size: 11px; color: var(--text-secondary); }
+        .market-card .value { font-size: 18px; font-weight: 700; }
+        .market-card .value.gold { color: #ffd700; }
+        .market-card .value.green { color: #4caf50; }
 
         /* Transaction History */
-        .transaction-item {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 10px 14px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--border-color);
-        }
-        .transaction-item .left {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .transaction-item .left .type {
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .transaction-item .left .detail {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-        .transaction-item .left .date {
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-        .transaction-item .right {
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .transaction-item .right.positive {
-            color: #4caf50;
-        }
-        .transaction-item .right.negative {
-            color: #ff5252;
-        }
-        .transaction-item .right.neutral {
-            color: var(--text-secondary);
-        }
+        .transaction-item { background: var(--bg-card); border-radius: 12px; padding: 10px 14px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); }
+        .transaction-item .left { display: flex; flex-direction: column; gap: 2px; }
+        .transaction-item .left .type { font-size: 13px; font-weight: 600; }
+        .transaction-item .left .detail { font-size: 11px; color: var(--text-secondary); }
+        .transaction-item .left .date { font-size: 10px; color: var(--text-muted); }
+        .transaction-item .right { font-size: 16px; font-weight: 700; }
+        .transaction-item .right.positive { color: #4caf50; }
+        .transaction-item .right.negative { color: #ff5252; }
+        .transaction-item .right.neutral { color: var(--text-secondary); }
 
         /* Admin */
-        .admin-section {
-            margin-bottom: 12px;
-        }
-        .admin-section h4 {
-            font-size: 13px;
-            color: var(--accent);
-            margin-bottom: 6px;
-        }
-        .admin-section p {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        .admin-row {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .admin-row input {
-            flex: 1;
-            min-width: 60px;
-        }
-        .admin-row .btn-sm {
-            padding: 8px 14px;
-            font-size: 11px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .btn-sm.green {
-            background: var(--success);
-            color: #fff;
-        }
-        .btn-sm.red {
-            background: var(--accent);
-            color: #fff;
-        }
-        .btn-sm.warning {
-            background: var(--warning);
-            color: #fff;
-        }
-        .btn-sm.gold {
-            background: #f5a623;
-            color: #1a1a2e;
-        }
-        .btn-sm.green:hover {
-            background: var(--success-hover);
-        }
-        .btn-sm.red:hover {
-            background: var(--accent-hover);
-        }
+        .admin-section { margin-bottom: 12px; }
+        .admin-section h4 { font-size: 13px; color: var(--accent); margin-bottom: 6px; }
+        .admin-section p { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+        .admin-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .admin-row input { flex: 1; min-width: 60px; }
+        .admin-row .btn-sm { padding: 8px 14px; font-size: 11px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .btn-sm.green { background: var(--success); color: #fff; }
+        .btn-sm.red { background: var(--accent); color: #fff; }
+        .btn-sm.warning { background: var(--warning); color: #fff; }
+        .btn-sm.gold { background: #f5a623; color: #1a1a2e; }
+        .btn-sm.green:hover { background: var(--success-hover); }
+        .btn-sm.red:hover { background: var(--accent-hover); }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        th,
-        td {
-            padding: 6px 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-        th {
-            background: rgba(211, 47, 47, 0.1);
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 9px;
-            text-transform: uppercase;
-        }
-        .status-pending {
-            color: #ffa726;
-        }
-        .status-approved {
-            color: #4caf50;
-        }
-        .status-rejected {
-            color: #ff5252;
-        }
-        .status-banned {
-            color: #ff5252;
-            font-weight: 700;
-        }
-        .status-active {
-            color: #4caf50;
-        }
-        .status-offline {
-            color: #ff5252;
-        }
-        .status-online {
-            color: #4caf50;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 6px 8px; text-align: center; border-bottom: 1px solid var(--border-color); }
+        th { background: rgba(211,47,47,0.1); color: var(--accent); font-weight: 600; font-size: 9px; text-transform: uppercase; }
+        .status-pending { color: #ffa726; }
+        .status-approved { color: #4caf50; }
+        .status-rejected { color: #ff5252; }
+        .status-banned { color: #ff5252; font-weight: 700; }
+        .status-active { color: #4caf50; }
+        .status-offline { color: #ff5252; }
+        .status-online { color: #4caf50; }
 
         /* Toast */
         .toast {
-            position: fixed;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-secondary);
-            backdrop-filter: blur(16px);
-            padding: 10px 24px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 13px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            z-index: 9999;
-            display: none;
-            animation: slideDown 0.3s ease;
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-secondary); backdrop-filter: blur(16px);
+            padding: 10px 24px; border-radius: var(--radius-full);
+            font-weight: 600; font-size: 13px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            z-index: 9999; display: none; animation: slideDown 0.3s ease;
         }
-        .toast.show {
-            display: block;
-        }
-        .toast.success {
-            border-color: var(--success);
-        }
-        .toast.error {
-            border-color: var(--accent);
-        }
-        .toast.warning {
-            border-color: var(--warning);
-        }
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
+        .toast.show { display: block; }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--accent); }
+        .toast.warning { border-color: var(--warning); }
+        @keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
         /* Exchange quick buttons */
-        .exchange-quick {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-        .exchange-quick button {
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-secondary);
-            font-size: 11px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .exchange-quick button:hover {
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-        .exchange-result {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            font-size: 15px;
-            font-weight: 600;
-            margin: 8px 0;
-            border: 1px solid var(--border-color);
-        }
+        .exchange-quick { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+        .exchange-quick button { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-secondary); font-size: 11px; cursor: pointer; transition: var(--transition); }
+        .exchange-quick button:hover { border-color: var(--accent); color: var(--text-primary); }
+        .exchange-result { background: var(--bg-card); border-radius: 12px; padding: 12px; text-align: center; font-size: 15px; font-weight: 600; margin: 8px 0; border: 1px solid var(--border-color); }
+        .ban-badge { background: var(--accent); color: #fff; padding: 1px 10px; border-radius: 20px; font-size: 10px; margin-left: 6px; }
 
-        .ban-badge {
-            background: var(--accent);
-            color: #fff;
-            padding: 1px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            margin-left: 6px;
-        }
+        .search-loading { grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted); }
+        .search-loading i { font-size: 30px; display: block; margin-bottom: 10px; animation: spin 1s linear infinite; }
+        .search-no-results { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); }
+        .search-no-results i { font-size: 40px; display: block; margin-bottom: 12px; opacity: 0.3; }
 
-        /* Loading spinner for search */
-        .search-loading {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 30px;
-            color: var(--text-muted);
-        }
-        .search-loading i {
-            font-size: 30px;
-            display: block;
-            margin-bottom: 10px;
-            animation: spin 1s linear infinite;
-        }
-        .search-no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-        .search-no-results i {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 12px;
-            opacity: 0.3;
-        }
+        .ad-link-cell { font-size: 10px; text-align: left; word-break: break-all; max-width: 150px; }
+        .ad-link-cell a { color: var(--accent); text-decoration: none; }
+        .ad-link-cell a:hover { text-decoration: underline; }
 
-        /* Ad list table */
-        .ad-link-cell {
-            font-size: 10px;
-            text-align: left;
-            word-break: break-all;
-            max-width: 150px;
-        }
-        .ad-link-cell a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-        .ad-link-cell a:hover {
-            text-decoration: underline;
-        }
+        .ad-progress-container { width: 100%; height: 4px; background: var(--border-color); border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .ad-progress-bar { height: 100%; background: var(--accent); width: 0%; border-radius: 4px; transition: width 0.3s ease; }
 
-        /* Ad progress bar */
-        .ad-progress-container {
-            width: 100%;
-            height: 4px;
-            background: var(--border-color);
-            border-radius: 4px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-        .ad-progress-bar {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        /* Online/Offline status dot */
-        .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 4px;
-        }
-        .status-dot.online {
-            background: #4caf50;
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-        }
-        .status-dot.offline {
-            background: #ff5252;
-            box-shadow: 0 0 8px rgba(255, 82, 82, 0.3);
-        }
+        .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+        .status-dot.online { background: #4caf50; box-shadow: 0 0 8px rgba(76,175,80,0.5); }
+        .status-dot.offline { background: #ff5252; box-shadow: 0 0 8px rgba(255,82,82,0.3); }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .top-bar {
-                padding: 6px 10px;
-                gap: 4px;
-                border-radius: 40px;
-                min-height: 42px;
-            }
-            .top-bar input {
-                font-size: 10px;
-                padding: 4px 10px;
-            }
-            .top-bar .coin-box {
-                font-size: 11px;
-                padding: 3px 8px;
-            }
-            .top-bar .btn-icon {
-                font-size: 10px;
-                padding: 4px 10px;
-            }
-            .video-container {
-                max-height: 170px;
-                min-height: 100px;
-            }
-            .menu-categories {
-                padding: 4px 2px;
-                border-radius: 40px;
-                min-height: 38px;
-            }
-            .menu-item {
-                padding: 2px 8px;
-                font-size: 8px;
-            }
-            .menu-item i {
-                font-size: 14px;
-            }
-            .video-grid {
-                gap: 6px;
-            }
-            .modal-content {
-                padding: 18px 14px;
-                border-radius: 20px;
-            }
-            .bottom-nav {
-                padding: 4px 0 8px;
-                min-height: 48px;
-            }
-            .bottom-nav .nav-item i {
-                font-size: 18px;
-            }
-            .auth-box {
-                padding: 24px 16px;
-                border-radius: 20px;
-            }
-            .transaction-item {
-                padding: 8px 10px;
-            }
-            .transaction-item .left .type {
-                font-size: 12px;
-            }
-            .transaction-item .right {
-                font-size: 14px;
-            }
-            .ad-link-cell {
-                max-width: 80px;
-                font-size: 9px;
-            }
-            .admin-row input {
-                font-size: 10px;
-                padding: 4px 8px;
-            }
+            .top-bar { padding: 6px 10px; gap: 4px; border-radius: 40px; min-height: 42px; }
+            .top-bar input { font-size: 10px; padding: 4px 10px; }
+            .top-bar .coin-box { font-size: 11px; padding: 3px 8px; }
+            .top-bar .btn-icon { font-size: 10px; padding: 4px 10px; }
+            .video-container { max-height: 170px; min-height: 100px; }
+            .menu-categories { padding: 4px 2px; border-radius: 40px; min-height: 38px; }
+            .menu-item { padding: 2px 8px; font-size: 8px; }
+            .menu-item i { font-size: 14px; }
+            .video-grid { gap: 6px; }
+            .modal-content { padding: 18px 14px; border-radius: 20px; }
+            .bottom-nav { padding: 4px 0 8px; min-height: 48px; }
+            .bottom-nav .nav-item i { font-size: 18px; }
+            .auth-box { padding: 24px 16px; border-radius: 20px; }
+            .transaction-item { padding: 8px 10px; }
+            .transaction-item .left .type { font-size: 12px; }
+            .transaction-item .right { font-size: 14px; }
+            .ad-link-cell { max-width: 80px; font-size: 9px; }
+            .admin-row input { font-size: 10px; padding: 4px 8px; }
         }
-        @media (min-width: 768px) {
-            .video-container {
-                max-height: 300px;
-            }
-            .video-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
+        @media (min-width: 768px) { .video-container { max-height: 300px; } .video-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-height: 500px) {
-            .video-container {
-                max-height: 120px;
-                min-height: 80px;
-            }
-            .top-bar {
-                min-height: 36px;
-                padding: 4px 8px;
-            }
-            .top-bar input {
-                font-size: 10px;
-                padding: 3px 8px;
-            }
-            .menu-categories {
-                min-height: 32px;
-                padding: 2px 4px;
-            }
-            .menu-item {
-                padding: 1px 6px;
-                font-size: 7px;
-            }
-            .menu-item i {
-                font-size: 12px;
-            }
-            .bottom-nav {
-                min-height: 40px;
-                padding: 2px 0 6px;
-            }
-            .bottom-nav .nav-item i {
-                font-size: 16px;
-            }
-            .playlist-section {
-                padding: 6px;
-            }
-            .video-card .title {
-                font-size: 8px;
-                padding: 3px 6px;
-            }
+            .video-container { max-height: 120px; min-height: 80px; }
+            .top-bar { min-height: 36px; padding: 4px 8px; }
+            .top-bar input { font-size: 10px; padding: 3px 8px; }
+            .menu-categories { min-height: 32px; padding: 2px 4px; }
+            .menu-item { padding: 1px 6px; font-size: 7px; }
+            .menu-item i { font-size: 12px; }
+            .bottom-nav { min-height: 40px; padding: 2px 0 6px; }
+            .bottom-nav .nav-item i { font-size: 16px; }
+            .playlist-section { padding: 6px; }
+            .video-card .title { font-size: 8px; padding: 3px 6px; }
         }
 
         /* ===== IFRAME AD MODAL STYLES ===== */
-        .ad-iframe-container {
-            background: #fff;
-            position: relative;
-            min-height: 350px;
+        .ad-iframe-container { background: #fff; position: relative; min-height: 350px; }
+        .ad-iframe-container iframe { width: 100%; height: 420px; border: none; background: #fff; display: block; }
+        .ad-iframe-container .loading-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #999; font-size: 14px; text-align: center; }
+        .ad-iframe-container .loading-overlay i { font-size: 30px; display: block; margin-bottom: 8px; animation: spin 1s linear infinite; }
+        .ad-footer { padding: 12px 16px; background: var(--bg-card); border-top: 1px solid var(--border-color); }
+        .ad-footer .progress-container { width: 100%; height: 6px; background: var(--border-color); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+        .ad-footer .progress-container .progress-bar { height: 100%; background: var(--accent); width: 0%; border-radius: 6px; transition: width 0.3s ease; }
+        .ad-footer .ad-actions { display: flex; gap: 8px; align-items: center; }
+        .ad-footer .ad-actions .claim-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; background: var(--bg-input); color: var(--text-primary); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 13px; }
+        .ad-footer .ad-actions .claim-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .ad-footer .ad-actions .claim-btn.active { background: linear-gradient(145deg, var(--accent), var(--accent-hover)); color: #fff; }
+        .ad-footer .ad-actions .close-btn { padding: 10px 14px; border: none; border-radius: 10px; background: var(--bg-card); color: var(--text-secondary); cursor: pointer; border: 1px solid var(--border-color); font-size: 16px; }
+        .ad-footer .ad-status { margin-top: 6px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; }
+        .ad-footer .ad-status .reward-text { color: var(--gold); font-weight: 700; }
+        .ad-footer .ad-status .status-text { color: var(--text-secondary); }
+        .ad-footer .ad-status .status-text.done { color: #4caf50; }
+
+        /* Local mode indicator */
+        #localModeIndicator {
+            position: fixed; bottom: 75px; left: 50%; transform: translateX(-50%);
+            background: #ff6b00; color: #fff; padding: 4px 16px;
+            border-radius: 20px; font-size: 10px; font-weight: 600;
+            z-index: 999; opacity: 0; transition: opacity 0.5s;
+            pointer-events: none; white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(255,107,0,0.3);
         }
-        .ad-iframe-container iframe {
-            width: 100%;
-            height: 420px;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-        .ad-iframe-container .loading-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #999;
-            font-size: 14px;
-            text-align: center;
-        }
-        .ad-iframe-container .loading-overlay i {
-            font-size: 30px;
-            display: block;
-            margin-bottom: 8px;
-            animation: spin 1s linear infinite;
-        }
-        .ad-footer {
-            padding: 12px 16px;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-        }
-        .ad-footer .progress-container {
-            width: 100%;
-            height: 6px;
-            background: var(--border-color);
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-        .ad-footer .progress-container .progress-bar {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            border-radius: 6px;
-            transition: width 0.3s ease;
-        }
-        .ad-footer .ad-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .ad-footer .ad-actions .claim-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            background: var(--bg-input);
-            color: var(--text-primary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 13px;
-        }
-        .ad-footer .ad-actions .claim-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .ad-footer .ad-actions .claim-btn.active {
-            background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-            color: #fff;
-        }
-        .ad-footer .ad-actions .close-btn {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 10px;
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-            font-size: 16px;
-        }
-        .ad-footer .ad-status {
-            margin-top: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-        }
-        .ad-footer .ad-status .reward-text {
-            color: var(--gold);
-            font-weight: 700;
-        }
-        .ad-footer .ad-status .status-text {
-            color: var(--text-secondary);
-        }
-        .ad-footer .ad-status .status-text.done {
-            color: #4caf50;
-        }
+        #localModeIndicator.show { opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -1280,6 +456,9 @@
         <div class="loader"></div>
         <p>Loading...</p>
     </div>
+
+    <!-- ===== LOCAL MODE INDICATOR ===== -->
+    <div id="localModeIndicator">📱 Local Mode</div>
 
     <!-- ===== TOAST ===== -->
     <div id="toast" class="toast"></div>
@@ -1553,27 +732,20 @@
                     <div id="appListContainer" style="max-height:150px;overflow-y:auto;margin-top:6px;">
                         <table>
                             <thead>
-                                <tr>
-                                    <th style="width:70%;">App Link</th>
-                                    <th style="width:30%;">Action</th>
-                                </tr>
+                                <tr><th style="width:70%;">App Link</th><th style="width:30%;">Action</th></tr>
                             </thead>
-                            <tbody id="appListBody">
-                                <!-- Dynamic content -->
-                            </tbody>
+                            <tbody id="appListBody"></tbody>
                         </table>
                     </div>
-                    <div id="appListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">
-                        App Link မရှိသေးပါ
-                    </div>
+                    <div id="appListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">App Link မရှိသေးပါ</div>
                 </div>
 
                 <hr class="divider" />
 
-                <!-- ===== AD LINKS (Video Watch) - Coin fixed 20 ===== -->
+                <!-- ===== AD LINKS ===== -->
                 <div class="admin-section">
                     <h4>📢 Ad Links (Video ကြည့်ပြီး Coin 20 ရရန်)</h4>
-                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link အသစ်ထည့်ရန် သို့မဟုတ် ရှိပြီးသားကို ဖျက်ရန် (Coin က 20 သတ်မှတ်ထားသည်)</p>
+                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link အသစ်ထည့်ရန် သို့မဟုတ် ရှိပြီးသားကို ဖျက်ရန်</p>
 
                     <div class="admin-row" style="margin-bottom:6px;">
                         <input type="text" id="adminAdLink" placeholder="Ad Link (URL)" style="flex:2;" />
@@ -1583,19 +755,12 @@
                     <div id="adListContainer" style="max-height:150px;overflow-y:auto;margin-top:6px;">
                         <table>
                             <thead>
-                                <tr>
-                                    <th style="width:70%;">Ad Link</th>
-                                    <th style="width:30%;">Action</th>
-                                </tr>
+                                <tr><th style="width:70%;">Ad Link</th><th style="width:30%;">Action</th></tr>
                             </thead>
-                            <tbody id="adListBody">
-                                <!-- Dynamic content -->
-                            </tbody>
+                            <tbody id="adListBody"></tbody>
                         </table>
                     </div>
-                    <div id="adListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">
-                        Ad Link မရှိသေးပါ
-                    </div>
+                    <div id="adListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">Ad Link မရှိသေးပါ</div>
                 </div>
 
                 <hr class="divider" />
@@ -1625,7 +790,7 @@
 
                 <hr class="divider" />
 
-                <!-- User Management with Active/Offline status -->
+                <!-- User Management -->
                 <div class="admin-section">
                     <h4>👥 User စာရင်း <span id="userCount" style="background:var(--accent);color:#fff;padding:1px 10px;border-radius:20px;font-size:10px;margin-left:6px;">0</span></h4>
                     <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
@@ -1636,26 +801,15 @@
                     </div>
                     <div style="max-height:200px;overflow-y:auto;">
                         <table id="adminUserTable">
-                            <thead>
-                                <tr>
-                                    <th>နာမည်</th>
-                                    <th>Coin</th>
-                                    <th>USDT</th>
-                                    <th>Status</th>
-                                    <th>Last Active</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td colspan="6" style="color:var(--text-muted);text-align:center;">Loading...</td></tr>
-                            </tbody>
+                            <thead><tr><th>နာမည်</th><th>Coin</th><th>USDT</th><th>Status</th><th>Last Active</th><th>Action</th></tr></thead>
+                            <tbody><tr><td colspan="6" style="color:var(--text-muted);text-align:center;">Loading...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
                 <hr class="divider" />
 
-                <!-- Coin Management - EMAIL based search -->
+                <!-- Coin Management -->
                 <div class="admin-section">
                     <h4>🪙 User Coin စီမံရန်</h4>
                     <p>User Email ဖြင့် ရှာပြီး Coin ထည့်/နုတ်ရန်</p>
@@ -1670,18 +824,14 @@
 
                 <hr class="divider" />
 
-                <!-- Banned Users List -->
+                <!-- Banned Users -->
                 <div class="admin-section">
                     <h4>⛔ Banned Users List <span class="ban-badge" id="bannedBadge">0</span></h4>
                     <p style="font-size:10px;color:var(--text-muted);">Auto-ban: ၃ ရက်ဆက်တိုက် App မသုံးလျှင် Ban ဖြစ်မည်</p>
                     <div id="bannedUsersList" style="max-height:150px;overflow-y:auto;margin-top:6px;">
                         <table>
-                            <thead>
-                                <tr><th>User</th><th>Email</th><th>Banned Since</th><th>Reason</th><th>Action</th></tr>
-                            </thead>
-                            <tbody id="bannedUsersBody">
-                                <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Banned User မရှိပါ</td></tr>
-                            </tbody>
+                            <thead><tr><th>User</th><th>Email</th><th>Banned Since</th><th>Reason</th><th>Action</th></tr></thead>
+                            <tbody id="bannedUsersBody"><tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Banned User မရှိပါ</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -1693,12 +843,8 @@
                     <h4>📋 Withdraw Requests <span id="withdrawBadge" style="background:var(--accent);color:#fff;padding:1px 10px;border-radius:20px;font-size:10px;margin-left:6px;">0</span></h4>
                     <div id="withdrawRequests" style="max-height:150px;overflow-y:auto;margin-top:6px;">
                         <table>
-                            <thead>
-                                <tr><th>User</th><th>Amount</th><th>Status</th><th>Requested</th><th>Action</th></tr>
-                            </thead>
-                            <tbody id="withdrawRequestsBody">
-                                <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">အသစ်မရှိပါ</td></tr>
-                            </tbody>
+                            <thead><tr><th>User</th><th>Amount</th><th>Status</th><th>Requested</th><th>Action</th></tr></thead>
+                            <tbody id="withdrawRequestsBody"><tr><td colspan="5" style="color:var(--text-muted);text-align:center;">အသစ်မရှိပါ</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -1708,18 +854,15 @@
         </div>
     </div>
 
-    <!-- ===== AD MODAL (IFrame Version) ===== -->
+    <!-- ===== AD MODAL ===== -->
     <div id="adModal" class="modal">
         <div class="modal-content" style="text-align:center; padding:0; max-width:500px; border-radius:16px; overflow:hidden;">
-            <!-- Header -->
             <div style="padding:12px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
                 <h3 style="margin:0; font-size:15px; color:var(--accent);">
                     <i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...
                 </h3>
                 <button onclick="closeAdModal()" style="background:none;border:none;color:var(--text-secondary);font-size:20px;cursor:pointer;padding:4px 8px;">✕</button>
             </div>
-            
-            <!-- IFrame Container -->
             <div class="ad-iframe-container" id="adIframeContainer">
                 <div class="loading-overlay" id="adLoading">
                     <i class="fas fa-spinner"></i>
@@ -1727,20 +870,16 @@
                 </div>
                 <iframe id="adIframe" src="about:blank"></iframe>
             </div>
-            
-            <!-- Footer -->
             <div class="ad-footer">
                 <div class="progress-container">
                     <div class="progress-bar" id="adProgressBar"></div>
                 </div>
-                
                 <div class="ad-actions">
                     <button class="claim-btn" id="adSkipBtn" disabled>
                         ⏳ <span id="adCountdown">30</span> စက္ကန့်စောင့်ပါ...
                     </button>
                     <button class="close-btn" onclick="closeAdModal()">✕</button>
                 </div>
-                
                 <div class="ad-status">
                     <span>🪙 ရရှိမည့် Coin: <span class="reward-text" id="adRewardAmount">20</span></span>
                     <span class="status-text" id="adStatusText">⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...</span>
@@ -1749,40 +888,22 @@
         </div>
     </div>
 
-    <!-- ===== DAILY BONUS MODAL (App Download) ===== -->
+    <!-- ===== DAILY BONUS MODAL ===== -->
     <div id="dailyBonusModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <button class="close" onclick="closeDailyBonusModal()" style="position:absolute;top:12px;right:16px;font-size:20px;color:var(--text-muted);background:none;border:none;cursor:pointer;">✕</button>
             <h3><i class="fa-solid fa-download"></i> App ဒေါင်းနေပါသည်...</h3>
-
-            <div style="font-size:48px;margin:10px 0;">
-                <i class="fas fa-mobile-screen-button" style="color:var(--accent);"></i>
-            </div>
-
+            <div style="font-size:48px;margin:10px 0;"><i class="fas fa-mobile-screen-button" style="color:var(--accent);"></i></div>
             <p style="font-size:14px;margin:6px 0;">ကျေးဇူးပြု၍ App 2 ခုကို ဒေါင်းလုဒ်လုပ်ပါ</p>
-
             <div style="background:var(--bg-card);border-radius:12px;padding:15px;margin:10px 0;border:1px solid var(--border-color);">
-                <p style="font-size:13px;color:var(--text-secondary);">
-                    <i class="fas fa-info-circle"></i> App ကို New Tab တွင်ဖွင့်ပါမည်
-                </p>
-                <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">
-                    App 2 ခုကို ဒေါင်းပြီးပါက <span id="dailyCountdown">30</span> စက္ကန့်အကြာ 700 Coins ရရှိပါမည်
-                </p>
+                <p style="font-size:13px;color:var(--text-secondary);"><i class="fas fa-info-circle"></i> App ကို New Tab တွင်ဖွင့်ပါမည်</p>
+                <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">App 2 ခုကို ဒေါင်းပြီးပါက <span id="dailyCountdown">30</span> စက္ကန့်အကြာ 700 Coins ရရှိပါမည်</p>
             </div>
-
-            <div class="ad-progress-container">
-                <div class="ad-progress-bar" id="dailyProgressBar"></div>
-            </div>
-
+            <div class="ad-progress-container"><div class="ad-progress-bar" id="dailyProgressBar"></div></div>
             <div style="display:flex;gap:8px;margin-top:10px;">
-                <button id="dailySkipBtn" disabled onclick="openDailyBonusApps()" style="flex:1;padding:12px;border:none;border-radius:12px;background:var(--bg-input);color:var(--text-primary);font-weight:600;cursor:pointer;transition:var(--transition);">
-                    ⏳ စောင့်ဆိုင်နေပါ...
-                </button>
-                <button onclick="closeDailyBonusModal()" style="padding:12px 16px;border:none;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);font-weight:500;cursor:pointer;border:1px solid var(--border-color);">
-                    ✕
-                </button>
+                <button id="dailySkipBtn" disabled onclick="openDailyBonusApps()" style="flex:1;padding:12px;border:none;border-radius:12px;background:var(--bg-input);color:var(--text-primary);font-weight:600;cursor:pointer;transition:var(--transition);">⏳ စောင့်ဆိုင်နေပါ...</button>
+                <button onclick="closeDailyBonusModal()" style="padding:12px 16px;border:none;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);font-weight:500;cursor:pointer;border:1px solid var(--border-color);">✕</button>
             </div>
-
             <div id="dailyRewardInfo" style="margin-top:8px;font-size:12px;color:var(--text-muted);">
                 🪙 ရရှိမည့် Coin: <span id="dailyRewardAmount">700</span>
             </div>
@@ -1847,6 +968,97 @@
         }
 
         // ============================================================
+        //  LOCAL STORAGE FUNCTIONS - PERSISTENT COINS
+        // ============================================================
+        function saveCoinsToLocal(coins) {
+            if (!currentUser) return;
+            try {
+                const coinData = {
+                    userId: currentUser.uid,
+                    coins: coins,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('userCoins_' + currentUser.uid, JSON.stringify(coinData));
+                console.log('💰 Coins saved to local:', coins);
+            } catch (e) {
+                console.error('Save coins error:', e);
+            }
+        }
+
+        function getCoinsFromLocal() {
+            if (!currentUser) return null;
+            try {
+                const data = localStorage.getItem('userCoins_' + currentUser.uid);
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    // Use if less than 7 days old
+                    if (Date.now() - parsed.timestamp < 604800000) {
+                        return parsed.coins;
+                    }
+                }
+            } catch (e) {
+                console.error('Get coins error:', e);
+            }
+            return null;
+        }
+
+        function saveTransactionLocal(type, amount, description) {
+            if (!currentUser) return;
+            try {
+                const transactions = JSON.parse(localStorage.getItem('localTransactions_' + currentUser.uid) || '[]');
+                transactions.push({
+                    type: type,
+                    amount: amount,
+                    description: description,
+                    timestamp: Date.now(),
+                    synced: false
+                });
+                if (transactions.length > 100) {
+                    transactions.splice(0, transactions.length - 100);
+                }
+                localStorage.setItem('localTransactions_' + currentUser.uid, JSON.stringify(transactions));
+            } catch (e) {
+                console.error('Save local transaction error:', e);
+            }
+        }
+
+        async function syncLocalTransactions() {
+            if (!currentUser) return;
+            try {
+                const transactions = JSON.parse(localStorage.getItem('localTransactions_' + currentUser.uid) || '[]');
+                const unsynced = transactions.filter(t => !t.synced);
+                if (unsynced.length === 0) return;
+
+                for (const tx of unsynced) {
+                    try {
+                        await db.collection('transactions').add({
+                            userId: currentUser.uid,
+                            type: tx.type,
+                            amount: tx.amount,
+                            description: tx.description,
+                            timestamp: new Date(tx.timestamp)
+                        });
+                        tx.synced = true;
+                    } catch (error) {
+                        if (error.code === 'resource-exhausted') break;
+                    }
+                }
+                localStorage.setItem('localTransactions_' + currentUser.uid, JSON.stringify(transactions));
+            } catch (e) {
+                console.error('Sync local transactions error:', e);
+            }
+        }
+
+        function showLocalModeIndicator(show) {
+            const el = document.getElementById('localModeIndicator');
+            if (show) {
+                el.classList.add('show');
+            } else {
+                el.classList.remove('show');
+            }
+        }
+
+        // ============================================================
         //  STATE
         // ============================================================
         let currentUser = null;
@@ -1854,6 +1066,7 @@
         let isUpdatingCoins = false;
         let isAdmin = false;
         let exchangeRate = 3000;
+        let usingLocalData = false;
 
         // ===== APP LINKS (Daily Bonus) =====
         let appLinks = JSON.parse(localStorage.getItem('appLinks')) || [
@@ -2059,6 +1272,9 @@
                     });
                 }
 
+                // Save to local immediately
+                saveCoinsToLocal(1000);
+
                 showToast('✅ အကောင့်ဖွင့်ပြီးပါပြီ!');
                 toggleAuth('login');
                 document.getElementById('signupEmail').value = '';
@@ -2135,7 +1351,7 @@
         }
 
         // ============================================================
-        //  AUTH STATE
+        //  AUTH STATE - WITH LOCAL STORAGE PRIORITY
         // ============================================================
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -2145,25 +1361,69 @@
 
                 await checkAutoBan(user.uid);
 
-                const doc = await db.collection('users').doc(user.uid).get();
-                if (doc.exists) {
-                    userData = doc.data();
-                    if (userData.isBanned) {
-                        await auth.signOut();
-                        showToast('⛔ သင်သည် Banned ဖြစ်နေပါသည်။', 'error');
-                        location.reload();
-                        return;
-                    }
+                // ===== LOAD FROM LOCAL STORAGE FIRST =====
+                const localCoins = getCoinsFromLocal();
+                if (localCoins !== null) {
+                    userData.coins = localCoins;
+                    console.log('📦 Loaded coins from local:', localCoins);
                     updateUI();
+                    usingLocalData = true;
+                    showLocalModeIndicator(true);
+                }
+
+                // ===== TRY TO GET FROM FIRESTORE =====
+                try {
+                    const doc = await db.collection('users').doc(user.uid).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        if (data.isBanned) {
+                            await auth.signOut();
+                            showToast('⛔ သင်သည် Banned ဖြစ်နေပါသည်။', 'error');
+                            location.reload();
+                            return;
+                        }
+                        // Use Firestore data if it's newer or higher
+                        if (data.coins !== undefined && data.coins > (userData.coins || 0)) {
+                            userData.coins = data.coins;
+                            saveCoinsToLocal(data.coins);
+                        } else if (localCoins !== null && localCoins > (data.coins || 0)) {
+                            // If local has more coins, update Firestore
+                            await db.collection('users').doc(user.uid).update({
+                                coins: localCoins
+                            });
+                            console.log('📤 Updated Firestore with local coins:', localCoins);
+                        }
+                        userData.username = data.username || userData.username;
+                        userData.email = data.email || userData.email || '';
+                        userData.usdt = data.usdt || userData.usdt;
+                        userData.isBanned = data.isBanned || false;
+                        userData.lastActive = data.lastActive || userData.lastActive;
+                        updateUI();
+                        usingLocalData = false;
+                        showLocalModeIndicator(false);
+                        
+                        // Sync local transactions
+                        syncLocalTransactions();
+                    }
+                } catch (error) {
+                    console.error('Firestore error, using local data:', error);
+                    if (error.code === 'resource-exhausted') {
+                        showToast('⚠️ Server busy. Using local data.', 'warning');
+                        showLocalModeIndicator(true);
+                        usingLocalData = true;
+                    }
                 }
 
                 await loadExchangeRate();
                 listenExchangeRate();
 
+                // Update lastActive less frequently
                 db.collection('users').doc(user.uid).update({
                     lastActive: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(() => {});
 
+                // ===== USE onSnapshot ONLY FOR CRITICAL DATA =====
+                // Only listen for ban status, not coins
                 db.collection('users').doc(user.uid).onSnapshot((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
@@ -2173,8 +1433,12 @@
                             location.reload();
                             return;
                         }
-                        if (!isUpdatingCoins) {
-                            userData.coins = data.coins || 0;
+                        // Only update coins from Firestore if not updating
+                        if (!isUpdatingCoins && !usingLocalData) {
+                            if (data.coins !== undefined && data.coins > (userData.coins || 0)) {
+                                userData.coins = data.coins;
+                                saveCoinsToLocal(data.coins);
+                            }
                         }
                         userData.username = data.username || userData.username;
                         userData.email = data.email || userData.email || '';
@@ -2187,15 +1451,31 @@
 
                 loadVideos();
                 if (!player) initPlayer();
-                listenWithdrawRequests();
 
+                // Remove auto-listen for withdraw requests - load on demand
+                // listenWithdrawRequests(); // COMMENTED OUT
+
+                // Update lastActive every 5 minutes
+                let lastActiveUpdate = Date.now();
                 setInterval(() => {
-                    if (currentUser) {
+                    const now = Date.now();
+                    if (currentUser && (now - lastActiveUpdate) > 300000) {
+                        lastActiveUpdate = now;
                         db.collection('users').doc(currentUser.uid).update({
                             lastActive: firebase.firestore.FieldValue.serverTimestamp()
                         }).catch(() => {});
                     }
                 }, 60000);
+
+                // Save coins to local every 30 seconds
+                setInterval(() => {
+                    if (currentUser && userData.coins !== undefined) {
+                        saveCoinsToLocal(userData.coins);
+                    }
+                }, 30000);
+
+                // Try to sync local transactions every minute
+                setInterval(syncLocalTransactions, 60000);
 
             } else {
                 currentUser = null;
@@ -2203,13 +1483,20 @@
                 document.getElementById('appContainer').classList.remove('active');
                 document.getElementById('loginEmail').value = '';
                 document.getElementById('loginPassword').value = '';
+                showLocalModeIndicator(false);
             }
         });
 
         // ============================================================
-        //  UI UPDATE
+        //  UI UPDATE - WITH LOCAL STORAGE
         // ============================================================
         function updateUI() {
+            // Get coins from local storage first
+            const localCoins = getCoinsFromLocal();
+            if (localCoins !== null && !isUpdatingCoins) {
+                userData.coins = localCoins;
+            }
+
             const coins = userData.coins || 0;
             const usdt = userData.usdt || 0;
             const username = userData.username || 'User';
@@ -2227,6 +1514,9 @@
 
             updateWithdrawUI();
             updateExchangeRateUI();
+
+            // Save to local
+            saveCoinsToLocal(coins);
         }
 
         function updateWithdrawUI() {
@@ -2274,24 +1564,17 @@
         }
 
         // ============================================================
-        //  AD MODAL FUNCTIONS - FIXED WITH WATCH TIME RESET
+        //  AD MODAL FUNCTIONS
         // ============================================================
         function closeAdModal() {
-            // Clear any running countdown
             if (window._adCountdownInterval) {
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
-
-            // Clear iframe
             const iframe = document.getElementById('adIframe');
             iframe.src = 'about:blank';
-            
-            // Close modal
             document.getElementById('adModal').classList.remove('show');
             document.getElementById('coinPopup').style.display = 'none';
-            
-            // IMPORTANT: Reset watch time when ad is closed without claiming
             watchTime = 0;
             if (watchInterval) {
                 clearInterval(watchInterval);
@@ -2302,28 +1585,19 @@
             }
         }
 
-        // ===== CLOSE AD AND CLAIM - FIXED WITH FULL RESET =====
         function closeAdAndClaim() {
-            // Clear any running countdown
             if (window._adCountdownInterval) {
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
-
-            // Clear iframe
             const iframe = document.getElementById('adIframe');
             iframe.src = 'about:blank';
-            
-            // Close modal
             document.getElementById('adModal').classList.remove('show');
-            
-            // Update ad index for next time
+
             if (adLinks && adLinks.length > 0) {
                 adIndex = (adIndex + 1) % adLinks.length;
                 localStorage.setItem('currentAdIndex', adIndex);
             }
-            
-            // Give reward
             giveAdReward(AD_REWARD);
         }
 
@@ -2387,16 +1661,15 @@
                 return;
             }
             currentVideoId = id;
-            // IMPORTANT: Reset watch time when loading new video
             watchTime = 0;
             document.getElementById('videoError').style.display = 'none';
             document.getElementById('coinPopup').style.display = 'none';
             if (player && player.loadVideoById) {
                 player.loadVideoById(id);
             }
-            if (watchInterval) { 
+            if (watchInterval) {
                 clearInterval(watchInterval);
-                watchInterval = null; 
+                watchInterval = null;
             }
         }
 
@@ -2431,7 +1704,8 @@
             const container = document.getElementById('playlistContainer');
             const title = document.getElementById('playlistTitle');
             title.textContent = '🔍 ရှာဖွေနေပါသည်...';
-            container.innerHTML = `
+            container.innerHTML =
+                `
                 <div class="search-loading">
                     <i class="fas fa-spinner"></i>
                     <p>"${query}" ကိုရှာဖွေနေပါသည်...</p>
@@ -2511,7 +1785,7 @@
         });
 
         // ============================================================
-        //  WATCH TIMER & AD COIN - FIXED WITH FULL RESET
+        //  WATCH TIMER & AD COIN
         // ============================================================
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
@@ -2527,9 +1801,9 @@
                     }, 1000);
                 }
             } else {
-                if (watchInterval) { 
+                if (watchInterval) {
                     clearInterval(watchInterval);
-                    watchInterval = null; 
+                    watchInterval = null;
                 }
             }
         }
@@ -2540,7 +1814,7 @@
             document.getElementById('coinPopup').style.display = 'block';
         }
 
-        // ===== CLAIM COIN - IFrame Version FIXED =====
+        // ===== CLAIM COIN - WITH LOCAL STORAGE SUPPORT =====
         function claimCoin() {
             if (!adLinks || adLinks.length === 0) {
                 showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
@@ -2548,10 +1822,16 @@
                 return;
             }
 
-            // Don't allow multiple ad claims at once
             if (isUpdatingCoins) {
                 showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
                 return;
+            }
+
+            // Check local balance first
+            const localCoins = getCoinsFromLocal();
+            if (localCoins !== null) {
+                userData.coins = localCoins;
+                updateUI();
             }
 
             document.getElementById('coinPopup').style.display = 'none';
@@ -2565,35 +1845,24 @@
             const skipBtn = document.getElementById('adSkipBtn');
             const statusText = document.getElementById('adStatusText');
 
-            // ========== RESET EVERYTHING ==========
-            // Reset iframe
+            // Reset everything
             iframe.src = 'about:blank';
             loading.style.display = 'block';
             iframe.style.display = 'none';
-
-            // Reset progress bar to 0%
             progressBar.style.width = '0%';
-            
-            // Reset timer to 30
             timerEl.textContent = '30';
-            
-            // Reset button
             skipBtn.disabled = true;
             skipBtn.innerHTML = '⏳ <span id="adCountdown">30</span> စက္ကန့်စောင့်ပါ...';
             skipBtn.className = 'claim-btn';
             skipBtn.onclick = null;
-            
-            // Reset status text
             statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
             statusText.className = 'status-text';
 
-            // Clear any existing countdown
             if (window._adCountdownInterval) {
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
 
-            // Load ad in iframe
             setTimeout(() => {
                 iframe.src = link;
             }, 300);
@@ -2611,7 +1880,6 @@
                 }
             }, 8000);
 
-            // Start new countdown
             let timeLeft = 30;
             timerEl.textContent = timeLeft;
             progressBar.style.width = '0%';
@@ -2635,78 +1903,113 @@
             }, 1000);
         }
 
-        // ===== GIVE AD REWARD - FIXED WITH WATCH TIME RESET =====
+        // ===== GIVE AD REWARD - WITH LOCAL STORAGE SUPPORT =====
         async function giveAdReward(reward) {
             if (!currentUser) {
                 showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
                 return;
             }
-            
-            // Prevent multiple simultaneous updates
+
             if (isUpdatingCoins) {
                 showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
                 return;
             }
-            
+
             try {
                 isUpdatingCoins = true;
-                
-                const userRef = db.collection('users').doc(currentUser.uid);
-                await userRef.update({
-                    coins: firebase.firestore.FieldValue.increment(reward)
-                });
-                
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'ad_watch',
-                    amount: reward,
-                    description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                // Update local userData
-                userData.coins = (userData.coins || 0) + reward;
+
+                // Update local coins FIRST (optimistic update)
+                const currentCoins = userData.coins || 0;
+                const newCoins = currentCoins + reward;
+                userData.coins = newCoins;
+                saveCoinsToLocal(newCoins);
                 updateUI();
-                
-                showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
-                
-                // IMPORTANT: Reset watch time and timer after claiming
+
+                // Try to update Firestore
+                try {
+                    const userRef = db.collection('users').doc(currentUser.uid);
+                    await userRef.update({
+                        coins: firebase.firestore.FieldValue.increment(reward)
+                    });
+
+                    await db.collection('transactions').add({
+                        userId: currentUser.uid,
+                        type: 'ad_watch',
+                        amount: reward,
+                        description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
+
+                } catch (firestoreError) {
+                    console.error('Firestore error, saving locally:', firestoreError);
+                    saveTransactionLocal('ad_watch', reward, 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins) [Local]');
+                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ! (Local Save)', 'success');
+                    showLocalModeIndicator(true);
+                    usingLocalData = true;
+                }
+
+                // Reset watch time
                 watchTime = 0;
                 if (watchInterval) {
                     clearInterval(watchInterval);
                     watchInterval = null;
                 }
                 if (player && player.playVideo) {
-                    // Small delay to ensure video resumes properly
                     setTimeout(() => {
                         if (player && player.playVideo) {
                             player.playVideo();
                         }
                     }, 500);
                 }
-                
+
             } catch (error) {
                 console.error('Ad reward error:', error);
-                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။ နောက်တစ်ကြိမ်ထပ်စမ်းပါ။', 'error');
+                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
             } finally {
-                // Reset the flag after a short delay
                 setTimeout(() => {
                     isUpdatingCoins = false;
-                    // Refresh data from Firestore to ensure consistency
-                    if (currentUser) {
-                        db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                            if (doc.exists) {
-                                userData.coins = doc.data().coins || 0;
-                                updateUI();
-                            }
-                        }).catch(() => {});
-                    }
+                    syncLocalTransactions();
                 }, 2000);
             }
         }
 
         // ============================================================
-        //  COIN GIFT SYSTEM
+        //  Online/Offline detection
+        // ============================================================
+        window.addEventListener('online', function() {
+            console.log('🔄 Back online, syncing data...');
+            if (currentUser) {
+                syncLocalTransactions();
+                // Refresh user data
+                db.collection('users').doc(currentUser.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            if (data.coins && data.coins > (userData.coins || 0)) {
+                                userData.coins = data.coins;
+                                saveCoinsToLocal(data.coins);
+                                updateUI();
+                            }
+                            usingLocalData = false;
+                            showLocalModeIndicator(false);
+                        }
+                    })
+                    .catch(() => {});
+            }
+        });
+
+        window.addEventListener('offline', function() {
+            console.log('📴 Offline - using local data');
+            if (currentUser) {
+                showLocalModeIndicator(true);
+                usingLocalData = true;
+            }
+        });
+
+        // ============================================================
+        //  COIN GIFT SYSTEM - WITH LOCAL STORAGE SUPPORT
         // ============================================================
         async function sendCoinGift() {
             const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
@@ -2754,71 +2057,74 @@
                 const receiverId = receiverDoc.id;
                 const receiverData = receiverDoc.data();
 
-                isUpdatingCoins = true;
+                // Update local first
                 userData.coins = (userData.coins || 0) - totalCost;
+                saveCoinsToLocal(userData.coins);
                 updateUI();
 
-                const senderRef = db.collection('users').doc(currentUser.uid);
-                const receiverRef = db.collection('users').doc(receiverId);
-                
-                await db.runTransaction(async (transaction) => {
-                    const senderDoc = await transaction.get(senderRef);
-                    const receiverDoc2 = await transaction.get(receiverRef);
-                    
-                    if (!senderDoc.exists || !receiverDoc2.exists) return;
-                    
-                    const senderCoins = senderDoc.data().coins || 0;
-                    
-                    if (senderCoins < totalCost) {
-                        throw new Error('Sender insufficient coins');
-                    }
-                    
-                    transaction.update(senderRef, { coins: senderCoins - totalCost });
-                    transaction.update(receiverRef, { coins: (receiverDoc2.data().coins || 0) + amount });
-                });
+                try {
+                    const senderRef = db.collection('users').doc(currentUser.uid);
+                    const receiverRef = db.collection('users').doc(receiverId);
 
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'gift_sent',
-                    amount: -totalCost,
-                    description: 'Coin Gift ပို့ခြင်း (' + amount + ' Coins → ' + receiverData.username +
-                        ' | Fee ' + GIFT_FEE + ' Coins)',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                    await db.runTransaction(async (transaction) => {
+                        const senderDoc = await transaction.get(senderRef);
+                        const receiverDoc2 = await transaction.get(receiverRef);
 
-                await db.collection('transactions').add({
-                    userId: receiverId,
-                    type: 'gift_received',
-                    amount: amount,
-                    description: 'Coin Gift ရရှိခြင်း (' + amount + ' Coins from ' + userData.username + ')',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                        if (!senderDoc.exists || !receiverDoc2.exists) return;
 
-                msgEl.textContent = '✅ ' + receiverData.username + ' ဆီကို ' + amount +
-                    ' Coins ပို့ပြီးပါပြီ! (Fee ' + GIFT_FEE + ' Coins ဖြတ်ပါပြီ)';
-                msgEl.style.color = '#4caf50';
+                        const senderCoins = senderDoc.data().coins || 0;
+
+                        if (senderCoins < totalCost) {
+                            throw new Error('Sender insufficient coins');
+                        }
+
+                        transaction.update(senderRef, { coins: senderCoins - totalCost });
+                        transaction.update(receiverRef, { coins: (receiverDoc2.data().coins || 0) + amount });
+                    });
+
+                    await db.collection('transactions').add({
+                        userId: currentUser.uid,
+                        type: 'gift_sent',
+                        amount: -totalCost,
+                        description: 'Coin Gift ပို့ခြင်း (' + amount + ' Coins → ' + receiverData.username +
+                            ' | Fee ' + GIFT_FEE + ' Coins)',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    await db.collection('transactions').add({
+                        userId: receiverId,
+                        type: 'gift_received',
+                        amount: amount,
+                        description: 'Coin Gift ရရှိခြင်း (' + amount + ' Coins from ' + userData.username + ')',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    msgEl.textContent = '✅ ' + receiverData.username + ' ဆီကို ' + amount +
+                        ' Coins ပို့ပြီးပါပြီ! (Fee ' + GIFT_FEE + ' Coins ဖြတ်ပါပြီ)';
+                    msgEl.style.color = '#4caf50';
+
+                } catch (error) {
+                    console.error('Firestore gift error, saving locally:', error);
+                    saveTransactionLocal('gift_sent', -totalCost, 'Coin Gift ပို့ခြင်း (' + amount + ' Coins → ' +
+                        receiverData.username + ' | Fee ' + GIFT_FEE + ' Coins) [Local]');
+                    msgEl.textContent = '✅ ' + receiverData.username + ' ဆီကို ' + amount +
+                        ' Coins ပို့ပြီးပါပြီ! (Local Save)';
+                    msgEl.style.color = '#4caf50';
+                    showLocalModeIndicator(true);
+                    usingLocalData = true;
+                }
 
                 document.getElementById('giftReceiverEmail').value = '';
                 document.getElementById('giftAmount').value = '';
-
                 showToast('🎁 ' + receiverData.username + ' ဆီကို ' + amount + ' Coins ပို့ပြီးပါပြီ!', 'success');
 
             } catch (error) {
                 console.error('Gift error:', error);
                 userData.coins = (userData.coins || 0) + totalCost;
+                saveCoinsToLocal(userData.coins);
                 updateUI();
                 msgEl.textContent = '❌ Gift ပို့မအောင်မြင်ပါ: ' + error.message;
                 msgEl.style.color = '#ff5252';
-            } finally {
-                setTimeout(() => {
-                    isUpdatingCoins = false;
-                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                        if (doc.exists) {
-                            userData.coins = doc.data().coins || 0;
-                            updateUI();
-                        }
-                    });
-                }, 2000);
             }
         }
 
@@ -2908,36 +2214,41 @@
 
         async function giveDailyBonusReward() {
             const reward = DAILY_BONUS_REWARD;
-
             if (!currentUser) return;
-            
+
             try {
-                isUpdatingCoins = true;
-                
-                const userRef = db.collection('users').doc(currentUser.uid);
-                await userRef.update({
-                    coins: firebase.firestore.FieldValue.increment(reward)
-                });
-                
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'daily_bonus',
-                    amount: reward,
-                    description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
+                // Update local first
                 userData.coins = (userData.coins || 0) + reward;
+                saveCoinsToLocal(userData.coins);
                 updateUI();
-                
+
+                try {
+                    const userRef = db.collection('users').doc(currentUser.uid);
+                    await userRef.update({
+                        coins: firebase.firestore.FieldValue.increment(reward)
+                    });
+
+                    await db.collection('transactions').add({
+                        userId: currentUser.uid,
+                        type: 'daily_bonus',
+                        amount: reward,
+                        description: 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins)',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                } catch (error) {
+                    console.error('Firestore error, saving locally:', error);
+                    saveTransactionLocal('daily_bonus', reward, 'App 2 ခု ဒေါင်းပြီး နေ့စဉ် Bonus (' + reward + ' Coins) [Local]');
+                    showLocalModeIndicator(true);
+                    usingLocalData = true;
+                }
+
                 const today = new Date().toDateString();
                 localStorage.setItem('lastBonusDate', today);
-                
+
                 showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
-                
                 document.getElementById('dailyBonusModal').classList.remove('show');
-                
-                // Reset watch time after daily bonus
+
                 watchTime = 0;
                 if (watchInterval) {
                     clearInterval(watchInterval);
@@ -2950,20 +2261,10 @@
                         }
                     }, 500);
                 }
-                
+
             } catch (error) {
                 console.error('Daily bonus error:', error);
                 showToast('❌ Bonus ရယူမအောင်မြင်ပါ။', 'error');
-            } finally {
-                setTimeout(() => {
-                    isUpdatingCoins = false;
-                    db.collection('users').doc(currentUser.uid).get().then((doc) => {
-                        if (doc.exists) {
-                            userData.coins = doc.data().coins || 0;
-                            updateUI();
-                        }
-                    });
-                }, 2000);
             }
         }
 
@@ -3088,11 +2389,51 @@
                     </div>
                 `;
 
-                const snapshot = await db.collection('transactions')
-                    .where('userId', '==', currentUser.uid)
-                    .get();
+                // Get from Firestore
+                let transactions = [];
+                try {
+                    const snapshot = await db.collection('transactions')
+                        .where('userId', '==', currentUser.uid)
+                        .get();
 
-                if (snapshot.empty) {
+                    if (!snapshot.empty) {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const timestamp = data.timestamp;
+                            let date = new Date();
+                            if (timestamp && timestamp.seconds) {
+                                date = new Date(timestamp.seconds * 1000);
+                            } else if (timestamp && timestamp.toDate) {
+                                date = timestamp.toDate();
+                            }
+                            transactions.push({
+                                ...data,
+                                _date: date,
+                                id: doc.id,
+                                source: 'firestore'
+                            });
+                        });
+                    }
+                } catch (error) {
+                    console.error('Firestore transaction error:', error);
+                }
+
+                // Get from local storage
+                try {
+                    const localTxs = JSON.parse(localStorage.getItem('localTransactions_' + currentUser.uid) || '[]');
+                    localTxs.forEach(tx => {
+                        transactions.push({
+                            type: tx.type,
+                            amount: tx.amount,
+                            description: tx.description + (tx.synced ? '' : ' [Local]'),
+                            _date: new Date(tx.timestamp),
+                            source: 'local',
+                            synced: tx.synced
+                        });
+                    });
+                } catch (e) {}
+
+                if (transactions.length === 0) {
                     container.innerHTML = `
                         <div style="text-align:center;padding:30px;color:var(--text-muted);">
                             <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:10px;opacity:0.3;"></i>
@@ -3102,23 +2443,6 @@
                     `;
                     return;
                 }
-
-                const transactions = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const timestamp = data.timestamp;
-                    let date = new Date();
-                    if (timestamp && timestamp.seconds) {
-                        date = new Date(timestamp.seconds * 1000);
-                    } else if (timestamp && timestamp.toDate) {
-                        date = timestamp.toDate();
-                    }
-                    transactions.push({
-                        ...data,
-                        _date: date,
-                        id: doc.id
-                    });
-                });
 
                 transactions.sort((a, b) => b._date - a._date);
 
@@ -3142,11 +2466,12 @@
                     const sign = isPositive ? '+' : (item.type === 'admin_remove' || item.type === 'withdraw' ||
                         item.type === 'gift_sent' ? '-' : '');
                     const time = item._date.toLocaleString();
+                    const localTag = item.source === 'local' && !item.synced ? ' 🔄' : '';
 
                     html += `
                         <div class="transaction-item">
                             <div class="left">
-                                <div class="type">${type.icon} ${type.label}</div>
+                                <div class="type">${type.icon} ${type.label}${localTag}</div>
                                 <div class="detail">${item.description || ''}</div>
                                 <div class="date">${time}</div>
                             </div>
@@ -3165,7 +2490,6 @@
                     <div style="text-align:center;padding:20px;color:var(--text-muted);">
                         <i class="fas fa-exclamation-circle" style="font-size:24px;display:block;margin-bottom:8px;color:var(--accent);"></i>
                         <p>မှတ်တမ်းများ ရယူမရပါ</p>
-                        <p style="font-size:11px;margin-top:4px;color:var(--text-secondary);">${error.message}</p>
                         <button class="btn btn-outline" onclick="loadTransactionHistory()" style="margin-top:8px;width:auto;padding:4px 16px;font-size:12px;">
                             <i class="fas fa-sync"></i> ပြန်စမ်းမည်
                         </button>
@@ -3205,17 +2529,31 @@
             if (!confirm(`🪙 ${amt} Coins → $${usdt.toFixed(2)} USDT လဲလှယ်မည်?`)) return;
 
             if (currentUser) {
-                await db.collection('users').doc(currentUser.uid).update({
-                    coins: firebase.firestore.FieldValue.increment(-amt),
-                    usdt: firebase.firestore.FieldValue.increment(usdt)
-                });
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'exchange',
-                    amount: -amt,
-                    description: `${amt} Coins → $${usdt.toFixed(2)} USDT`,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                // Update local first
+                userData.coins = (userData.coins || 0) - amt;
+                userData.usdt = (userData.usdt || 0) + usdt;
+                saveCoinsToLocal(userData.coins);
+                updateUI();
+
+                try {
+                    await db.collection('users').doc(currentUser.uid).update({
+                        coins: firebase.firestore.FieldValue.increment(-amt),
+                        usdt: firebase.firestore.FieldValue.increment(usdt)
+                    });
+                    await db.collection('transactions').add({
+                        userId: currentUser.uid,
+                        type: 'exchange',
+                        amount: -amt,
+                        description: `${amt} Coins → $${usdt.toFixed(2)} USDT`,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error('Firestore exchange error:', error);
+                    saveTransactionLocal('exchange', -amt, `${amt} Coins → $${usdt.toFixed(2)} USDT [Local]`);
+                    showLocalModeIndicator(true);
+                    usingLocalData = true;
+                }
+
                 showToast(`✅ ${amt} Coin → $${usdt.toFixed(2)} USDT လဲလှယ်ပြီးပါပြီ`);
                 closeModal('exchangeModal');
             }
@@ -3267,19 +2605,11 @@
         }
 
         // ============================================================
-        //  ADMIN WITHDRAW REQUESTS
+        //  ADMIN WITHDRAW REQUESTS - LOAD ON DEMAND
         // ============================================================
         function listenWithdrawRequests() {
-            if (!currentUser) return;
-
-            db.collection('withdrawals')
-                .where('status', '==', 'pending')
-                .onSnapshot((snapshot) => {
-                    updateWithdrawBadge();
-                    if (isAdmin) {
-                        loadWithdrawRequests();
-                    }
-                });
+            // Disabled to reduce Firestore reads
+            // Only load when admin opens the panel
         }
 
         function updateWithdrawBadge() {
@@ -3304,6 +2634,7 @@
             try {
                 const snapshot = await db.collection('withdrawals')
                     .orderBy('requestedAt', 'desc')
+                    .limit(50)
                     .get();
 
                 if (snapshot.empty) {
@@ -3507,6 +2838,7 @@
             try {
                 const snapshot = await db.collection('users')
                     .orderBy('createdAt', 'desc')
+                    .limit(100)
                     .get();
 
                 if (snapshot.empty) {
@@ -4019,6 +3351,8 @@
 
         console.log('✅ App initialized successfully!');
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
+        console.log('💾 Local Storage: Coin တွေကို Local မှာ သိမ်းထားပါမယ်');
+        console.log('🔄 Sync: Firestore ပြန်ရတဲ့အခါ Local Data တွေကို Sync လုပ်ပါမယ်');
         console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
         console.log('📱 App Download Links (Daily Bonus): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
         console.log('📢 Ad Links (Video Watch): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။ (Coin 20 သတ်မှတ်ထားသည်)');
