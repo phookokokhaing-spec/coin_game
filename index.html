@@ -2274,7 +2274,7 @@
         }
 
         // ============================================================
-        //  AD MODAL FUNCTIONS - FIXED
+        //  AD MODAL FUNCTIONS - FIXED WITH WATCH TIME RESET
         // ============================================================
         function closeAdModal() {
             // Clear any running countdown
@@ -2291,14 +2291,18 @@
             document.getElementById('adModal').classList.remove('show');
             document.getElementById('coinPopup').style.display = 'none';
             
-            // Resume video
+            // IMPORTANT: Reset watch time when ad is closed without claiming
             watchTime = 0;
+            if (watchInterval) {
+                clearInterval(watchInterval);
+                watchInterval = null;
+            }
             if (player && player.playVideo) {
                 player.playVideo();
             }
         }
 
-        // ===== CLOSE AD AND CLAIM - FIXED =====
+        // ===== CLOSE AD AND CLAIM - FIXED WITH FULL RESET =====
         function closeAdAndClaim() {
             // Clear any running countdown
             if (window._adCountdownInterval) {
@@ -2383,14 +2387,17 @@
                 return;
             }
             currentVideoId = id;
+            // IMPORTANT: Reset watch time when loading new video
             watchTime = 0;
             document.getElementById('videoError').style.display = 'none';
             document.getElementById('coinPopup').style.display = 'none';
             if (player && player.loadVideoById) {
                 player.loadVideoById(id);
             }
-            if (watchInterval) { clearInterval(watchInterval);
-                watchInterval = null; }
+            if (watchInterval) { 
+                clearInterval(watchInterval);
+                watchInterval = null; 
+            }
         }
 
         // ============================================================
@@ -2504,7 +2511,7 @@
         });
 
         // ============================================================
-        //  WATCH TIMER & AD COIN (IFrame Version) - FIXED
+        //  WATCH TIMER & AD COIN - FIXED WITH FULL RESET
         // ============================================================
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
@@ -2520,8 +2527,10 @@
                     }, 1000);
                 }
             } else {
-                if (watchInterval) { clearInterval(watchInterval);
-                    watchInterval = null; }
+                if (watchInterval) { 
+                    clearInterval(watchInterval);
+                    watchInterval = null; 
+                }
             }
         }
 
@@ -2616,7 +2625,7 @@
             }, 1000);
         }
 
-        // ===== GIVE AD REWARD - FIXED =====
+        // ===== GIVE AD REWARD - FIXED WITH WATCH TIME RESET =====
         async function giveAdReward(reward) {
             if (!currentUser) {
                 showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
@@ -2651,9 +2660,20 @@
                 
                 showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
                 
-                // Reset watch timer
+                // IMPORTANT: Reset watch time and timer after claiming
                 watchTime = 0;
-                if (player && player.playVideo) player.playVideo();
+                if (watchInterval) {
+                    clearInterval(watchInterval);
+                    watchInterval = null;
+                }
+                if (player && player.playVideo) {
+                    // Small delay to ensure video resumes properly
+                    setTimeout(() => {
+                        if (player && player.playVideo) {
+                            player.playVideo();
+                        }
+                    }, 500);
+                }
                 
             } catch (error) {
                 console.error('Ad reward error:', error);
@@ -2906,8 +2926,20 @@
                 showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
                 
                 document.getElementById('dailyBonusModal').classList.remove('show');
+                
+                // Reset watch time after daily bonus
                 watchTime = 0;
-                if (player && player.playVideo) player.playVideo();
+                if (watchInterval) {
+                    clearInterval(watchInterval);
+                    watchInterval = null;
+                }
+                if (player && player.playVideo) {
+                    setTimeout(() => {
+                        if (player && player.playVideo) {
+                            player.playVideo();
+                        }
+                    }, 500);
+                }
                 
             } catch (error) {
                 console.error('Daily bonus error:', error);
