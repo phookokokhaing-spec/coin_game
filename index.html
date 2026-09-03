@@ -2135,7 +2135,7 @@
         }
 
         // ============================================================
-        //  AUTH STATE - FIXED
+        //  AUTH STATE
         // ============================================================
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -2205,7 +2205,7 @@
         });
 
         // ============================================================
-        //  UI UPDATE - FIXED
+        //  UI UPDATE
         // ============================================================
         function updateUI() {
             if (currentUser) {
@@ -2291,8 +2291,11 @@
             const iframe = document.getElementById('adIframe');
             iframe.src = 'about:blank';
             document.getElementById('adModal').classList.remove('show');
-            document.getElementById('coinPopup').style.display = 'none';
+            
+            // ✅ Reset watch timer and hide popup
             watchTime = 0;
+            document.getElementById('coinPopup').style.display = 'none';
+            
             if (player && player.playVideo) {
                 player.playVideo();
             }
@@ -2395,10 +2398,11 @@
                 adIndex = (adIndex + 1) % adLinks.length;
                 localStorage.setItem('currentAdIndex', adIndex);
             }
+            
             giveAdReward(AD_REWARD);
         }
 
-        // ===== GIVE AD REWARD - FIXED (Simple update without transaction for speed) =====
+        // ===== GIVE AD REWARD - FIXED (Reset timer and hide popup) =====
         async function giveAdReward(reward) {
             if (!currentUser) {
                 showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
@@ -2406,7 +2410,6 @@
             }
 
             try {
-                // Simple update - faster than transaction
                 await db.collection('users').doc(currentUser.uid).update({
                     coins: firebase.firestore.FieldValue.increment(reward)
                 });
@@ -2420,14 +2423,20 @@
                 });
 
                 showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
+                
+                // ✅ Reset watch timer and hide popup
                 watchTime = 0;
-                if (player && player.playVideo) player.playVideo();
-                // Force refresh UI
+                document.getElementById('coinPopup').style.display = 'none';
+                
+                // Play video again
+                if (player && player.playVideo) {
+                    player.playVideo();
+                }
+                
                 setTimeout(updateUI, 500);
 
             } catch (error) {
                 console.error('Ad reward error:', error);
-                // If quota exceeded, show warning but don't fail
                 if (error.code === 'resource-exhausted' || error.message.includes('429')) {
                     showToast('⚠️ Server busy. Please try again in a moment.', 'warning');
                 } else {
@@ -2437,7 +2446,20 @@
         }
 
         // ============================================================
-        //  DAILY BONUS - FIXED
+        //  SHOW COIN POPUP - FIXED (Prevent duplicate popups)
+        // ============================================================
+        function showCoinPopup() {
+            // Check if popup is already showing
+            if (document.getElementById('coinPopup').style.display === 'block') {
+                return;
+            }
+            document.getElementById('coinRewardVal').textContent = AD_REWARD;
+            document.getElementById('adRewardAmount').textContent = AD_REWARD;
+            document.getElementById('coinPopup').style.display = 'block';
+        }
+
+        // ============================================================
+        //  DAILY BONUS - FIXED (Once per day)
         // ============================================================
         async function claimDailyBonus() {
             if (!currentUser) {
@@ -2550,6 +2572,7 @@
             await giveDailyBonusReward();
         }
 
+        // ===== GIVE DAILY BONUS REWARD - FIXED (Once per day) =====
         async function giveDailyBonusReward() {
             const reward = DAILY_BONUS_REWARD;
             if (!currentUser) return;
@@ -2559,7 +2582,6 @@
                 const bonusRef = db.collection('dailyBonus').doc(currentUser.uid);
                 const today = new Date().toISOString().split('T')[0];
 
-                // Simple update - faster than transaction
                 await userRef.update({
                     coins: firebase.firestore.FieldValue.increment(reward)
                 });
@@ -2768,12 +2790,6 @@
                 if (watchInterval) { clearInterval(watchInterval);
                     watchInterval = null; }
             }
-        }
-
-        function showCoinPopup() {
-            document.getElementById('coinRewardVal').textContent = AD_REWARD;
-            document.getElementById('adRewardAmount').textContent = AD_REWARD;
-            document.getElementById('coinPopup').style.display = 'block';
         }
 
         // ============================================================
@@ -3948,13 +3964,14 @@
         document.getElementById('profileImg').src = localStorage.getItem('profileImg') ||
             'https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72';
 
-        console.log('✅ App initialized successfully with FIXED coin claiming!');
+        console.log('✅ App initialized successfully with FIXED coin claiming and daily bonus!');
         console.log('🔒 Admin lock: သော့ပုံကို 12 ချက်နှိပ်ပါ။');
         console.log('📊 Exchange Rate: Firestore မှာ သိမ်းပြီး အားလုံးဆီမှာ တူညီပါမယ်။');
         console.log('📱 App Download Links (Daily Bonus): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။');
         console.log('📢 Ad Links (Video Watch): Admin မှ ထည့်/ဖျက် လုပ်လို့ရပါပြီ။ (Coin 20 သတ်မှတ်ထားသည်)');
-        console.log('🎁 Daily Bonus: App 2 ခု ဒေါင်းပြီး 700 Coins ရမယ် (သီးခြား)');
+        console.log('🎁 Daily Bonus: တစ်နေ့တစ်ခါသာ ရယူနိုင်ပါပြီ။');
         console.log('🎬 Video Watch: 2 မိနစ်ကြည့်ရင် Ad ပေါ်မယ်၊ Ad ကြည့်ပြီး 20 Coins ရမယ်');
+        console.log('🔄 Coin ယူပြီးရင် နောက်ထပ် 2 မိနစ်စောင့်မှ ပြန်ပေါ်ပါမယ်။');
     </script>
 </body>
 </html>
