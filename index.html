@@ -1062,223 +1062,361 @@
             }
         }
 
-        // ============================================================
-        //  LOCAL VIDEO MANAGEMENT - SHARED WITH ALL USERS
-        // ============================================================
-        const defaultMyVideos = [
-            { name: "မြန်မာသီချင်းအသစ်", id: "fHnXtisVCGs" },
-            { name: "ရွှေချစ်သူ - အောင်လ", id: "iIW2nSg8HQY" },
-            { name: "မြန်မာရုပ်ရှင်ဇာတ်ကား", id: "X6Hur8jbfNo" },
-            { name: "ဆိုင်းဝိုင်း - ဝင်းမင်းထက်", id: "2qc_vi9qOtY" },
-            { name: "အိပ်မက်ဆိုး - ဇော်ဇော်", id: "3Ss9AYC6N7M" },
-            { name: "ရင်ခုန်သံ - အေးမြတ်", id: "WR3EwCf0myY" }
-        ];
+// ============================================================
+//  LOCAL VIDEO MANAGEMENT - SHARED WITH ALL USERS
+//  🔥 UPDATED with Nay Htoo Naing Videos + localStorage support
+// ============================================================
 
-        const defaultSongList = [
-            { name: "သီချင်း 1 - တို့ဗမာ", id: "EnpWs20HZiY" },
-            { name: "သီချင်း 2 - ရင်ခုန်သံ", id: "H0GOhtVdC3Y" },
-            { name: "သီချင်း 3 - မြစ်ကမ်းနား", id: "6g9vqvklR_I" },
-            { name: "သီချင်း 4 - ချစ်တဲ့သူ", id: "WRMcoFCQb1s" }
-        ];
+// ============================================================
+//  🔥 NAY HTOO NAING VIDEOS (Default)
+//  📌 These will be used if localStorage is empty
+// ============================================================
 
-        const defaultVideoList = [
-            { name: "ဗီဒီယို 1", id: "I54Chzm_YUY" },
-            { name: "ဗီဒီယို 2", id: "WRMcoFCQb1s" }
-        ];
+const NAY_HTOO_VIDEOS = [
+    { name: "ဝတစ်ထောင်သိန်းမောင် (စ/ဆုံး)", id: "you2gfY4hGA" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မောင်မောင်တာနောယက္ခ", id: "B-RUIXjbodQ" },
+    { name: "တောအုပ် မင်းဒင် (အပိုင်း ၂)", id: "4WA4TRXPPu4" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မြေသျှိုးမိုးပျံသတိုးဘမှန်", id: "zjcy_M5QnIk" },
+    { name: "မြန်မာဇာတ်ကား စ/ဆုံး သိုက်ဆက်ကျိန်စာ", id: "1xLD7PKgb_k" },
+    { name: "မြန်မာဇာတ်ကား စ/ဆုံး သျှောင်တစ်စောင်းမောင်မောင်", id: "HpSQ_ylvNIg" },
+    { name: "မြန်မာဇာတ်ကား စ/ဆုံး မုသားသစ္စာ", id: "aonmCljaTWI" },
+    { name: "မြန်မာဇာတ်ကား စ/ဆုံး မေတ္တာမဲ့အချစ်", id: "m8TX6GUneWY" },
+    { name: "မြန်မာဇာတ်ကား စ/ဆုံး ဘုံရန်သူ", id: "_wnfhQPSBVA" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး ရွှေရုပ်နဲ့ဇနပုဒ်", id: "ocQgJB5VOuw" },
+    { name: "လာမထိနဲ့ မီးပွင့်သွားမယ်(၂)", id: "h69xcEmd3l0" },
+    { name: "လာမထိနဲ့ မီးပွင့်သွားမယ်", id: "AAiH4gxZEiU" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး ကျွန်တော်ချစ်တဲ့မခင်နှင်းဆီ", id: "5YBZJp11_T8" },
+    { name: "မြန်မာဇာတ်ကား စ/ဆုံး ဒေါက်မကျိုးတဲ့ကျောက်ဒိုး", id: "PFxsSfsdf_I" },
+    { name: "【မနူဟာကျိန်စာ | Ma Nu Har Kyain Sar】", id: "ZgcRpuNw9WA" },
+    { name: "အဖေတူသား (စ/ဆုံး)", id: "MRIIaeB1UAM" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး လူတကာထက်တစ်ယူဇနာပိုမိုက်တယ်", id: "ybdI4evCQzw" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး သံမဏိသစ္စာဓား", id: "mVjwRVXLqNc" },
+    { name: "'တိုက်မောင်းကို မိုက်ကြောင်း မပြောနဲ့' အပိုင်း(၁)", id: "y5owcs7CyVM" },
+    { name: "#မြန်မာဇာတ်ကား စ/ဆုံး အချစ်ကြမ်းကြမ်းအလွမ်းဝေးဝေး", id: "msFM4TIkfnI" },
+    // ... ကျန်တဲ့ ၃၇၈ ခုကို Console ကနေကူးပြီး ထည့်ပါ
+];
 
-        const defaultCartoonList = [
-            { name: "ကာတွန်း 1", id: "EnpWs20HZiY" },
-            { name: "ကာတွန်း 2", id: "H0GOhtVdC3Y" }
-        ];
+// ============================================================
+//  🔥 MAIN DEFAULT VIDEOS (Load from localStorage first)
+// ============================================================
 
-        function getVideosFromLocal(category) {
-            const key = 'videos_' + category;
-            const stored = localStorage.getItem(key);
-            if (stored) {
-                try {
-                    return JSON.parse(stored);
-                } catch (e) {
-                    console.error('Error parsing videos:', e);
-                }
+function getDefaultMyVideos() {
+    // Try to load from localStorage first
+    const stored = localStorage.getItem('videos_myvideo');
+    if (stored) {
+        try {
+            const videos = JSON.parse(stored);
+            if (videos && videos.length > 0) {
+                console.log(`📦 Loaded ${videos.length} videos from localStorage`);
+                return videos;
             }
-            switch(category) {
-                case 'myvideo': return defaultMyVideos;
-                case 'song': return defaultSongList;
-                case 'video': return defaultVideoList;
-                case 'cartoon': return defaultCartoonList;
-                default: return defaultMyVideos;
+        } catch(e) {
+            console.error('Error loading videos from localStorage:', e);
+        }
+    }
+    // Fallback to NAY_HTOO_VIDEOS
+    console.log(`📋 Using ${NAY_HTOO_VIDEOS.length} default videos`);
+    return NAY_HTOO_VIDEOS;
+}
+
+const defaultMyVideos = getDefaultMyVideos();
+
+// ============================================================
+//  OTHER LISTS
+// ============================================================
+
+const defaultSongList = [
+    { name: "သီချင်း 1 - တို့ဗမာ", id: "EnpWs20HZiY" },
+    { name: "သီချင်း 2 - ရင်ခုန်သံ", id: "H0GOhtVdC3Y" },
+    { name: "သီချင်း 3 - မြစ်ကမ်းနား", id: "6g9vqvklR_I" },
+    { name: "သီချင်း 4 - ချစ်တဲ့သူ", id: "WRMcoFCQb1s" }
+];
+
+const defaultVideoList = [
+    { name: "ဗီဒီယို 1", id: "I54Chzm_YUY" },
+    { name: "ဗီဒီယို 2", id: "WRMcoFCQb1s" }
+];
+
+const defaultCartoonList = [
+    { name: "ကာတွန်း 1", id: "EnpWs20HZiY" },
+    { name: "ကာတွန်း 2", id: "H0GOhtVdC3Y" }
+];
+
+// ============================================================
+//  GET VIDEOS FROM LOCAL
+// ============================================================
+
+function getVideosFromLocal(category) {
+    const key = 'videos_' + category;
+    const stored = localStorage.getItem(key);
+    if (stored) {
+        try {
+            return JSON.parse(stored);
+        } catch (e) {
+            console.error('Error parsing videos:', e);
+        }
+    }
+    switch(category) {
+        case 'myvideo': return defaultMyVideos;
+        case 'song': return defaultSongList;
+        case 'video': return defaultVideoList;
+        case 'cartoon': return defaultCartoonList;
+        default: return defaultMyVideos;
+    }
+}
+
+// ============================================================
+//  SAVE VIDEOS TO LOCAL
+// ============================================================
+
+function saveVideosToLocal(category, videos) {
+    const key = 'videos_' + category;
+    localStorage.setItem(key, JSON.stringify(videos));
+    // Update defaultMyVideos if it's the main category
+    if (category === 'myvideo') {
+        // The next time getDefaultMyVideos is called, it will load from localStorage
+    }
+}
+
+// ============================================================
+//  🔥 ADMIN — ADD VIDEO (Local Only)
+// ============================================================
+
+function adminAddVideoLocal() {
+    const title = document.getElementById('adminVidTitle').value.trim();
+    const url = document.getElementById('adminVidUrl').value.trim();
+    
+    if (!title || !url) {
+        showToast('အချက်အလက် အပြည့်အစုံထည့်ပါ။', 'error');
+        return;
+    }
+
+    let id = url;
+    if (url.includes('youtu.be/')) {
+        id = url.split('youtu.be/')[1].split('?')[0];
+    } else if (url.includes('watch?v=')) {
+        id = url.split('watch?v=').pop().split('&')[0];
+    } else if (url.includes('shorts/')) {
+        id = url.split('shorts/')[1].split('?')[0];
+    } else if (url.length === 11) {
+        id = url;
+    }
+
+    if (id.length !== 11) {
+        showToast('မှန်ကန်သော Video ID မဟုတ်ပါ။', 'error');
+        return;
+    }
+
+    const currentVideos = getVideosFromLocal('myvideo');
+    
+    // Check if video already exists
+    if (currentVideos.find(v => v.id === id)) {
+        showToast('⚠️ ဒီ Video ID ရှိပြီးသား။', 'warning');
+        return;
+    }
+    
+    const newVideo = { name: title, id: id };
+    currentVideos.push(newVideo);
+    saveVideosToLocal('myvideo', currentVideos);
+    
+    showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ (Local)');
+    document.getElementById('adminVidTitle').value = '';
+    document.getElementById('adminVidUrl').value = '';
+    
+    renderPlaylist('myvideo');
+    loadAdminVideoList();
+}
+
+// ============================================================
+//  🔥 ADMIN — DELETE VIDEO
+// ============================================================
+
+function adminDeleteVideoLocal(index) {
+    if (!confirm('ဒီ Video ကို ဖျက်မည်?')) return;
+    
+    const currentVideos = getVideosFromLocal('myvideo');
+    if (index < 0 || index >= currentVideos.length) {
+        showToast('Video မတွေ့ပါ။', 'error');
+        return;
+    }
+    
+    currentVideos.splice(index, 1);
+    saveVideosToLocal('myvideo', currentVideos);
+    
+    showToast('✅ Video ဖျက်ပြီးပါပြီ (Local)');
+    renderPlaylist('myvideo');
+    loadAdminVideoList();
+}
+
+// ============================================================
+//  🔥 ADMIN — LOAD VIDEO LIST
+// ============================================================
+
+function loadAdminVideoList() {
+    const container = document.getElementById('adminVideoList');
+    if (!container) return;
+    
+    const videos = getVideosFromLocal('myvideo');
+    if (videos.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:12px;text-align:center;">ဗီဒီယိုမရှိသေးပါ</p>';
+        return;
+    }
+    
+    let html = '<table><thead><tr><th style="width:70%;">Video Title</th><th style="width:30%;">Action</th></tr></thead><tbody>';
+    
+    videos.forEach((video, index) => {
+        const displayName = video.name.length > 30 ? video.name.substring(0, 30) + '...' : video.name;
+        html += `
+            <tr>
+                <td style="font-size:10px;text-align:left;">${displayName}</td>
+                <td>
+                    <button class="btn-sm red" onclick="adminDeleteVideoLocal(${index})" style="padding:2px 8px;font-size:9px;">
+                        <i class="fas fa-trash"></i> ဖျက်
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+// ============================================================
+//  🔥 RENDER PLAYLIST
+// ============================================================
+
+function renderPlaylist(category) {
+    const container = document.getElementById('playlistContainer');
+    const title = document.getElementById('playlistTitle');
+    const count = document.getElementById('playlistCount');
+    
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    let list = [];
+    
+    switch(category) {
+        case 'myvideo': {
+            list = getVideosFromLocal('myvideo');
+            title.textContent = '📽️ My Videos';
+            break;
+        }
+        case 'song': {
+            list = getVideosFromLocal('song');
+            title.textContent = '🎵 သီချင်းများ';
+            break;
+        }
+        case 'video': {
+            list = getVideosFromLocal('video');
+            title.textContent = '🎬 ဗီဒီယိုများ';
+            break;
+        }
+        case 'cartoon': {
+            list = getVideosFromLocal('cartoon');
+            title.textContent = '🎨 ကာတွန်းများ';
+            break;
+        }
+        case 'search': {
+            title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
+            const q = document.getElementById('searchInput').value.trim();
+            if (q) {
+                list = [{ name: '🔍 "' + q + '" ရှာဖွေရန်', id: 'fHnXtisVCGs' }];
+            } else {
+                list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
             }
+            break;
         }
-
-        function saveVideosToLocal(category, videos) {
-            const key = 'videos_' + category;
-            localStorage.setItem(key, JSON.stringify(videos));
+        default: {
+            list = getVideosFromLocal('myvideo');
+            title.textContent = '📽️ My Videos';
         }
+    }
 
-        function adminAddVideoLocal() {
-            const title = document.getElementById('adminVidTitle').value.trim();
-            const url = document.getElementById('adminVidUrl').value.trim();
-            
-            if (!title || !url) {
-                showToast('အချက်အလက် အပြည့်အစုံထည့်ပါ။', 'error');
+    // If no videos found, show a message
+    if (!list || list.length === 0) {
+        list = [{ name: 'ဗီဒီယိုမရှိသေးပါ', id: 'fHnXtisVCGs' }];
+    }
+
+    count.textContent = list.length;
+
+    list.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+        const isDefaultVideo = item.name === 'ဗီဒီယိုမရှိသေးပါ';
+        
+        card.innerHTML = `
+            <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
+            <div class="title">${item.name}</div>
+            ${category === 'myvideo' && currentUser && !isDefaultVideo ? `
+                <div style="padding:2px 6px;text-align:right;">
+                    <button onclick="adminDeleteVideoLocal(${index})" style="background:var(--accent);color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:9px;cursor:pointer;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            ` : ''}
+        `;
+        
+        card.onclick = (e) => {
+            if (e.target.closest('button')) return;
+            if (isDefaultVideo) {
+                showToast('📢 ဗီဒီယိုမရှိသေးပါ။ Admin ကို ဆက်သွယ်ပါ။', 'warning');
                 return;
             }
-
-            let id = url;
-            if (url.includes('youtu.be/')) {
-                id = url.split('youtu.be/')[1].split('?')[0];
-            } else if (url.includes('watch?v=')) {
-                id = url.split('watch?v=').pop().split('&')[0];
-            } else if (url.includes('shorts/')) {
-                id = url.split('shorts/')[1].split('?')[0];
-            } else if (url.length === 11) {
-                id = url;
+            if (item.id && item.id.length === 11) {
+                loadVideo(item.id);
+                watchTime = 0;
+                document.getElementById('coinPopup').style.display = 'none';
+                if (watchInterval) {
+                    clearInterval(watchInterval);
+                    watchInterval = null;
+                }
+            } else {
+                searchYouTube();
             }
+        };
+        container.appendChild(card);
+    });
+}
 
-            if (id.length !== 11) {
-                showToast('မှန်ကန်သော Video ID မဟုတ်ပါ။', 'error');
+// ============================================================
+//  🔥 REFRESH VIDEO DATA
+// ============================================================
+
+function refreshVideoData() {
+    renderPlaylist(currentCategory || 'myvideo');
+    loadAdminVideoList();
+    console.log('🔄 Videos refreshed!');
+}
+
+// ============================================================
+//  🔥 INIT — Load videos on app start
+// ============================================================
+
+// Call this when app initializes
+function initVideos() {
+    // Load from localStorage if available
+    const stored = localStorage.getItem('videos_myvideo');
+    if (stored) {
+        try {
+            const videos = JSON.parse(stored);
+            if (videos && videos.length > 0) {
+                console.log(`📦 Initialized with ${videos.length} videos from localStorage`);
+                // Update defaultMyVideos
+                window.defaultMyVideos = videos;
+                renderPlaylist('myvideo');
                 return;
             }
-
-            const currentVideos = getVideosFromLocal('myvideo');
-            const newVideo = { name: title, id: id };
-            currentVideos.push(newVideo);
-            saveVideosToLocal('myvideo', currentVideos);
-            
-            showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ (Local - All Users)');
-            document.getElementById('adminVidTitle').value = '';
-            document.getElementById('adminVidUrl').value = '';
-            
-            renderPlaylist('myvideo');
-            loadAdminVideoList();
-        }
-
-        function adminDeleteVideoLocal(index) {
-            if (!confirm('ဒီ Video ကို ဖျက်မည်?')) return;
-            
-            const currentVideos = getVideosFromLocal('myvideo');
-            if (index < 0 || index >= currentVideos.length) {
-                showToast('Video မတွေ့ပါ။', 'error');
-                return;
-            }
-            
-            currentVideos.splice(index, 1);
-            saveVideosToLocal('myvideo', currentVideos);
-            
-            showToast('✅ Video ဖျက်ပြီးပါပြီ (Local)');
-            renderPlaylist('myvideo');
-            loadAdminVideoList();
-        }
-
-        function loadAdminVideoList() {
-            const container = document.getElementById('adminVideoList');
-            if (!container) return;
-            
-            const videos = getVideosFromLocal('myvideo');
-            let html = '<table><thead><tr><th style="width:70%;">Video Title</th><th style="width:30%;">Action</th></tr></thead><tbody>';
-            
-            videos.forEach((video, index) => {
-                const displayName = video.name.length > 30 ? video.name.substring(0, 30) + '...' : video.name;
-                html += `
-                    <tr>
-                        <td style="font-size:10px;text-align:left;">${displayName}</td>
-                        <td>
-                            <button class="btn-sm red" onclick="adminDeleteVideoLocal(${index})" style="padding:2px 8px;font-size:9px;">
-                                <i class="fas fa-trash"></i> ဖျက်
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            html += '</tbody></table>';
-            container.innerHTML = html;
-        }
-
-        function renderPlaylist(category) {
-            const container = document.getElementById('playlistContainer');
-            const title = document.getElementById('playlistTitle');
-            const count = document.getElementById('playlistCount');
-            container.innerHTML = '';
-            
-            let list = [];
-            
-            switch(category) {
-                case 'myvideo': {
-                    list = getVideosFromLocal('myvideo');
-                    title.textContent = 'My Videos';
-                    break;
-                }
-                case 'song': {
-                    list = getVideosFromLocal('song');
-                    title.textContent = 'သီချင်းများ';
-                    break;
-                }
-                case 'video': {
-                    list = getVideosFromLocal('video');
-                    title.textContent = 'ဗီဒီယိုများ';
-                    break;
-                }
-                case 'cartoon': {
-                    list = getVideosFromLocal('cartoon');
-                    title.textContent = 'ကာတွန်းများ';
-                    break;
-                }
-                case 'search': {
-                    title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
-                    const q = document.getElementById('searchInput').value.trim();
-                    if (q) {
-                        list = [{ name: '🔍 ' + q + ' (ရှာဖွေရန်)', id: 'fHnXtisVCGs' }];
-                    } else {
-                        list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
-                    }
-                    break;
-                }
-                default: {
-                    list = getVideosFromLocal('myvideo');
-                    title.textContent = 'My Videos';
-                }
-            }
-
-            if (!list || list.length === 0) {
-                list = [{ name: 'ဗီဒီယိုမရှိပါ', id: 'fHnXtisVCGs' }];
-            }
-
-            count.textContent = list.length;
-
-            list.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                card.innerHTML = `
-                    <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
-                    <div class="title">${item.name}</div>
-                    ${category === 'myvideo' && currentUser ? `
-                        <div style="padding:2px 6px;text-align:right;">
-                            <button onclick="adminDeleteVideoLocal(${index})" style="background:var(--accent);color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:9px;cursor:pointer;">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    ` : ''}
-                `;
-                card.onclick = (e) => {
-                    if (e.target.closest('button')) return;
-                    if (item.id && item.id.length === 11) {
-                        loadVideo(item.id);
-                        // Reset watch time when user selects new video
-                        watchTime = 0;
-                        document.getElementById('coinPopup').style.display = 'none';
-                        if (watchInterval) {
-                            clearInterval(watchInterval);
-                            watchInterval = null;
-                        }
-                    } else {
-                        searchYouTube();
-                    }
-                };
-                container.appendChild(card);
-            });
-        }
+        } catch(e) {}
+    }
+    
+    // Use default
+    console.log(`📋 Initialized with ${NAY_HTOO_VIDEOS.length} default videos`);
+    window.defaultMyVideos = NAY_HTOO_VIDEOS;
+    renderPlaylist('myvideo');
+}
 
         // ============================================================
         //  STATE
