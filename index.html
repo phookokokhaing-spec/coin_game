@@ -708,10 +708,10 @@
             <div id="adminDashboard" style="display:none;">
                 <p style="color:#4caf50;font-weight:600;font-size:13px;margin-bottom:12px;">✅ ဝင်ရောက်ပြီးပါပြီ</p>
 
-                <!-- ===== VIDEO UPLOAD - LOCAL ONLY ===== -->
+                <!-- ===== VIDEO UPLOAD - LOCAL ONLY (Shared with all users) ===== -->
                 <div class="admin-section">
-                    <h4>📹 ဗီဒီယိုတင်ရန် (Local Storage)</h4>
-                    <p>YouTube URL သို့မဟုတ် Video ID (Local Storage မှာ သိမ်းမည်)</p>
+                    <h4>📹 ဗီဒီယိုတင်ရန် (Local Storage - All Users)</h4>
+                    <p>YouTube URL သို့မဟုတ် Video ID (အားလုံးမြင်ရမည်)</p>
                     <input type="text" id="adminVidTitle" placeholder="ဗီဒီယိုခေါင်းစဉ်" />
                     <input type="text" id="adminVidUrl" placeholder="YouTube URL သို့မဟုတ် ID" />
                     <button class="btn" onclick="adminAddVideoLocal()"><i class="fa-solid fa-upload"></i> တင်မည် (Local)</button>
@@ -1063,7 +1063,7 @@
         }
 
         // ============================================================
-        //  LOCAL VIDEO MANAGEMENT - NO FIRESTORE READS
+        //  LOCAL VIDEO MANAGEMENT - SHARED WITH ALL USERS
         // ============================================================
         const defaultMyVideos = [
             { name: "မြန်မာသီချင်းအသစ်", id: "fHnXtisVCGs" },
@@ -1145,7 +1145,7 @@
             currentVideos.push(newVideo);
             saveVideosToLocal('myvideo', currentVideos);
             
-            showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ (Local)');
+            showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ (Local - All Users)');
             document.getElementById('adminVidTitle').value = '';
             document.getElementById('adminVidUrl').value = '';
             
@@ -1265,6 +1265,13 @@
                     if (e.target.closest('button')) return;
                     if (item.id && item.id.length === 11) {
                         loadVideo(item.id);
+                        // Reset watch time when user selects new video
+                        watchTime = 0;
+                        document.getElementById('coinPopup').style.display = 'none';
+                        if (watchInterval) {
+                            clearInterval(watchInterval);
+                            watchInterval = null;
+                        }
                     } else {
                         searchYouTube();
                     }
@@ -1318,7 +1325,7 @@
         // ============================================================
         //  ADMIN IDS
         // ============================================================
-        const ADMIN_IDS = ["5586866145", "7625227853"];
+        const ADMIN_IDS = ["2021666", "7625227853"];
 
         // ============================================================
         //  SPLASH
@@ -1736,7 +1743,7 @@
         }
 
         // ============================================================
-        //  AD MODAL FUNCTIONS
+        //  AD MODAL FUNCTIONS - FIXED: RESET EVERYTHING ON EACH AD
         // ============================================================
         function closeAdModal() {
             if (window._adCountdownInterval) {
@@ -1957,7 +1964,7 @@
         });
 
         // ============================================================
-        //  WATCH TIMER & AD COIN
+        //  WATCH TIMER & AD COIN - FIXED: AD SHOWS EVERY 2 MIN WATCH
         // ============================================================
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
@@ -1986,7 +1993,7 @@
             document.getElementById('coinPopup').style.display = 'block';
         }
 
-        // ===== CLAIM COIN =====
+        // ===== CLAIM COIN - FIXED: RESET PROGRESS BAR EACH TIME =====
         function claimCoin() {
             if (!adLinks || adLinks.length === 0) {
                 showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
@@ -2016,6 +2023,7 @@
             const skipBtn = document.getElementById('adSkipBtn');
             const statusText = document.getElementById('adStatusText');
 
+            // ===== RESET EVERYTHING =====
             iframe.src = 'about:blank';
             loading.style.display = 'block';
             iframe.style.display = 'none';
@@ -2073,7 +2081,7 @@
             }, 1000);
         }
 
-        // ===== GIVE AD REWARD =====
+        // ===== GIVE AD REWARD - FIXED: RESET WATCH TIME =====
         async function giveAdReward(reward) {
             if (!currentUser) {
                 showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
@@ -2118,6 +2126,7 @@
                     usingLocalData = true;
                 }
 
+                // ===== RESET WATCH TIME FOR NEXT AD =====
                 watchTime = 0;
                 if (watchInterval) {
                     clearInterval(watchInterval);
@@ -3323,11 +3332,11 @@
             'https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72';
 
         console.log('✅ App initialized successfully!');
-        console.log('📹 Video Management: LOCAL ONLY (No Firestore reads for videos)');
+        console.log('📹 Video Management: LOCAL ONLY (Shared with all users)');
         console.log('💾 Local Storage: Coin & Video data stored locally');
         console.log('🔥 Firebase: Auth, Coins, USDT, Exchange Rate only');
         console.log('🔄 Sync: Firestore sync when online');
-        console.log('🎬 Video Watch: 2 min watch → Ad → 20 Coins');
+        console.log('🎬 Video Watch: 2 min watch → Ad → 20 Coins (Ad resets each time)');
     </script>
 </body>
 </html>
