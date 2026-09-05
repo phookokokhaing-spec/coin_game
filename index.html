@@ -446,19 +446,6 @@
             box-shadow: 0 4px 16px rgba(255,107,0,0.3);
         }
         #localModeIndicator.show { opacity: 0.9; }
-        
-        /* Watch timer display */
-        .watch-timer {
-            position: absolute; bottom: 12px; left: 12px;
-            background: rgba(0,0,0,0.7); color: #fff;
-            padding: 4px 12px; border-radius: 20px;
-            font-size: 12px; font-weight: 600;
-            display: none; z-index: 10;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .watch-timer i { margin-right: 4px; color: var(--accent); }
-        .watch-timer .timer-text { font-variant-numeric: tabular-nums; }
     </style>
 </head>
 <body>
@@ -543,10 +530,6 @@
                 <span>ဗီဒီယိုမရှိပါ</span>
                 <span style="font-size:11px;display:block;margin-top:4px;">Video ID ကိုစစ်ဆေးပါ</span>
             </div>
-            <div class="watch-timer" id="watchTimer">
-                <i class="fas fa-clock"></i>
-                <span class="timer-text" id="watchTimerText">0s / 120s</span>
-            </div>
             <button id="coinPopup" onclick="claimCoin()"><i class="fas fa-coins"></i> Coin ယူရန် (+<span id="coinRewardVal">20</span>)</button>
         </div>
 
@@ -618,12 +601,7 @@
                 <div id="giftMsg" style="font-size:11px;margin-top:4px;"></div>
             </div>
 
-            <!-- ===== DAILY BONUS - ONE TIME PER DAY ===== -->
-            <button class="btn" id="dailyBonusBtn" onclick="claimDailyBonus()">
-                <i class="fas fa-download" style="margin-right:6px;"></i> App 2 ခု ဒေါင်းပြီး 700 Coins ရယူမည်
-            </button>
-            <div id="dailyBonusStatus" style="font-size:11px;color:var(--text-muted);margin-top:4px;text-align:center;"></div>
-
+            <button class="btn" onclick="claimDailyBonus()"><i class="fas fa-download" style="margin-right:6px;"></i> App 2 ခု ဒေါင်းပြီး 700 Coins ရယူမည်</button>
             <button class="btn btn-outline" onclick="openHistoryModal()" style="margin-top:6px;">
                 <i class="fas fa-history" style="margin-right:6px;"></i> Transaction History
             </button>
@@ -730,14 +708,14 @@
             <div id="adminDashboard" style="display:none;">
                 <p style="color:#4caf50;font-weight:600;font-size:13px;margin-bottom:12px;">✅ ဝင်ရောက်ပြီးပါပြီ</p>
 
-                <!-- ===== VIDEO UPLOAD - LOCAL ONLY (Shared with all users) ===== -->
+                <!-- ===== VIDEO UPLOAD - LOCAL ONLY ===== -->
                 <div class="admin-section">
-                    <h4>📹 ဗီဒီယိုတင်ရန် (Local Storage - All Users)</h4>
-                    <p>YouTube URL သို့မဟုတ် Video ID (အားလုံးမြင်ရမည်)</p>
+                    <h4>📹 ဗီဒီယိုတင်ရန် (Local Storage)</h4>
+                    <p>YouTube URL သို့မဟုတ် Video ID (Local Storage မှာ သိမ်းမည်)</p>
                     <input type="text" id="adminVidTitle" placeholder="ဗီဒီယိုခေါင်းစဉ်" />
                     <input type="text" id="adminVidUrl" placeholder="YouTube URL သို့မဟုတ် ID" />
                     <button class="btn" onclick="adminAddVideoLocal()"><i class="fa-solid fa-upload"></i> တင်မည် (Local)</button>
-
+                    
                     <!-- Video List with Delete -->
                     <div id="adminVideoList" style="max-height:200px;overflow-y:auto;margin-top:10px;">
                         <!-- Dynamic content -->
@@ -1085,59 +1063,16 @@
         }
 
         // ============================================================
-        //  LOCAL VIDEO MANAGEMENT - SHARED WITH ALL USERS
+        //  LOCAL VIDEO MANAGEMENT - NO FIRESTORE READS
         // ============================================================
-
-        // ============================================================
-        //  🔥 NAY HTOO NAING VIDEOS (Default)
-        // ============================================================
-
-        const NAY_HTOO_VIDEOS = [
-            { name: "ဝတစ်ထောင်သိန်းမောင် (စ/ဆုံး)", id: "you2gfY4hGA" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မောင်မောင်တာနောယက္ခ", id: "B-RUIXjbodQ" },
-            { name: "တောအုပ် မင်းဒင် (အပိုင်း ၂)", id: "4WA4TRXPPu4" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မြေသျှိုးမိုးပျံသတိုးဘမှန်", id: "zjcy_M5QnIk" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး သိုက်ဆက်ကျိန်စာ", id: "1xLD7PKgb_k" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး သျှောင်တစ်စောင်းမောင်မောင်", id: "HpSQ_ylvNIg" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး မုသားသစ္စာ", id: "aonmCljaTWI" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး မေတ္တာမဲ့အချစ်", id: "m8TX6GUneWY" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး ဘုံရန်သူ", id: "_wnfhQPSBVA" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး ရွှေရုပ်နဲ့ဇနပုဒ်", id: "ocQgJB5VOuw" },
-            { name: "လာမထိနဲ့ မီးပွင့်သွားမယ်(၂)", id: "h69xcEmd3l0" },
-            { name: "လာမထိနဲ့ မီးပွင့်သွားမယ်", id: "AAiH4gxZEiU" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး ကျွန်တော်ချစ်တဲ့မခင်နှင်းဆီ", id: "5YBZJp11_T8" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး ဒေါက်မကျိုးတဲ့ကျောက်ဒိုး", id: "PFxsSfsdf_I" },
-            { name: "【မနူဟာကျိန်စာ | Ma Nu Har Kyain Sar】", id: "ZgcRpuNw9WA" },
-            { name: "အဖေတူသား (စ/ဆုံး)", id: "MRIIaeB1UAM" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး လူတကာထက်တစ်ယူဇနာပိုမိုက်တယ်", id: "ybdI4evCQzw" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး သံမဏိသစ္စာဓား", id: "mVjwRVXLqNc" },
-            { name: "'တိုက်မောင်းကို မိုက်ကြောင်း မပြောနဲ့' အပိုင်း(၁)", id: "y5owcs7CyVM" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး အချစ်ကြမ်းကြမ်းအလွမ်းဝေးဝေး", id: "msFM4TIkfnI" }
+        const defaultMyVideos = [
+            { name: "မြန်မာသီချင်းအသစ်", id: "fHnXtisVCGs" },
+            { name: "ရွှေချစ်သူ - အောင်လ", id: "iIW2nSg8HQY" },
+            { name: "မြန်မာရုပ်ရှင်ဇာတ်ကား", id: "X6Hur8jbfNo" },
+            { name: "ဆိုင်းဝိုင်း - ဝင်းမင်းထက်", id: "2qc_vi9qOtY" },
+            { name: "အိပ်မက်ဆိုး - ဇော်ဇော်", id: "3Ss9AYC6N7M" },
+            { name: "ရင်ခုန်သံ - အေးမြတ်", id: "WR3EwCf0myY" }
         ];
-
-        // ============================================================
-        //  🔥 MAIN DEFAULT VIDEOS (Load from localStorage first)
-        // ============================================================
-
-        function getDefaultMyVideos() {
-            const stored = localStorage.getItem('videos_myvideo');
-            if (stored) {
-                try {
-                    const videos = JSON.parse(stored);
-                    if (videos && videos.length > 0) {
-                        console.log(`📦 Loaded ${videos.length} videos from localStorage`);
-                        return videos;
-                    }
-                } catch (e) {
-                    console.error('Error loading videos from localStorage:', e);
-                }
-            }
-            return NAY_HTOO_VIDEOS;
-        }
-
-        // ============================================================
-        //  OTHER LISTS
-        // ============================================================
 
         const defaultSongList = [
             { name: "သီချင်း 1 - တို့ဗမာ", id: "EnpWs20HZiY" },
@@ -1156,10 +1091,6 @@
             { name: "ကာတွန်း 2", id: "H0GOhtVdC3Y" }
         ];
 
-        // ============================================================
-        //  GET VIDEOS FROM LOCAL
-        // ============================================================
-
         function getVideosFromLocal(category) {
             const key = 'videos_' + category;
             const stored = localStorage.getItem(key);
@@ -1170,37 +1101,24 @@
                     console.error('Error parsing videos:', e);
                 }
             }
-            switch (category) {
-                case 'myvideo':
-                    return getDefaultMyVideos();
-                case 'song':
-                    return defaultSongList;
-                case 'video':
-                    return defaultVideoList;
-                case 'cartoon':
-                    return defaultCartoonList;
-                default:
-                    return getDefaultMyVideos();
+            switch(category) {
+                case 'myvideo': return defaultMyVideos;
+                case 'song': return defaultSongList;
+                case 'video': return defaultVideoList;
+                case 'cartoon': return defaultCartoonList;
+                default: return defaultMyVideos;
             }
         }
-
-        // ============================================================
-        //  SAVE VIDEOS TO LOCAL
-        // ============================================================
 
         function saveVideosToLocal(category, videos) {
             const key = 'videos_' + category;
             localStorage.setItem(key, JSON.stringify(videos));
         }
 
-        // ============================================================
-        //  🔥 ADMIN — ADD VIDEO (Local Only)
-        // ============================================================
-
         function adminAddVideoLocal() {
             const title = document.getElementById('adminVidTitle').value.trim();
             const url = document.getElementById('adminVidUrl').value.trim();
-
+            
             if (!title || !url) {
                 showToast('အချက်အလက် အပြည့်အစုံထည့်ပါ။', 'error');
                 return;
@@ -1223,121 +1141,94 @@
             }
 
             const currentVideos = getVideosFromLocal('myvideo');
-
-            if (currentVideos.find(v => v.id === id)) {
-                showToast('⚠️ ဒီ Video ID ရှိပြီးသား။', 'warning');
-                return;
-            }
-
             const newVideo = { name: title, id: id };
             currentVideos.push(newVideo);
             saveVideosToLocal('myvideo', currentVideos);
-
+            
             showToast('✅ ဗီဒီယိုအသစ်တင်ပြီးပါပြီ (Local)');
             document.getElementById('adminVidTitle').value = '';
             document.getElementById('adminVidUrl').value = '';
-
+            
             renderPlaylist('myvideo');
             loadAdminVideoList();
         }
 
-        // ============================================================
-        //  🔥 ADMIN — DELETE VIDEO
-        // ============================================================
-
         function adminDeleteVideoLocal(index) {
             if (!confirm('ဒီ Video ကို ဖျက်မည်?')) return;
-
+            
             const currentVideos = getVideosFromLocal('myvideo');
             if (index < 0 || index >= currentVideos.length) {
                 showToast('Video မတွေ့ပါ။', 'error');
                 return;
             }
-
+            
             currentVideos.splice(index, 1);
             saveVideosToLocal('myvideo', currentVideos);
-
+            
             showToast('✅ Video ဖျက်ပြီးပါပြီ (Local)');
             renderPlaylist('myvideo');
             loadAdminVideoList();
         }
 
-        // ============================================================
-        //  🔥 ADMIN — LOAD VIDEO LIST
-        // ============================================================
-
         function loadAdminVideoList() {
             const container = document.getElementById('adminVideoList');
             if (!container) return;
-
+            
             const videos = getVideosFromLocal('myvideo');
-            if (videos.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted);font-size:12px;text-align:center;">ဗီဒီယိုမရှိသေးပါ</p>';
-                return;
-            }
-
-            let html =
-                '<table><thead><tr><th style="width:70%;">Video Title</th><th style="width:30%;">Action</th></tr></thead><tbody>';
-
+            let html = '<table><thead><tr><th style="width:70%;">Video Title</th><th style="width:30%;">Action</th></tr></thead><tbody>';
+            
             videos.forEach((video, index) => {
                 const displayName = video.name.length > 30 ? video.name.substring(0, 30) + '...' : video.name;
                 html += `
-                        <tr>
-                            <td style="font-size:10px;text-align:left;">${displayName}</td>
-                            <td>
-                                <button class="btn-sm red" onclick="adminDeleteVideoLocal(${index})" style="padding:2px 8px;font-size:9px;">
-                                    <i class="fas fa-trash"></i> ဖျက်
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td style="font-size:10px;text-align:left;">${displayName}</td>
+                        <td>
+                            <button class="btn-sm red" onclick="adminDeleteVideoLocal(${index})" style="padding:2px 8px;font-size:9px;">
+                                <i class="fas fa-trash"></i> ဖျက်
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
-
+            
             html += '</tbody></table>';
             container.innerHTML = html;
         }
-
-        // ============================================================
-        //  🔥 RENDER PLAYLIST
-        // ============================================================
 
         function renderPlaylist(category) {
             const container = document.getElementById('playlistContainer');
             const title = document.getElementById('playlistTitle');
             const count = document.getElementById('playlistCount');
-
-            if (!container) return;
-
             container.innerHTML = '';
-
+            
             let list = [];
-
-            switch (category) {
+            
+            switch(category) {
                 case 'myvideo': {
                     list = getVideosFromLocal('myvideo');
-                    title.textContent = '📽️ My Videos';
+                    title.textContent = 'My Videos';
                     break;
                 }
                 case 'song': {
                     list = getVideosFromLocal('song');
-                    title.textContent = '🎵 သီချင်းများ';
+                    title.textContent = 'သီချင်းများ';
                     break;
                 }
                 case 'video': {
                     list = getVideosFromLocal('video');
-                    title.textContent = '🎬 ဗီဒီယိုများ';
+                    title.textContent = 'ဗီဒီယိုများ';
                     break;
                 }
                 case 'cartoon': {
                     list = getVideosFromLocal('cartoon');
-                    title.textContent = '🎨 ကာတွန်းများ';
+                    title.textContent = 'ကာတွန်းများ';
                     break;
                 }
                 case 'search': {
                     title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
                     const q = document.getElementById('searchInput').value.trim();
                     if (q) {
-                        list = [{ name: '🔍 "' + q + '" ရှာဖွေရန်', id: 'fHnXtisVCGs' }];
+                        list = [{ name: '🔍 ' + q + ' (ရှာဖွေရန်)', id: 'fHnXtisVCGs' }];
                     } else {
                         list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
                     }
@@ -1345,12 +1236,12 @@
                 }
                 default: {
                     list = getVideosFromLocal('myvideo');
-                    title.textContent = '📽️ My Videos';
+                    title.textContent = 'My Videos';
                 }
             }
 
             if (!list || list.length === 0) {
-                list = [{ name: 'ဗီဒီယိုမရှိသေးပါ', id: 'fHnXtisVCGs' }];
+                list = [{ name: 'ဗီဒီယိုမရှိပါ', id: 'fHnXtisVCGs' }];
             }
 
             count.textContent = list.length;
@@ -1359,26 +1250,19 @@
                 const card = document.createElement('div');
                 card.className = 'video-card';
                 const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                const isDefaultVideo = item.name === 'ဗီဒီယိုမရှိသေးပါ';
-
                 card.innerHTML = `
-                        <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
-                        <div class="title">${item.name}</div>
-                        ${category === 'myvideo' && currentUser && !isDefaultVideo ? `
-                            <div style="padding:2px 6px;text-align:right;">
-                                <button onclick="adminDeleteVideoLocal(${index})" style="background:var(--accent);color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:9px;cursor:pointer;">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        ` : ''}
-                    `;
-
+                    <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
+                    <div class="title">${item.name}</div>
+                    ${category === 'myvideo' && currentUser ? `
+                        <div style="padding:2px 6px;text-align:right;">
+                            <button onclick="adminDeleteVideoLocal(${index})" style="background:var(--accent);color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:9px;cursor:pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                `;
                 card.onclick = (e) => {
                     if (e.target.closest('button')) return;
-                    if (isDefaultVideo) {
-                        showToast('📢 ဗီဒီယိုမရှိသေးပါ။ Admin ကို ဆက်သွယ်ပါ။', 'warning');
-                        return;
-                    }
                     if (item.id && item.id.length === 11) {
                         loadVideo(item.id);
                     } else {
@@ -1388,525 +1272,6 @@
                 container.appendChild(card);
             });
         }
-
-        // ============================================================
-        //  🔥 WATCH TIMER - FIXED: EXACT 2 MINUTES (120 seconds) with proper reset
-        // ============================================================
-        const TARGET_WATCH = 120; // 2 minutes in seconds
-        let watchTime = 0;
-        let watchInterval = null;
-        let isAdShowing = false;
-        let isVideoPlaying = false;
-
-        function resetWatchTimer() {
-            // Clear existing interval
-            if (watchInterval) {
-                clearInterval(watchInterval);
-                watchInterval = null;
-            }
-            
-            // Reset all timer state
-            watchTime = 0;
-            isAdShowing = false;
-            isVideoPlaying = false;
-            
-            // Update UI
-            document.getElementById('watchTimer').style.display = 'none';
-            document.getElementById('coinPopup').style.display = 'none';
-            document.getElementById('watchTimerText').textContent = '0s / 120s';
-            
-            console.log('⏱️ Watch timer COMPLETELY RESET to 0');
-        }
-
-        function startWatchTimer() {
-            // Clear any existing interval
-            if (watchInterval) {
-                clearInterval(watchInterval);
-                watchInterval = null;
-            }
-            
-            // Don't start if ad is showing or timer already reached target
-            if (isAdShowing) {
-                console.log('⏱️ Ad is showing, timer paused');
-                return;
-            }
-            
-            if (watchTime >= TARGET_WATCH) {
-                console.log('⏱️ Already reached target, showing coin popup');
-                showCoinPopup();
-                return;
-            }
-
-            isVideoPlaying = true;
-            document.getElementById('watchTimer').style.display = 'block';
-            updateWatchTimerDisplay();
-
-            watchInterval = setInterval(() => {
-                // Check if ad is showing
-                if (isAdShowing) {
-                    console.log('⏱️ Ad showing, timer paused');
-                    return;
-                }
-                
-                // Check if video is still playing
-                if (!isVideoPlaying) {
-                    console.log('⏱️ Video not playing, timer paused');
-                    return;
-                }
-                
-                watchTime++;
-                updateWatchTimerDisplay();
-                console.log(`⏱️ Watch time: ${watchTime}s / ${TARGET_WATCH}s`);
-
-                if (watchTime >= TARGET_WATCH) {
-                    clearInterval(watchInterval);
-                    watchInterval = null;
-                    console.log('⏱️ 2 minutes reached! Showing coin popup.');
-                    if (player && player.pauseVideo) {
-                        player.pauseVideo();
-                    }
-                    isVideoPlaying = false;
-                    showCoinPopup();
-                }
-            }, 1000);
-        }
-
-        function updateWatchTimerDisplay() {
-            document.getElementById('watchTimerText').textContent = `${watchTime}s / ${TARGET_WATCH}s`;
-        }
-
-        function showCoinPopup() {
-            isAdShowing = true;
-            isVideoPlaying = false;
-            if (watchInterval) {
-                clearInterval(watchInterval);
-                watchInterval = null;
-            }
-            document.getElementById('coinRewardVal').textContent = AD_REWARD;
-            document.getElementById('adRewardAmount').textContent = AD_REWARD;
-            document.getElementById('coinPopup').style.display = 'block';
-            document.getElementById('watchTimer').style.display = 'none';
-            console.log('🎯 Coin popup shown! Timer stopped.');
-        }
-
-        // ============================================================
-        //  YOUTUBE PLAYER - FIXED with timer
-        // ============================================================
-        function initPlayer() {
-            if (typeof YT !== 'undefined' && YT.Player) {
-                player = new YT.Player('player', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: currentVideoId,
-                    playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
-                    events: {
-                        'onReady': () => {
-                            document.getElementById('videoError').style.display = 'none';
-                            resetWatchTimer();
-                        },
-                        'onStateChange': onPlayerStateChange,
-                        'onError': (e) => {
-                            const err = document.getElementById('videoError');
-                            err.style.display = 'block';
-                            err.querySelector('span').textContent = 'Video Error: ' + e.data;
-                            resetWatchTimer();
-                        }
-                    }
-                });
-            } else {
-                setTimeout(initPlayer, 500);
-            }
-        }
-
-        function onYouTubeIframeAPIReady() {
-            initPlayer();
-        }
-
-        function loadVideo(id) {
-            if (!id || id.length !== 11) {
-                const err = document.getElementById('videoError');
-                err.style.display = 'block';
-                err.querySelector('span').textContent = 'မှန်ကန်သော Video ID မဟုတ်ပါ';
-                return;
-            }
-            currentVideoId = id;
-            
-            // CRITICAL: Reset everything when loading new video
-            resetWatchTimer();
-            
-            document.getElementById('videoError').style.display = 'none';
-            document.getElementById('coinPopup').style.display = 'none';
-            isAdShowing = false;
-            isVideoPlaying = false;
-            
-            if (player && player.loadVideoById) {
-                player.loadVideoById(id);
-            }
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                console.log('▶️ Video playing, starting timer...');
-                isVideoPlaying = true;
-                
-                // If ad was showing and video resumed, reset everything
-                if (isAdShowing) {
-                    console.log('⚠️ Ad was showing, but video resumed. Resetting...');
-                    isAdShowing = false;
-                    resetWatchTimer();
-                }
-                
-                // Only start timer if we haven't reached target yet and no ad is showing
-                if (!isAdShowing && watchTime < TARGET_WATCH) {
-                    startWatchTimer();
-                }
-            } else if (event.data === YT.PlayerState.PAUSED) {
-                console.log('⏸️ Video paused');
-                isVideoPlaying = false;
-                if (watchInterval) {
-                    clearInterval(watchInterval);
-                    watchInterval = null;
-                }
-            } else if (event.data === YT.PlayerState.ENDED) {
-                console.log('⏹️ Video ended');
-                isVideoPlaying = false;
-                if (watchInterval) {
-                    clearInterval(watchInterval);
-                    watchInterval = null;
-                }
-            } else if (event.data === YT.PlayerState.BUFFERING) {
-                console.log('⏳ Buffering...');
-            }
-        }
-
-        // ============================================================
-        //  🔥 CLAIM COIN - FIXED: Proper reset after claiming
-        // ============================================================
-        function claimCoin() {
-            if (!adLinks || adLinks.length === 0) {
-                showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
-                document.getElementById('coinPopup').style.display = 'none';
-                resetWatchTimer();
-                isAdShowing = false;
-                if (player && player.playVideo) {
-                    setTimeout(() => { if (player && player.playVideo) player.playVideo(); }, 500);
-                }
-                return;
-            }
-
-            if (isUpdatingCoins) {
-                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
-                return;
-            }
-
-            const localCoins = getCoinsFromLocal();
-            if (localCoins !== null) {
-                userData.coins = localCoins;
-                updateUI();
-            }
-
-            document.getElementById('coinPopup').style.display = 'none';
-            document.getElementById('adModal').classList.add('show');
-
-            const link = adLinks[adIndex % adLinks.length];
-            const iframe = document.getElementById('adIframe');
-            const loading = document.getElementById('adLoading');
-            const progressBar = document.getElementById('adProgressBar');
-            const timerEl = document.getElementById('adCountdown');
-            const skipBtn = document.getElementById('adSkipBtn');
-            const statusText = document.getElementById('adStatusText');
-
-            // ===== RESET EVERYTHING =====
-            iframe.src = 'about:blank';
-            loading.style.display = 'block';
-            iframe.style.display = 'none';
-            progressBar.style.width = '0%';
-            timerEl.textContent = '30';
-            skipBtn.disabled = true;
-            skipBtn.innerHTML = '⏳ <span id="adCountdown">30</span> စက္ကန့်စောင့်ပါ...';
-            skipBtn.className = 'claim-btn';
-            skipBtn.onclick = null;
-            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
-            statusText.className = 'status-text';
-
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-                window._adCountdownInterval = null;
-            }
-
-            setTimeout(() => {
-                iframe.src = link;
-            }, 300);
-
-            iframe.onload = function() {
-                loading.style.display = 'none';
-                iframe.style.display = 'block';
-            };
-
-            setTimeout(() => {
-                if (iframe.style.display === 'none') {
-                    loading.style.display = 'none';
-                    iframe.style.display = 'block';
-                    iframe.src = link;
-                }
-            }, 8000);
-
-            let timeLeft = 30;
-            timerEl.textContent = timeLeft;
-            progressBar.style.width = '0%';
-
-            window._adCountdownInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.textContent = timeLeft;
-                progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
-
-                if (timeLeft <= 0) {
-                    clearInterval(window._adCountdownInterval);
-                    window._adCountdownInterval = null;
-                    skipBtn.disabled = false;
-                    skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
-                    skipBtn.className = 'claim-btn active';
-                    skipBtn.onclick = closeAdAndClaim;
-                    progressBar.style.width = '100%';
-                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
-                    statusText.className = 'status-text done';
-                }
-            }, 1000);
-        }
-
-        // ===== GIVE AD REWARD - FIXED: Reset everything properly =====
-        async function giveAdReward(reward) {
-            if (!currentUser) {
-                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
-                return;
-            }
-
-            if (isUpdatingCoins) {
-                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
-                return;
-            }
-
-            try {
-                isUpdatingCoins = true;
-
-                const currentCoins = userData.coins || 0;
-                const newCoins = currentCoins + reward;
-                userData.coins = newCoins;
-                saveCoinsToLocal(newCoins);
-                updateUI();
-
-                try {
-                    const userRef = db.collection('users').doc(currentUser.uid);
-                    await userRef.update({
-                        coins: firebase.firestore.FieldValue.increment(reward)
-                    });
-
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'ad_watch',
-                        amount: reward,
-                        description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
-
-                } catch (firestoreError) {
-                    console.error('Firestore error, saving locally:', firestoreError);
-                    saveTransactionLocal('ad_watch', reward, 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins) [Local]');
-                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ! (Local Save)', 'success');
-                    showLocalModeIndicator(true);
-                    usingLocalData = true;
-                }
-
-                // ===== CRITICAL: Reset EVERYTHING completely =====
-                // This is the key fix - completely reset all timer state
-                isAdShowing = false;
-                isVideoPlaying = false;
-                resetWatchTimer();
-                
-                console.log('🔄 Timer COMPLETELY RESET! Ready for next 2 minutes.');
-
-                // ===== Play video again after short delay =====
-                if (player && player.playVideo) {
-                    setTimeout(() => {
-                        if (player && player.playVideo) {
-                            player.playVideo();
-                            console.log('▶️ Video resumed after ad reward');
-                            // The onStateChange will handle starting the timer
-                        }
-                    }, 800);
-                }
-
-            } catch (error) {
-                console.error('Ad reward error:', error);
-                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
-                isAdShowing = false;
-                isVideoPlaying = false;
-                resetWatchTimer();
-            } finally {
-                setTimeout(() => {
-                    isUpdatingCoins = false;
-                    syncLocalTransactions();
-                }, 2000);
-            }
-        }
-
-        function closeAdAndClaim() {
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-                window._adCountdownInterval = null;
-            }
-            const iframe = document.getElementById('adIframe');
-            iframe.src = 'about:blank';
-            document.getElementById('adModal').classList.remove('show');
-
-            if (adLinks && adLinks.length > 0) {
-                adIndex = (adIndex + 1) % adLinks.length;
-                localStorage.setItem('currentAdIndex', adIndex);
-            }
-            
-            // Mark ad as done and give reward
-            isAdShowing = false;
-            giveAdReward(AD_REWARD);
-        }
-
-        function closeAdModal() {
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-                window._adCountdownInterval = null;
-            }
-            const iframe = document.getElementById('adIframe');
-            iframe.src = 'about:blank';
-            document.getElementById('adModal').classList.remove('show');
-            document.getElementById('coinPopup').style.display = 'none';
-            
-            // Reset timer when ad is closed without claiming
-            isAdShowing = false;
-            isVideoPlaying = false;
-            resetWatchTimer();
-            
-            if (player && player.playVideo) {
-                setTimeout(() => {
-                    if (player && player.playVideo) {
-                        player.playVideo();
-                        console.log('▶️ Video resumed after ad closed');
-                    }
-                }, 500);
-            }
-        }
-
-        // ============================================================
-        //  🔥 YOUTUBE SEARCH
-        // ============================================================
-        async function searchYouTube() {
-            const query = document.getElementById('searchInput').value.trim();
-            if (!query) {
-                showToast('ကျေးဇူးပြု၍ သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ထည့်ပါ။', 'error');
-                return;
-            }
-
-            let videoId = '';
-            if (query.includes('youtu.be/')) {
-                videoId = query.split('youtu.be/')[1].split('?')[0];
-            } else if (query.includes('watch?v=')) {
-                videoId = query.split('watch?v=').pop().split('&')[0];
-            } else if (query.includes('shorts/')) {
-                videoId = query.split('shorts/')[1].split('?')[0];
-            } else if (query.length === 11 && /^[a-zA-Z0-9_-]+$/.test(query)) {
-                videoId = query;
-            }
-
-            if (videoId && videoId.length === 11) {
-                loadVideo(videoId);
-                document.getElementById('searchInput').value = '';
-                switchCategory('search', document.querySelector('.menu-item:last-child'));
-                return;
-            }
-
-            const container = document.getElementById('playlistContainer');
-            const title = document.getElementById('playlistTitle');
-            title.textContent = '🔍 ရှာဖွေနေပါသည်...';
-            container.innerHTML =
-                `
-                <div class="search-loading">
-                    <i class="fas fa-spinner"></i>
-                    <p>"${query}" ကိုရှာဖွေနေပါသည်...</p>
-                </div>
-            `;
-
-            switchCategory('search', document.querySelector('.menu-item:last-child'));
-
-            try {
-                const response = await fetch(
-                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`
-                );
-
-                if (!response.ok) {
-                    throw new Error('API Key မှားနေသည် သို့မဟုတ် ကန့်သတ်ချက်ကျော်နေပါသည်။');
-                }
-
-                const data = await response.json();
-
-                if (data.items && data.items.length > 0) {
-                    const results = data.items.map(item => ({
-                        name: item.snippet.title,
-                        id: item.id.videoId,
-                        thumbnail: item.snippet.thumbnails.medium.url,
-                        channel: item.snippet.channelTitle
-                    }));
-
-                    title.textContent = `🔍 "${query}" ရလဒ် (${results.length})`;
-                    container.innerHTML = '';
-
-                    results.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'video-card';
-                        const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                        card.innerHTML = `
-                            <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
-                            <div class="title">${item.name}</div>
-                        `;
-                        card.onclick = () => {
-                            loadVideo(item.id);
-                            resetWatchTimer();
-                        };
-                        container.appendChild(card);
-                    });
-
-                } else {
-                    title.textContent = '🔍 ရှာဖွေမှုရလဒ်';
-                    container.innerHTML = `
-                        <div class="search-no-results">
-                            <i class="fas fa-search"></i>
-                            <p>"${query}" အတွက် ရလဒ်မတွေ့ပါ။</p>
-                            <p style="font-size:11px;margin-top:4px;">နောက်တစ်ကြိမ် ထပ်စမ်းပါ။</p>
-                        </div>
-                    `;
-                }
-
-            } catch (error) {
-                console.error('Search error:', error);
-                title.textContent = '❌ ရှာဖွေမှုမအောင်မြင်ပါ';
-                container.innerHTML = `
-                    <div class="search-no-results">
-                        <i class="fas fa-exclamation-circle" style="color:var(--accent);"></i>
-                        <p>ရှာဖွေမှုမအောင်မြင်ပါ။</p>
-                        <p style="font-size:11px;margin-top:4px;color:var(--text-secondary);">${error.message}</p>
-                        <button class="btn" onclick="searchYouTube()" style="margin-top:10px;width:auto;padding:8px 20px;font-size:12px;">
-                            <i class="fas fa-sync"></i> ပြန်စမ်းမည်
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                searchYouTube();
-            }
-        });
 
         // ============================================================
         //  STATE
@@ -1943,13 +1308,17 @@
 
         // Video player
         let player = null;
+        let watchInterval = null;
+        let watchTime = 0;
+        const TARGET_WATCH = 120;
+
         let currentCategory = 'myvideo';
         let currentVideoId = "fHnXtisVCGs";
 
         // ============================================================
         //  ADMIN IDS
         // ============================================================
-        const ADMIN_IDS = ["2021666", "7625227853"];
+        const ADMIN_IDS = ["5586866145", "7625227853"];
 
         // ============================================================
         //  SPLASH
@@ -2283,9 +1652,6 @@
 
                 setInterval(syncLocalTransactions, 60000);
 
-                // ===== UPDATE DAILY BONUS BUTTON STATUS =====
-                updateDailyBonusUI();
-
             } else {
                 currentUser = null;
                 document.getElementById('authScreen').classList.add('active');
@@ -2340,31 +1706,6 @@
         }
 
         // ============================================================
-        //  DAILY BONUS UI
-        // ============================================================
-        function updateDailyBonusUI() {
-            const today = new Date().toDateString();
-            const last = localStorage.getItem('lastBonusDate') || '';
-            const btn = document.getElementById('dailyBonusBtn');
-            const status = document.getElementById('dailyBonusStatus');
-
-            if (last === today) {
-                btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:6px;"></i> ယနေ့ Bonus ရယူပြီးပါပြီ (700 Coins)';
-                btn.disabled = true;
-                btn.style.opacity = '0.6';
-                btn.style.cursor = 'not-allowed';
-                status.textContent = '✅ ယနေ့အတွက် ရယူပြီးပါပြီ။ မနက်ဖြန် ပြန်လာပါ။';
-                status.style.color = '#4caf50';
-            } else {
-                btn.innerHTML = '<i class="fas fa-download" style="margin-right:6px;"></i> App 2 ခု ဒေါင်းပြီး 700 Coins ရယူမည်';
-                btn.disabled = false;
-                btn.style.opacity = '1';
-                btn.style.cursor = 'pointer';
-                status.textContent = '';
-            }
-        }
-
-        // ============================================================
         //  THEME TOGGLE
         // ============================================================
         let isDark = true;
@@ -2394,6 +1735,44 @@
             document.getElementById(id).classList.remove('show');
         }
 
+        // ============================================================
+        //  AD MODAL FUNCTIONS
+        // ============================================================
+        function closeAdModal() {
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+                window._adCountdownInterval = null;
+            }
+            const iframe = document.getElementById('adIframe');
+            iframe.src = 'about:blank';
+            document.getElementById('adModal').classList.remove('show');
+            document.getElementById('coinPopup').style.display = 'none';
+            watchTime = 0;
+            if (watchInterval) {
+                clearInterval(watchInterval);
+                watchInterval = null;
+            }
+            if (player && player.playVideo) {
+                player.playVideo();
+            }
+        }
+
+        function closeAdAndClaim() {
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+                window._adCountdownInterval = null;
+            }
+            const iframe = document.getElementById('adIframe');
+            iframe.src = 'about:blank';
+            document.getElementById('adModal').classList.remove('show');
+
+            if (adLinks && adLinks.length > 0) {
+                adIndex = (adIndex + 1) % adLinks.length;
+                localStorage.setItem('currentAdIndex', adIndex);
+            }
+            giveAdReward(AD_REWARD);
+        }
+
         function closeDailyBonusModal() {
             document.getElementById('dailyBonusModal').classList.remove('show');
             if (player && player.playVideo) {
@@ -2415,6 +1794,352 @@
             setTimeout(() => {
                 loadTransactionHistory();
             }, 300);
+        }
+
+        // ============================================================
+        //  YOUTUBE PLAYER
+        // ============================================================
+        function initPlayer() {
+            if (typeof YT !== 'undefined' && YT.Player) {
+                player = new YT.Player('player', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: currentVideoId,
+                    playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
+                    events: {
+                        'onReady': () => { document.getElementById('videoError').style.display = 'none'; },
+                        'onStateChange': onPlayerStateChange,
+                        'onError': (e) => {
+                            const err = document.getElementById('videoError');
+                            err.style.display = 'block';
+                            err.querySelector('span').textContent = 'Video Error: ' + e.data;
+                        }
+                    }
+                });
+            } else {
+                setTimeout(initPlayer, 500);
+            }
+        }
+
+        function onYouTubeIframeAPIReady() {
+            initPlayer();
+        }
+
+        function loadVideo(id) {
+            if (!id || id.length !== 11) {
+                const err = document.getElementById('videoError');
+                err.style.display = 'block';
+                err.querySelector('span').textContent = 'မှန်ကန်သော Video ID မဟုတ်ပါ';
+                return;
+            }
+            currentVideoId = id;
+            watchTime = 0;
+            document.getElementById('videoError').style.display = 'none';
+            document.getElementById('coinPopup').style.display = 'none';
+            if (player && player.loadVideoById) {
+                player.loadVideoById(id);
+            }
+            if (watchInterval) {
+                clearInterval(watchInterval);
+                watchInterval = null;
+            }
+        }
+
+        // ============================================================
+        //  YOUTUBE SEARCH
+        // ============================================================
+        async function searchYouTube() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                showToast('ကျေးဇူးပြု၍ သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ထည့်ပါ။', 'error');
+                return;
+            }
+
+            let videoId = '';
+            if (query.includes('youtu.be/')) {
+                videoId = query.split('youtu.be/')[1].split('?')[0];
+            } else if (query.includes('watch?v=')) {
+                videoId = query.split('watch?v=').pop().split('&')[0];
+            } else if (query.includes('shorts/')) {
+                videoId = query.split('shorts/')[1].split('?')[0];
+            } else if (query.length === 11 && /^[a-zA-Z0-9_-]+$/.test(query)) {
+                videoId = query;
+            }
+
+            if (videoId && videoId.length === 11) {
+                loadVideo(videoId);
+                document.getElementById('searchInput').value = '';
+                switchCategory('search', document.querySelector('.menu-item:last-child'));
+                return;
+            }
+
+            const container = document.getElementById('playlistContainer');
+            const title = document.getElementById('playlistTitle');
+            title.textContent = '🔍 ရှာဖွေနေပါသည်...';
+            container.innerHTML =
+                `
+                <div class="search-loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>"${query}" ကိုရှာဖွေနေပါသည်...</p>
+                </div>
+            `;
+
+            switchCategory('search', document.querySelector('.menu-item:last-child'));
+
+            try {
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`
+                );
+
+                if (!response.ok) {
+                    throw new Error('API Key မှားနေသည် သို့မဟုတ် ကန့်သတ်ချက်ကျော်နေပါသည်။');
+                }
+
+                const data = await response.json();
+
+                if (data.items && data.items.length > 0) {
+                    const results = data.items.map(item => ({
+                        name: item.snippet.title,
+                        id: item.id.videoId,
+                        thumbnail: item.snippet.thumbnails.medium.url,
+                        channel: item.snippet.channelTitle
+                    }));
+
+                    title.textContent = `🔍 "${query}" ရလဒ် (${results.length})`;
+                    container.innerHTML = '';
+
+                    results.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'video-card';
+                        const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+                        card.innerHTML = `
+                            <img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
+                            <div class="title">${item.name}</div>
+                        `;
+                        card.onclick = () => {
+                            loadVideo(item.id);
+                        };
+                        container.appendChild(card);
+                    });
+
+                } else {
+                    title.textContent = '🔍 ရှာဖွေမှုရလဒ်';
+                    container.innerHTML = `
+                        <div class="search-no-results">
+                            <i class="fas fa-search"></i>
+                            <p>"${query}" အတွက် ရလဒ်မတွေ့ပါ။</p>
+                            <p style="font-size:11px;margin-top:4px;">နောက်တစ်ကြိမ် ထပ်စမ်းပါ။</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Search error:', error);
+                title.textContent = '❌ ရှာဖွေမှုမအောင်မြင်ပါ';
+                container.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-exclamation-circle" style="color:var(--accent);"></i>
+                        <p>ရှာဖွေမှုမအောင်မြင်ပါ။</p>
+                        <p style="font-size:11px;margin-top:4px;color:var(--text-secondary);">${error.message}</p>
+                        <button class="btn" onclick="searchYouTube()" style="margin-top:10px;width:auto;padding:8px 20px;font-size:12px;">
+                            <i class="fas fa-sync"></i> ပြန်စမ်းမည်
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchYouTube();
+            }
+        });
+
+        // ============================================================
+        //  WATCH TIMER & AD COIN
+        // ============================================================
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                if (!watchInterval) {
+                    watchInterval = setInterval(() => {
+                        watchTime++;
+                        if (watchTime >= TARGET_WATCH) {
+                            clearInterval(watchInterval);
+                            watchInterval = null;
+                            if (player && player.pauseVideo) player.pauseVideo();
+                            showCoinPopup();
+                        }
+                    }, 1000);
+                }
+            } else {
+                if (watchInterval) {
+                    clearInterval(watchInterval);
+                    watchInterval = null;
+                }
+            }
+        }
+
+        function showCoinPopup() {
+            document.getElementById('coinRewardVal').textContent = AD_REWARD;
+            document.getElementById('adRewardAmount').textContent = AD_REWARD;
+            document.getElementById('coinPopup').style.display = 'block';
+        }
+
+        // ===== CLAIM COIN =====
+        function claimCoin() {
+            if (!adLinks || adLinks.length === 0) {
+                showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
+                document.getElementById('coinPopup').style.display = 'none';
+                return;
+            }
+
+            if (isUpdatingCoins) {
+                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
+                return;
+            }
+
+            const localCoins = getCoinsFromLocal();
+            if (localCoins !== null) {
+                userData.coins = localCoins;
+                updateUI();
+            }
+
+            document.getElementById('coinPopup').style.display = 'none';
+            document.getElementById('adModal').classList.add('show');
+
+            const link = adLinks[adIndex % adLinks.length];
+            const iframe = document.getElementById('adIframe');
+            const loading = document.getElementById('adLoading');
+            const progressBar = document.getElementById('adProgressBar');
+            const timerEl = document.getElementById('adCountdown');
+            const skipBtn = document.getElementById('adSkipBtn');
+            const statusText = document.getElementById('adStatusText');
+
+            iframe.src = 'about:blank';
+            loading.style.display = 'block';
+            iframe.style.display = 'none';
+            progressBar.style.width = '0%';
+            timerEl.textContent = '30';
+            skipBtn.disabled = true;
+            skipBtn.innerHTML = '⏳ <span id="adCountdown">30</span> စက္ကန့်စောင့်ပါ...';
+            skipBtn.className = 'claim-btn';
+            skipBtn.onclick = null;
+            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
+            statusText.className = 'status-text';
+
+            if (window._adCountdownInterval) {
+                clearInterval(window._adCountdownInterval);
+                window._adCountdownInterval = null;
+            }
+
+            setTimeout(() => {
+                iframe.src = link;
+            }, 300);
+
+            iframe.onload = function() {
+                loading.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+
+            setTimeout(() => {
+                if (iframe.style.display === 'none') {
+                    loading.style.display = 'none';
+                    iframe.style.display = 'block';
+                    iframe.src = link;
+                }
+            }, 8000);
+
+            let timeLeft = 30;
+            timerEl.textContent = timeLeft;
+            progressBar.style.width = '0%';
+
+            window._adCountdownInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                progressBar.style.width = ((30 - timeLeft) / 30 * 100) + '%';
+
+                if (timeLeft <= 0) {
+                    clearInterval(window._adCountdownInterval);
+                    window._adCountdownInterval = null;
+                    skipBtn.disabled = false;
+                    skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
+                    skipBtn.className = 'claim-btn active';
+                    skipBtn.onclick = closeAdAndClaim;
+                    progressBar.style.width = '100%';
+                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
+                    statusText.className = 'status-text done';
+                }
+            }, 1000);
+        }
+
+        // ===== GIVE AD REWARD =====
+        async function giveAdReward(reward) {
+            if (!currentUser) {
+                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
+                return;
+            }
+
+            if (isUpdatingCoins) {
+                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
+                return;
+            }
+
+            try {
+                isUpdatingCoins = true;
+
+                const currentCoins = userData.coins || 0;
+                const newCoins = currentCoins + reward;
+                userData.coins = newCoins;
+                saveCoinsToLocal(newCoins);
+                updateUI();
+
+                try {
+                    const userRef = db.collection('users').doc(currentUser.uid);
+                    await userRef.update({
+                        coins: firebase.firestore.FieldValue.increment(reward)
+                    });
+
+                    await db.collection('transactions').add({
+                        userId: currentUser.uid,
+                        type: 'ad_watch',
+                        amount: reward,
+                        description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
+
+                } catch (firestoreError) {
+                    console.error('Firestore error, saving locally:', firestoreError);
+                    saveTransactionLocal('ad_watch', reward, 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins) [Local]');
+                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ! (Local Save)', 'success');
+                    showLocalModeIndicator(true);
+                    usingLocalData = true;
+                }
+
+                watchTime = 0;
+                if (watchInterval) {
+                    clearInterval(watchInterval);
+                    watchInterval = null;
+                }
+                if (player && player.playVideo) {
+                    setTimeout(() => {
+                        if (player && player.playVideo) {
+                            player.playVideo();
+                        }
+                    }, 500);
+                }
+
+            } catch (error) {
+                console.error('Ad reward error:', error);
+                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
+            } finally {
+                setTimeout(() => {
+                    isUpdatingCoins = false;
+                    syncLocalTransactions();
+                }, 2000);
+            }
         }
 
         // ============================================================
@@ -2569,7 +2294,7 @@
         }
 
         // ============================================================
-        //  DAILY BONUS - APP DOWNLOAD (ONE TIME PER DAY)
+        //  DAILY BONUS - APP DOWNLOAD
         // ============================================================
         async function claimDailyBonus() {
             const today = new Date().toDateString();
@@ -2685,15 +2410,14 @@
                 const today = new Date().toDateString();
                 localStorage.setItem('lastBonusDate', today);
 
-                // Update UI
-                updateDailyBonusUI();
-
                 showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (App 2 ခု ဒေါင်းပြီးပါပြီ)');
                 document.getElementById('dailyBonusModal').classList.remove('show');
 
-                resetWatchTimer();
-                isAdShowing = false;
-                isVideoPlaying = false;
+                watchTime = 0;
+                if (watchInterval) {
+                    clearInterval(watchInterval);
+                    watchInterval = null;
+                }
                 if (player && player.playVideo) {
                     setTimeout(() => {
                         if (player && player.playVideo) {
@@ -2716,9 +2440,6 @@
             document.querySelectorAll('.menu-item').forEach(e => e.classList.remove('active'));
             if (el) el.classList.add('active');
             renderPlaylist(category);
-            resetWatchTimer();
-            isAdShowing = false;
-            isVideoPlaying = false;
         }
 
         // ============================================================
@@ -2759,11 +2480,11 @@
 
             try {
                 container.innerHTML = `
-                        <div style="text-align:center;padding:20px;color:var(--text-muted);">
-                            <i class="fas fa-spinner fa-spin" style="font-size:24px;"></i>
-                            <p style="margin-top:8px;">မှတ်တမ်းများ ရယူနေပါသည်...</p>
-                        </div>
-                    `;
+                    <div style="text-align:center;padding:20px;color:var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin" style="font-size:24px;"></i>
+                        <p style="margin-top:8px;">မှတ်တမ်းများ ရယူနေပါသည်...</p>
+                    </div>
+                `;
 
                 let transactions = [];
                 try {
@@ -2809,12 +2530,12 @@
 
                 if (transactions.length === 0) {
                     container.innerHTML = `
-                            <div style="text-align:center;padding:30px;color:var(--text-muted);">
-                                <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:10px;opacity:0.3;"></i>
-                                <p>မှတ်တမ်းမရှိသေးပါ</p>
-                                <p style="font-size:11px;margin-top:4px;">ဗီဒီယိုကြည့်ပြီး Coin ရယူပါ။</p>
-                            </div>
-                        `;
+                        <div style="text-align:center;padding:30px;color:var(--text-muted);">
+                            <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:10px;opacity:0.3;"></i>
+                            <p>မှတ်တမ်းမရှိသေးပါ</p>
+                            <p style="font-size:11px;margin-top:4px;">ဗီဒီယိုကြည့်ပြီး Coin ရယူပါ။</p>
+                        </div>
+                    `;
                     return;
                 }
 
@@ -2843,17 +2564,17 @@
                     const localTag = item.source === 'local' && !item.synced ? ' 🔄' : '';
 
                     html += `
-                            <div class="transaction-item">
-                                <div class="left">
-                                    <div class="type">${type.icon} ${type.label}${localTag}</div>
-                                    <div class="detail">${item.description || ''}</div>
-                                    <div class="date">${time}</div>
-                                </div>
-                                <div class="right ${isPositive ? 'positive' : 'negative'}">
-                                    ${sign}${amount}
-                                </div>
+                        <div class="transaction-item">
+                            <div class="left">
+                                <div class="type">${type.icon} ${type.label}${localTag}</div>
+                                <div class="detail">${item.description || ''}</div>
+                                <div class="date">${time}</div>
                             </div>
-                        `;
+                            <div class="right ${isPositive ? 'positive' : 'negative'}">
+                                ${sign}${amount}
+                            </div>
+                        </div>
+                    `;
                 });
 
                 container.innerHTML = html;
@@ -2861,14 +2582,14 @@
             } catch (error) {
                 console.error('Load transaction error:', error);
                 container.innerHTML = `
-                        <div style="text-align:center;padding:20px;color:var(--text-muted);">
-                            <i class="fas fa-exclamation-circle" style="font-size:24px;display:block;margin-bottom:8px;color:var(--accent);"></i>
-                            <p>မှတ်တမ်းများ ရယူမရပါ</p>
-                            <button class="btn btn-outline" onclick="loadTransactionHistory()" style="margin-top:8px;width:auto;padding:4px 16px;font-size:12px;">
-                                <i class="fas fa-sync"></i> ပြန်စမ်းမည်
-                            </button>
-                        </div>
-                    `;
+                    <div style="text-align:center;padding:20px;color:var(--text-muted);">
+                        <i class="fas fa-exclamation-circle" style="font-size:24px;display:block;margin-bottom:8px;color:var(--accent);"></i>
+                        <p>မှတ်တမ်းများ ရယူမရပါ</p>
+                        <button class="btn btn-outline" onclick="loadTransactionHistory()" style="margin-top:8px;width:auto;padding:4px 16px;font-size:12px;">
+                            <i class="fas fa-sync"></i> ပြန်စမ်းမည်
+                        </button>
+                    </div>
+                `;
             }
         }
 
@@ -3022,21 +2743,21 @@
                     const time = d.requestedAt ? new Date(d.requestedAt.seconds * 1000).toLocaleString() : 'N/A';
 
                     html += `
-                            <tr>
-                                <td><strong>${d.username || 'User'}</strong><br><span style="font-size:9px;color:var(--text-muted);">${d.email || ''}</span></td>
-                                <td><strong>$${d.amount.toFixed(2)}</strong></td>
-                                <td class="${statusClass}">${statusText}</td>
-                                <td style="font-size:10px;color:var(--text-muted);">${time}</td>
-                                <td>
-                                    ${d.status === 'pending' ? `
-                                        <button class="btn-sm green" onclick="approveWithdraw('${doc.id}', ${d.amount})" style="margin-right:4px;">Approve</button>
-                                        <button class="btn-sm red" onclick="rejectWithdraw('${doc.id}')">Reject</button>
-                                    ` : `
-                                        <span style="font-size:10px;color:var(--text-muted);">Done</span>
-                                    `}
-                                </td>
-                            </tr>
-                        `;
+                        <tr>
+                            <td><strong>${d.username || 'User'}</strong><br><span style="font-size:9px;color:var(--text-muted);">${d.email || ''}</span></td>
+                            <td><strong>$${d.amount.toFixed(2)}</strong></td>
+                            <td class="${statusClass}">${statusText}</td>
+                            <td style="font-size:10px;color:var(--text-muted);">${time}</td>
+                            <td>
+                                ${d.status === 'pending' ? `
+                                    <button class="btn-sm green" onclick="approveWithdraw('${doc.id}', ${d.amount})" style="margin-right:4px;">Approve</button>
+                                    <button class="btn-sm red" onclick="rejectWithdraw('${doc.id}')">Reject</button>
+                                ` : `
+                                    <span style="font-size:10px;color:var(--text-muted);">Done</span>
+                                `}
+                            </td>
+                        </tr>
+                    `;
                 });
 
                 tbody.innerHTML = html;
@@ -3180,33 +2901,33 @@
                     }
 
                     html += `
-                            <tr>
-                                <td>
-                                    <strong>${data.username || 'User'}</strong>
-                                    ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
-                                    ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
-                                    <br>
-                                    <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
-                                </td>
-                                <td><strong>${data.coins || 0}</strong></td>
-                                <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
-                                <td>${statusHtml}</td>
-                                <td style="font-size:10px;color:var(--text-muted);">${lastActiveStr}</td>
-                                <td>
-                                    <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
-                                        ${!isAdminUser ? `
-                                            <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
-                                                    onclick="toggleBan('${userId}')" 
-                                                    style="width:100%;">
-                                                ${data.isBanned ? 'Unban' : 'Ban'}
-                                            </button>
-                                        ` : `
-                                            <span style="font-size:9px;color:var(--text-muted);">Admin</span>
-                                        `}
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
+                        <tr>
+                            <td>
+                                <strong>${data.username || 'User'}</strong>
+                                ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
+                                ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
+                                <br>
+                                <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
+                            </td>
+                            <td><strong>${data.coins || 0}</strong></td>
+                            <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
+                            <td>${statusHtml}</td>
+                            <td style="font-size:10px;color:var(--text-muted);">${lastActiveStr}</td>
+                            <td>
+                                <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+                                    ${!isAdminUser ? `
+                                        <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
+                                                onclick="toggleBan('${userId}')" 
+                                                style="width:100%;">
+                                            ${data.isBanned ? 'Unban' : 'Ban'}
+                                        </button>
+                                    ` : `
+                                        <span style="font-size:9px;color:var(--text-muted);">Admin</span>
+                                    `}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                 });
 
                 table.innerHTML = html;
@@ -3333,17 +3054,17 @@
             links.forEach((link, index) => {
                 const displayLink = link.length > 40 ? link.substring(0, 40) + '...' : link;
                 html += `
-                        <tr>
-                            <td class="ad-link-cell">
-                                <a href="${link}" target="_blank">${displayLink}</a>
-                            </td>
-                            <td>
-                                <button class="btn-sm red" onclick="adminRemoveAppLink(${index})" style="padding:4px 10px;font-size:9px;">
-                                    <i class="fas fa-trash"></i> ဖျက်
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td class="ad-link-cell">
+                            <a href="${link}" target="_blank">${displayLink}</a>
+                        </td>
+                        <td>
+                            <button class="btn-sm red" onclick="adminRemoveAppLink(${index})" style="padding:4px 10px;font-size:9px;">
+                                <i class="fas fa-trash"></i> ဖျက်
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
             tbody.innerHTML = html;
         }
@@ -3404,17 +3125,17 @@
             links.forEach((link, index) => {
                 const displayLink = link.length > 40 ? link.substring(0, 40) + '...' : link;
                 html += `
-                        <tr>
-                            <td class="ad-link-cell">
-                                <a href="${link}" target="_blank">${displayLink}</a>
-                            </td>
-                            <td>
-                                <button class="btn-sm red" onclick="adminRemoveAdLink(${index})" style="padding:4px 10px;font-size:9px;">
-                                    <i class="fas fa-trash"></i> ဖျက်
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td class="ad-link-cell">
+                            <a href="${link}" target="_blank">${displayLink}</a>
+                        </td>
+                        <td>
+                            <button class="btn-sm red" onclick="adminRemoveAdLink(${index})" style="padding:4px 10px;font-size:9px;">
+                                <i class="fas fa-trash"></i> ဖျက်
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
             tbody.innerHTML = html;
         }
@@ -3589,9 +3310,6 @@
             } else if (tab === 'home') {
                 document.getElementById('searchInput').blur();
                 renderPlaylist(currentCategory);
-                resetWatchTimer();
-                isAdShowing = false;
-                isVideoPlaying = false;
             }
         }
 
@@ -3603,20 +3321,13 @@
         updateWithdrawBadge();
         document.getElementById('profileImg').src = localStorage.getItem('profileImg') ||
             'https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72';
-        updateDailyBonusUI();
-        resetWatchTimer();
-        isAdShowing = false;
-        isVideoPlaying = false;
 
         console.log('✅ App initialized successfully!');
-        console.log('📹 Video Management: LOCAL ONLY (Shared with all users)');
+        console.log('📹 Video Management: LOCAL ONLY (No Firestore reads for videos)');
         console.log('💾 Local Storage: Coin & Video data stored locally');
         console.log('🔥 Firebase: Auth, Coins, USDT, Exchange Rate only');
         console.log('🔄 Sync: Firestore sync when online');
-        console.log('🎬 Video Watch: 2 min watch → Ad → 20 Coins (Timer resets properly)');
-        console.log('📅 Daily Bonus: One time per day, 700 Coins for 2 app downloads');
-        console.log('⏱️ Watch Timer: EXACT 120 seconds (2 minutes) with complete reset');
-        console.log('🔄 Each video watch cycle resets timer completely - FIXED!');
+        console.log('🎬 Video Watch: 2 min watch → Ad → 20 Coins');
     </script>
 </body>
 </html>
