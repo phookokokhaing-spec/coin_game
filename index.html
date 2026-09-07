@@ -1809,7 +1809,7 @@
                 <div class="ad-icon"><i class="fas fa-ad"></i></div>
                 <div class="ad-title">ကြော်ငြာကိုဖွင့်နေပါသည်...</div>
                 <div class="ad-subtitle">ကျေးဇူးပြု၍ စောင့်ဆိုင်းပါ</div>
-                <div class="ad-countdown-big" id="adCountdownBig">4</div>
+                <div class="ad-countdown-big" id="adCountdownBig">3</div>
             </div>
             <div class="ad-footer">
                 <div class="progress-container">
@@ -1817,7 +1817,7 @@
                 </div>
                 <div class="ad-actions">
                     <button class="claim-btn" id="adSkipBtn" disabled>
-                        ⏳ <span id="adCountdown">4</span> စက္ကန့်စောင့်ပါ...
+                        ⏳ <span id="adCountdown">3</span> စက္ကန့်စောင့်ပါ...
                     </button>
                     <button class="open-btn" onclick="openAdWebsite()" title="ကြော်ငြာဖွင့်ရန်">
                         <i class="fas fa-external-link-alt"></i>
@@ -2379,7 +2379,7 @@
         }
 
         // ============================================================
-        //  CLAIM COIN - 4 SECONDS AD WITH AUTO-CLAIM ON FOCUS
+        //  CLAIM COIN - 3 SECONDS AD (NO IFRAME, OPENS WEBSITE)
         // ============================================================
         // Updated AD LINKS as requested - 3 links rotation
         const AD_LINKS = [
@@ -2396,10 +2396,10 @@
         // ============================================================
         //  🔥 FIX: GLOBAL SAVED VIDEO TIME
         // ============================================================
-        let savedVideoTime = 0;
+        let savedVideoTime = 0;   // <-- Video time သိမ်းဖို့ ဒီ Variable ကိုထည့်ထားတယ်
 
         // ============================================================
-        //  CLAIM COIN (FIXED: 4 sec timer + auto-claim on focus)
+        //  CLAIM COIN (FIXED: Save time before showing ad)
         // ============================================================
         function claimCoin() {
             if (!adLinks || adLinks.length === 0) {
@@ -2434,8 +2434,6 @@
             document.getElementById('adModal').classList.add('show');
 
             currentAdUrl = adLinks[adIndex % adLinks.length];
-            adIndex = (adIndex + 1) % adLinks.length;
-            localStorage.setItem('currentAdIndex', adIndex);
 
             const progressBar = document.getElementById('adProgressBar');
             const timerEl = document.getElementById('adCountdown');
@@ -2443,15 +2441,15 @@
             const skipBtn = document.getElementById('adSkipBtn');
             const statusText = document.getElementById('adStatusText');
 
-            // Reset UI - 4 seconds
+            // Reset
             progressBar.style.width = '0%';
-            timerEl.textContent = '4';
-            timerBig.textContent = '4';
+            timerEl.textContent = '3';
+            timerBig.textContent = '3';
             skipBtn.disabled = true;
-            skipBtn.innerHTML = '⏳ <span id="adCountdown">4</span> စက္ကန့်စောင့်ပါ...';
+            skipBtn.innerHTML = '⏳ <span id="adCountdown">3</span> စက္ကန့်စောင့်ပါ...';
             skipBtn.className = 'claim-btn';
             skipBtn.onclick = null;
-            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်... (App ကိုပြန်လာပါ)';
+            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
             statusText.className = 'status-text';
 
             if (window._adCountdownInterval) {
@@ -2459,80 +2457,48 @@
                 window._adCountdownInterval = null;
             }
 
-            // Open the ad website in a new tab
-            try {
-                const win = window.open(currentAdUrl, '_blank');
-                if (win) win.focus();
-                else window.open(currentAdUrl, '_blank');
-            } catch (e) {
-                window.open(currentAdUrl, '_blank');
-            }
+            // Open the ad website immediately
+            openAdWebsite();
 
-            // Remove old focus listener to avoid duplicates
-            window.removeEventListener('focus', handleAdFocus);
+            let timeLeft = 3;
+            timerEl.textContent = timeLeft;
+            timerBig.textContent = timeLeft;
+            progressBar.style.width = '0%';
 
-            let timeLeft = 4;
-            let isClaimed = false;
-
-            // 🔥 FOCUS EVENT: User comes back to our app tab
-            function handleAdFocus() {
-                if (isClaimed) return;
-                if (timeLeft <= 0) {
-                    // Timer finished, claim immediately!
-                    isClaimed = true;
-                    window.removeEventListener('focus', handleAdFocus);
-                    closeAdAndClaim();
-                } else {
-                    // Still counting, show status
-                    statusText.textContent = `⏳ ကျန်စက္ကန့် ${timeLeft}... ပြန်လာပါ!`;
-                    statusText.className = 'status-text';
-                }
-            }
-
-            window.addEventListener('focus', handleAdFocus);
-
-            // Countdown
             window._adCountdownInterval = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = timeLeft;
                 timerBig.textContent = timeLeft;
-                progressBar.style.width = ((4 - timeLeft) / 4 * 100) + '%';
+                progressBar.style.width = ((3 - timeLeft) / 3 * 100) + '%';
 
                 if (timeLeft <= 0) {
                     clearInterval(window._adCountdownInterval);
                     window._adCountdownInterval = null;
-
-                    // Enable claim button in case user clicks it
                     skipBtn.disabled = false;
                     skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
                     skipBtn.className = 'claim-btn active';
-                    skipBtn.onclick = function() {
-                        if (!isClaimed) {
-                            isClaimed = true;
-                            window.removeEventListener('focus', handleAdFocus);
-                            closeAdAndClaim();
-                        }
-                    };
+                    skipBtn.onclick = closeAdAndClaim;
                     progressBar.style.width = '100%';
-                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ! (App ကိုပြန်လာပါ)';
+                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
                     statusText.className = 'status-text done';
-
-                    // 🔥 If user is already on our app tab, claim automatically
-                    if (document.hasFocus()) {
-                        isClaimed = true;
-                        window.removeEventListener('focus', handleAdFocus);
-                        closeAdAndClaim();
-                    } else {
-                        // Wait for focus event
-                        statusText.textContent = '🔄 App ကိုပြန်လာပါ။ အလိုအလျောက်ပေါင်းပေးပါမည်။';
-                    }
                 }
             }, 1000);
         }
 
         function openAdWebsite() {
-            // Already opened in claimCoin
-            // Kept for compatibility
+            if (currentAdUrl) {
+                try {
+                    const popup = window.open(
+                        currentAdUrl,
+                        'adPopup',
+                        'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+                    );
+                    if (popup) popup.focus();
+                    else window.open(currentAdUrl, '_blank');
+                } catch (e) {
+                    window.open(currentAdUrl, '_blank');
+                }
+            }
         }
 
         // ============================================================
@@ -2598,7 +2564,7 @@
                         }
                     }, 300);
                 } else if (currentVideoId && player && player.loadVideoById) {
-                    // Fallback to loadVideo if seek fails
+                    // Fallback to loadVideo if seek fails (မဖြစ်သင့်ပေမယ့် အာမခံထားတယ်)
                     console.warn('⚠️ seekTo failed, falling back to loadVideo');
                     player.loadVideoById(currentVideoId);
                     setTimeout(() => {
@@ -2629,8 +2595,12 @@
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
-            window.removeEventListener('focus', handleAdFocus);
             document.getElementById('adModal').classList.remove('show');
+
+            if (adLinks && adLinks.length > 0) {
+                adIndex = (adIndex + 1) % adLinks.length;
+                localStorage.setItem('currentAdIndex', adIndex);
+            }
             isAdShowing = false;
             giveAdReward(AD_REWARD);
         }
@@ -2640,7 +2610,6 @@
                 clearInterval(window._adCountdownInterval);
                 window._adCountdownInterval = null;
             }
-            window.removeEventListener('focus', handleAdFocus);
             document.getElementById('adModal').classList.remove('show');
             document.getElementById('coinPopup').style.display = 'none';
             isAdShowing = false;
@@ -4327,11 +4296,11 @@
         console.log('   3️⃣ Download App 2: 300 Coins');
         console.log('⏱️ Watch Timer: EXACT 120 seconds (2 minutes) with complete reset');
         console.log('🔄 FIXED: Timer restarts after coin claim using seekTo instead of loadVideo');
-        console.log('🌐 Ad: Opens website in new tab - 4 seconds wait then auto-claim on app focus');
-        console.log('✅ Loop: Watch 2 min → Ad 4 sec → Claim 20 Coins → Watch 2 min again (smooth continue)');
+        console.log('🌐 Ad: Opens website in new tab/popup - 3 seconds wait then claim');
+        console.log('✅ Loop: Watch 2 min → Ad 3 sec → Claim 20 Coins → Watch 2 min again (smooth continue)');
         console.log('📌 AD LINKS UPDATED with 3 new links (rotating)');
         console.log('📌 Timer shows on every video play and card click');
-        console.log('🔥 FIX: Auto-claim when user returns to app (using window focus event)');
     </script>
 </body>
 </html>
+
