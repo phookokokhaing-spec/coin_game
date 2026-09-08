@@ -4037,233 +4037,1177 @@ function closeAdModal() {
             }
         }
 
-        // ============================================================
-        //  DAILY BONUS - 3 TYPES
-        // ============================================================
-        function updateDailyBonusUI() {
-            const today = new Date().toDateString();
+// ============================================================
+// DAILY BONUS - 3 TYPES
+// BONUS 1 = 100 COINS
+// APP DOWNLOAD 1 = 300 COINS AFTER 120 SECONDS
+// APP DOWNLOAD 2 = 300 COINS AFTER 120 SECONDS
+// ============================================================
 
-            const last1 = localStorage.getItem('lastDailyBonus1Date') || '';
-            const btn1 = document.getElementById('dailyBonus1Btn');
-            const status1 = document.getElementById('dailyBonus1Status');
-            if (last1 === today) {
-                btn1.disabled = true;
-                btn1.style.opacity = '0.5';
-                status1.textContent = '✅ ရယူပြီး';
-                status1.style.color = '#4caf50';
-            } else {
-                btn1.disabled = false;
-                btn1.style.opacity = '1';
-                status1.textContent = '⏳ ရယူရန်';
-                status1.style.color = 'var(--text-muted)';
-            }
 
-            const last2 = localStorage.getItem('lastDailyBonus2Date') || '';
-            const btn2 = document.getElementById('dailyBonus2Btn');
-            const status2 = document.getElementById('dailyBonus2Status');
-            if (last2 === today) {
-                btn2.disabled = true;
-                btn2.style.opacity = '0.5';
-                status2.textContent = '✅ ရယူပြီး';
-                status2.style.color = '#4caf50';
-            } else {
-                btn2.disabled = false;
-                btn2.style.opacity = '1';
-                status2.textContent = '⏳ ရယူရန်';
-                status2.style.color = 'var(--text-muted)';
-            }
+// ============================================================
+// SETTINGS
+// ============================================================
 
-            const last3 = localStorage.getItem('lastDailyBonus3Date') || '';
-            const btn3 = document.getElementById('dailyBonus3Btn');
-            const status3 = document.getElementById('dailyBonus3Status');
-            if (last3 === today) {
-                btn3.disabled = true;
-                btn3.style.opacity = '0.5';
-                status3.textContent = '✅ ရယူပြီး';
-                status3.style.color = '#4caf50';
-            } else {
-                btn3.disabled = false;
-                btn3.style.opacity = '1';
-                status3.textContent = '⏳ ရယူရန်';
-                status3.style.color = 'var(--text-muted)';
-            }
+const DAILY_BONUS_DOWNLOAD_WAIT = 120; // 2 minutes
+
+let downloadBonusTimer1 = null;
+let downloadBonusTimer2 = null;
+
+let downloadBonusRunning1 = false;
+let downloadBonusRunning2 = false;
+
+
+// ============================================================
+// DAILY BONUS UI
+// ============================================================
+
+function updateDailyBonusUI() {
+
+    const today = new Date().toDateString();
+
+
+    // ========================================================
+    // BONUS 1 - 100 COINS
+    // ========================================================
+
+    const last1 =
+        localStorage.getItem('lastDailyBonus1Date') || '';
+
+    const btn1 =
+        document.getElementById('dailyBonus1Btn');
+
+    const status1 =
+        document.getElementById('dailyBonus1Status');
+
+    if (btn1 && status1) {
+
+        if (last1 === today) {
+
+            btn1.disabled = true;
+            btn1.style.opacity = '0.5';
+
+            status1.textContent =
+                '✅ ရယူပြီး';
+
+            status1.style.color =
+                '#4caf50';
+
+        } else {
+
+            btn1.disabled = false;
+            btn1.style.opacity = '1';
+
+            status1.textContent =
+                '⏳ ရယူရန်';
+
+            status1.style.color =
+                'var(--text-muted)';
+
         }
 
-        async function claimDailyBonus1() {
-            const today = new Date().toDateString();
-            const last = localStorage.getItem('lastDailyBonus1Date') || '';
-            if (last === today) {
-                showToast('ယနေ့အတွက် Bonus 1 ရယူပြီးပါပြီ။', 'error');
-                return;
-            }
+    }
 
-            if (isUpdatingCoins) {
-                showToast('⏳ ခဏစောင့်ပါ...', 'warning');
-                return;
-            }
 
-            try {
-                isUpdatingCoins = true;
-                const reward = 100;
-                userData.coins = (userData.coins || 0) + reward;
-                saveCoinsToLocal(userData.coins);
-                updateUI();
+    // ========================================================
+    // BONUS 2 - DOWNLOAD APP 1
+    // ========================================================
 
-                try {
-                    await db.collection('users').doc(currentUser.uid).update({
-                        coins: firebase.firestore.FieldValue.increment(reward)
-                    });
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'daily_bonus',
-                        amount: reward,
-                        description: 'နေ့စဉ်ဘောနပ်စ် (၁) - ' + reward + ' Coins',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } catch (e) {
-                    console.error('Firestore bonus error:', e);
-                    saveTransactionLocal('daily_bonus', reward, 'နေ့စဉ်ဘောနပ်စ် (၁) - ' + reward + ' Coins [Local]');
-                    showLocalModeIndicator(true);
-                    usingLocalData = true;
+    const last2 =
+        localStorage.getItem('lastDailyBonus2Date') || '';
+
+    const btn2 =
+        document.getElementById('dailyBonus2Btn');
+
+    const status2 =
+        document.getElementById('dailyBonus2Status');
+
+    if (btn2 && status2) {
+
+        if (last2 === today) {
+
+            btn2.disabled = true;
+            btn2.style.opacity = '0.5';
+
+            status2.textContent =
+                '✅ ရယူပြီး';
+
+            status2.style.color =
+                '#4caf50';
+
+        } else if (downloadBonusRunning1) {
+
+            btn2.disabled = true;
+            btn2.style.opacity = '0.7';
+
+            status2.textContent =
+                '⏳ စောင့်နေပါ...';
+
+            status2.style.color =
+                '#ff9800';
+
+        } else {
+
+            btn2.disabled = false;
+            btn2.style.opacity = '1';
+
+            status2.textContent =
+                '⏳ ရယူရန်';
+
+            status2.style.color =
+                'var(--text-muted)';
+
+        }
+
+    }
+
+
+    // ========================================================
+    // BONUS 3 - DOWNLOAD APP 2
+    // ========================================================
+
+    const last3 =
+        localStorage.getItem('lastDailyBonus3Date') || '';
+
+    const btn3 =
+        document.getElementById('dailyBonus3Btn');
+
+    const status3 =
+        document.getElementById('dailyBonus3Status');
+
+    if (btn3 && status3) {
+
+        if (last3 === today) {
+
+            btn3.disabled = true;
+            btn3.style.opacity = '0.5';
+
+            status3.textContent =
+                '✅ ရယူပြီး';
+
+            status3.style.color =
+                '#4caf50';
+
+        } else if (downloadBonusRunning2) {
+
+            btn3.disabled = true;
+            btn3.style.opacity = '0.7';
+
+            status3.textContent =
+                '⏳ စောင့်နေပါ...';
+
+            status3.style.color =
+                '#ff9800';
+
+        } else {
+
+            btn3.disabled = false;
+            btn3.style.opacity = '1';
+
+            status3.textContent =
+                '⏳ ရယူရန်';
+
+            status3.style.color =
+                'var(--text-muted)';
+
+        }
+
+    }
+
+}
+
+
+// ============================================================
+// BONUS 1 - 100 COINS
+// ============================================================
+
+async function claimDailyBonus1() {
+
+    const today =
+        new Date().toDateString();
+
+    const last =
+        localStorage.getItem(
+            'lastDailyBonus1Date'
+        ) || '';
+
+
+    // --------------------------------------------------------
+    // Already claimed
+    // --------------------------------------------------------
+
+    if (last === today) {
+
+        showToast(
+            'ယနေ့အတွက် Bonus 1 ရယူပြီးပါပြီ။',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Updating lock
+    // --------------------------------------------------------
+
+    if (isUpdatingCoins) {
+
+        showToast(
+            '⏳ ခဏစောင့်ပါ...',
+            'warning'
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        isUpdatingCoins = true;
+
+        const reward = 100;
+
+
+        // ====================================================
+        // LOCAL COINS
+        // ====================================================
+
+        userData.coins =
+            (userData.coins || 0) + reward;
+
+        saveCoinsToLocal(
+            userData.coins
+        );
+
+        updateUI();
+
+
+        // ====================================================
+        // FIREBASE
+        // ====================================================
+
+        try {
+
+            await db
+                .collection('users')
+                .doc(currentUser.uid)
+                .update({
+
+                    coins:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(reward)
+
+                });
+
+
+            await db
+                .collection('transactions')
+                .add({
+
+                    userId:
+                        currentUser.uid,
+
+                    type:
+                        'daily_bonus',
+
+                    amount:
+                        reward,
+
+                    description:
+                        'နေ့စဉ်ဘောနပ်စ် (၁) - ' +
+                        reward +
+                        ' Coins',
+
+                    timestamp:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+        } catch (e) {
+
+            console.error(
+                'Firestore bonus error:',
+                e
+            );
+
+
+            saveTransactionLocal(
+                'daily_bonus',
+                reward,
+                'နေ့စဉ်ဘောနပ်စ် (၁) - ' +
+                reward +
+                ' Coins [Local]'
+            );
+
+            showLocalModeIndicator(true);
+
+            usingLocalData = true;
+
+        }
+
+
+        // ====================================================
+        // MARK CLAIMED
+        // ====================================================
+
+        localStorage.setItem(
+            'lastDailyBonus1Date',
+            today
+        );
+
+        updateDailyBonusUI();
+
+
+        showToast(
+            '🎉 +' +
+            reward +
+            ' Coins ရရှိပါပြီ! (နေ့စဉ်ဘောနပ်စ် ၁)'
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            'Bonus 1 error:',
+            error
+        );
+
+        showToast(
+            '❌ ဘောနပ်စ် မအောင်မြင်ပါ။',
+            'error'
+        );
+
+
+    } finally {
+
+        isUpdatingCoins = false;
+
+    }
+
+}
+
+
+// ============================================================
+// DOWNLOAD BONUS 1
+// APP DOWNLOAD 1 = 300 COINS
+// ============================================================
+
+async function claimDailyBonus2() {
+
+    const today =
+        new Date().toDateString();
+
+    const last =
+        localStorage.getItem(
+            'lastDailyBonus2Date'
+        ) || '';
+
+
+    // --------------------------------------------------------
+    // Already claimed
+    // --------------------------------------------------------
+
+    if (last === today) {
+
+        showToast(
+            'ယနေ့အတွက် Download App 1 Bonus ရယူပြီးပါပြီ။',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Already running
+    // --------------------------------------------------------
+
+    if (downloadBonusRunning1) {
+
+        showToast(
+            '⏳ Download Bonus 1 ကို စောင့်နေပါသည်။',
+            'warning'
+        );
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Coin update lock
+    // --------------------------------------------------------
+
+    if (isUpdatingCoins) {
+
+        showToast(
+            '⏳ ခဏစောင့်ပါ...',
+            'warning'
+        );
+
+        return;
+
+    }
+
+
+    const appLink =
+        "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d";
+
+
+    const reward = 300;
+
+
+    // ========================================================
+    // START STATE
+    // ========================================================
+
+    downloadBonusRunning1 = true;
+
+
+    const btn =
+        document.getElementById(
+            'dailyBonus2Btn'
+        );
+
+    const status =
+        document.getElementById(
+            'dailyBonus2Status'
+        );
+
+
+    if (btn) {
+
+        btn.disabled = true;
+
+        btn.style.opacity = '0.7';
+
+    }
+
+
+    if (status) {
+
+        status.textContent =
+            '⏳ 2 မိနစ်စောင့်နေပါ...';
+
+        status.style.color =
+            '#ff9800';
+
+    }
+
+
+    // ========================================================
+    // TOAST MESSAGE
+    // ========================================================
+
+    showToast(
+        '📥 Download စတင်ပါပြီ။ ' +
+        'Download ပြီးမှ Coin ရရှိပါမည်။ ⏳ 2 မိနစ်စောင့်ပါ။',
+        'success'
+    );
+
+
+    // ========================================================
+    // OPEN AD / DOWNLOAD WEBSITE
+    // ========================================================
+
+    try {
+
+        const popup =
+            window.open(
+                appLink,
+                'appDownload1',
+                'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+            );
+
+        if (popup) {
+
+            popup.focus();
+
+        } else {
+
+            window.open(
+                appLink,
+                '_blank'
+            );
+
+        }
+
+    } catch (e) {
+
+        window.open(
+            appLink,
+            '_blank'
+        );
+
+    }
+
+
+    // ========================================================
+    // 120 SECOND COUNTDOWN
+    // ========================================================
+
+    let remaining =
+        DAILY_BONUS_DOWNLOAD_WAIT;
+
+
+    if (status) {
+
+        status.textContent =
+            '⏳ 2:00 စောင့်နေပါ...';
+
+    }
+
+
+    downloadBonusTimer1 =
+        setInterval(
+            async () => {
+
+                remaining--;
+
+
+                // ------------------------------------------------
+                // Update status
+                // ------------------------------------------------
+
+                if (status) {
+
+                    const minutes =
+                        Math.floor(
+                            remaining / 60
+                        );
+
+                    const seconds =
+                        remaining % 60;
+
+                    status.textContent =
+                        '⏳ ' +
+                        minutes +
+                        ':' +
+                        String(seconds).padStart(2, '0') +
+                        ' စောင့်နေပါ...';
+
                 }
 
-                localStorage.setItem('lastDailyBonus1Date', today);
-                updateDailyBonusUI();
-                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (နေ့စဉ်ဘောနပ်စ် ၁)');
-            } catch (error) {
-                console.error('Bonus 1 error:', error);
-                showToast('❌ ဘောနပ်စ် မအောင်မြင်ပါ။', 'error');
-            } finally {
-                isUpdatingCoins = false;
-            }
-        }
 
-        async function claimDailyBonus2() {
-            const today = new Date().toDateString();
-            const last = localStorage.getItem('lastDailyBonus2Date') || '';
-            if (last === today) {
-                showToast('ယနေ့အတွက် Bonus 2 ရယူပြီးပါပြီ။', 'error');
-                return;
-            }
+                // =================================================
+                // COMPLETE
+                // =================================================
 
-            if (isUpdatingCoins) {
-                showToast('⏳ ခဏစောင့်ပါ...', 'warning');
-                return;
-            }
+                if (remaining <= 0) {
 
-            const appLink = "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d";
-            try {
-                const popup = window.open(
-                    appLink,
-                    'appDownload1',
-                    'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
-                );
-                if (popup) popup.focus();
-                else window.open(appLink, '_blank');
-            } catch (e) {
-                window.open(appLink, '_blank');
-            }
+                    clearInterval(
+                        downloadBonusTimer1
+                    );
 
-            try {
-                isUpdatingCoins = true;
-                const reward = 300;
-                userData.coins = (userData.coins || 0) + reward;
-                saveCoinsToLocal(userData.coins);
-                updateUI();
+                    downloadBonusTimer1 =
+                        null;
 
-                try {
-                    await db.collection('users').doc(currentUser.uid).update({
-                        coins: firebase.firestore.FieldValue.increment(reward)
-                    });
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'daily_bonus',
-                        amount: reward,
-                        description: 'နေ့စဉ်ဘောနပ်စ် (၂) - Download App 1 - ' + reward + ' Coins',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } catch (e) {
-                    console.error('Firestore bonus error:', e);
-                    saveTransactionLocal('daily_bonus', reward, 'နေ့စဉ်ဘောနပ်စ် (၂) - Download App 1 - ' + reward +
-                        ' Coins [Local]');
-                    showLocalModeIndicator(true);
-                    usingLocalData = true;
+
+                    // ------------------------------------------------
+                    // Stop running
+                    // ------------------------------------------------
+
+                    downloadBonusRunning1 =
+                        false;
+
+
+                    // ------------------------------------------------
+                    // Double-check today's claim
+                    // ------------------------------------------------
+
+                    const checkToday =
+                        new Date().toDateString();
+
+                    const checkLast =
+                        localStorage.getItem(
+                            'lastDailyBonus2Date'
+                        ) || '';
+
+
+                    if (checkLast === checkToday) {
+
+                        updateDailyBonusUI();
+
+                        return;
+
+                    }
+
+
+                    // =================================================
+                    // GIVE 300 COINS
+                    // =================================================
+
+                    try {
+
+                        isUpdatingCoins = true;
+
+
+                        // ---------------------------------------------
+                        // Local
+                        // ---------------------------------------------
+
+                        userData.coins =
+                            (userData.coins || 0) +
+                            reward;
+
+                        saveCoinsToLocal(
+                            userData.coins
+                        );
+
+                        updateUI();
+
+
+                        // ---------------------------------------------
+                        // Firebase
+                        // ---------------------------------------------
+
+                        try {
+
+                            await db
+                                .collection('users')
+                                .doc(currentUser.uid)
+                                .update({
+
+                                    coins:
+                                        firebase.firestore
+                                            .FieldValue
+                                            .increment(
+                                                reward
+                                            )
+
+                                });
+
+
+                            await db
+                                .collection('transactions')
+                                .add({
+
+                                    userId:
+                                        currentUser.uid,
+
+                                    type:
+                                        'daily_bonus',
+
+                                    amount:
+                                        reward,
+
+                                    description:
+                                        'နေ့စဉ်ဘောနပ်စ် (၂) - Download App 1 - ' +
+                                        reward +
+                                        ' Coins',
+
+                                    timestamp:
+                                        firebase.firestore
+                                            .FieldValue
+                                            .serverTimestamp()
+
+                                });
+
+                        } catch (e) {
+
+                            console.error(
+                                'Firestore bonus error:',
+                                e
+                            );
+
+
+                            saveTransactionLocal(
+                                'daily_bonus',
+                                reward,
+                                'နေ့စဉ်ဘောနပ်စ် (၂) - Download App 1 - ' +
+                                reward +
+                                ' Coins [Local]'
+                            );
+
+                            showLocalModeIndicator(
+                                true
+                            );
+
+                            usingLocalData =
+                                true;
+
+                        }
+
+
+                        // ---------------------------------------------
+                        // Mark claimed
+                        // ---------------------------------------------
+
+                        localStorage.setItem(
+                            'lastDailyBonus2Date',
+                            checkToday
+                        );
+
+
+                        updateDailyBonusUI();
+
+
+                        // ---------------------------------------------
+                        // Success message
+                        // ---------------------------------------------
+
+                        showToast(
+                            '🎉 +' +
+                            reward +
+                            ' Coins ရရှိပါပြီ! (Download App 1)',
+                            'success'
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            'Download Bonus 1 error:',
+                            error
+                        );
+
+
+                        showToast(
+                            '❌ Download Bonus မအောင်မြင်ပါ။',
+                            'error'
+                        );
+
+
+                        downloadBonusRunning1 =
+                            false;
+
+
+                        updateDailyBonusUI();
+
+
+                    } finally {
+
+                        isUpdatingCoins =
+                            false;
+
+                    }
+
                 }
 
-                localStorage.setItem('lastDailyBonus2Date', today);
-                updateDailyBonusUI();
-                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (Download App 1)');
-            } catch (error) {
-                console.error('Bonus 2 error:', error);
-                showToast('❌ ဘောနပ်စ် မအောင်မြင်ပါ။', 'error');
-            } finally {
-                isUpdatingCoins = false;
-            }
+            },
+            1000
+        );
+
+}
+
+
+// ============================================================
+// DOWNLOAD BONUS 2
+// APP DOWNLOAD 2 = 300 COINS
+// ============================================================
+
+async function claimDailyBonus3() {
+
+    const today =
+        new Date().toDateString();
+
+    const last =
+        localStorage.getItem(
+            'lastDailyBonus3Date'
+        ) || '';
+
+
+    // --------------------------------------------------------
+    // Already claimed
+    // --------------------------------------------------------
+
+    if (last === today) {
+
+        showToast(
+            'ယနေ့အတွက် Download App 2 Bonus ရယူပြီးပါပြီ။',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Already running
+    // --------------------------------------------------------
+
+    if (downloadBonusRunning2) {
+
+        showToast(
+            '⏳ Download Bonus 2 ကို စောင့်နေပါသည်။',
+            'warning'
+        );
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Coin update lock
+    // --------------------------------------------------------
+
+    if (isUpdatingCoins) {
+
+        showToast(
+            '⏳ ခဏစောင့်ပါ...',
+            'warning'
+        );
+
+        return;
+
+    }
+
+
+    const appLink =
+        "https://www.profitableratecpmnetwork.com/uw3ckb3ie?key=6710938164a4254e8236611b92be03fe";
+
+
+    const reward = 300;
+
+
+    // ========================================================
+    // START STATE
+    // ========================================================
+
+    downloadBonusRunning2 = true;
+
+
+    const btn =
+        document.getElementById(
+            'dailyBonus3Btn'
+        );
+
+    const status =
+        document.getElementById(
+            'dailyBonus3Status'
+        );
+
+
+    if (btn) {
+
+        btn.disabled = true;
+
+        btn.style.opacity = '0.7';
+
+    }
+
+
+    if (status) {
+
+        status.textContent =
+            '⏳ 2 မိနစ်စောင့်နေပါ...';
+
+        status.style.color =
+            '#ff9800';
+
+    }
+
+
+    // ========================================================
+    // TOAST MESSAGE
+    // ========================================================
+
+    showToast(
+        '📥 Download စတင်ပါပြီ။ ' +
+        'Download ပြီးမှ Coin ရရှိပါမည်။ ⏳ 2 မိနစ်စောင့်ပါ။',
+        'success'
+    );
+
+
+    // ========================================================
+    // OPEN AD / DOWNLOAD WEBSITE
+    // ========================================================
+
+    try {
+
+        const popup =
+            window.open(
+                appLink,
+                'appDownload2',
+                'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
+            );
+
+        if (popup) {
+
+            popup.focus();
+
+        } else {
+
+            window.open(
+                appLink,
+                '_blank'
+            );
+
         }
 
-        async function claimDailyBonus3() {
-            const today = new Date().toDateString();
-            const last = localStorage.getItem('lastDailyBonus3Date') || '';
-            if (last === today) {
-                showToast('ယနေ့အတွက် Bonus 3 ရယူပြီးပါပြီ။', 'error');
-                return;
-            }
+    } catch (e) {
 
-            if (isUpdatingCoins) {
-                showToast('⏳ ခဏစောင့်ပါ...', 'warning');
-                return;
-            }
+        window.open(
+            appLink,
+            '_blank'
+        );
 
-            const appLink = "https://www.profitableratecpmnetwork.com/uw3ckb3ie?key=6710938164a4254e8236611b92be03fe";
-            try {
-                const popup = window.open(
-                    appLink,
-                    'appDownload2',
-                    'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
-                );
-                if (popup) popup.focus();
-                else window.open(appLink, '_blank');
-            } catch (e) {
-                window.open(appLink, '_blank');
-            }
+    }
 
-            try {
-                isUpdatingCoins = true;
-                const reward = 300;
-                userData.coins = (userData.coins || 0) + reward;
-                saveCoinsToLocal(userData.coins);
-                updateUI();
 
-                try {
-                    await db.collection('users').doc(currentUser.uid).update({
-                        coins: firebase.firestore.FieldValue.increment(reward)
-                    });
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'daily_bonus',
-                        amount: reward,
-                        description: 'နေ့စဉ်ဘောနပ်စ် (၃) - Download App 2 - ' + reward + ' Coins',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } catch (e) {
-                    console.error('Firestore bonus error:', e);
-                    saveTransactionLocal('daily_bonus', reward, 'နေ့စဉ်ဘောနပ်စ် (၃) - Download App 2 - ' + reward +
-                        ' Coins [Local]');
-                    showLocalModeIndicator(true);
-                    usingLocalData = true;
+    // ========================================================
+    // 120 SECOND COUNTDOWN
+    // ========================================================
+
+    let remaining =
+        DAILY_BONUS_DOWNLOAD_WAIT;
+
+
+    if (status) {
+
+        status.textContent =
+            '⏳ 2:00 စောင့်နေပါ...';
+
+    }
+
+
+    downloadBonusTimer2 =
+        setInterval(
+            async () => {
+
+                remaining--;
+
+
+                // ------------------------------------------------
+                // Update status
+                // ------------------------------------------------
+
+                if (status) {
+
+                    const minutes =
+                        Math.floor(
+                            remaining / 60
+                        );
+
+                    const seconds =
+                        remaining % 60;
+
+                    status.textContent =
+                        '⏳ ' +
+                        minutes +
+                        ':' +
+                        String(seconds).padStart(2, '0') +
+                        ' စောင့်နေပါ...';
+
                 }
 
-                localStorage.setItem('lastDailyBonus3Date', today);
-                updateDailyBonusUI();
-                showToast('🎉 +' + reward + ' Coins ရရှိပါပြီ! (Download App 2)');
-            } catch (error) {
-                console.error('Bonus 3 error:', error);
-                showToast('❌ ဘောနပ်စ် မအောင်မြင်ပါ။', 'error');
-            } finally {
-                isUpdatingCoins = false;
-            }
-        }
 
+                // =================================================
+                // COMPLETE
+                // =================================================
+
+                if (remaining <= 0) {
+
+                    clearInterval(
+                        downloadBonusTimer2
+                    );
+
+                    downloadBonusTimer2 =
+                        null;
+
+
+                    // ------------------------------------------------
+                    // Stop running
+                    // ------------------------------------------------
+
+                    downloadBonusRunning2 =
+                        false;
+
+
+                    // ------------------------------------------------
+                    // Double-check today's claim
+                    // ------------------------------------------------
+
+                    const checkToday =
+                        new Date().toDateString();
+
+                    const checkLast =
+                        localStorage.getItem(
+                            'lastDailyBonus3Date'
+                        ) || '';
+
+
+                    if (checkLast === checkToday) {
+
+                        updateDailyBonusUI();
+
+                        return;
+
+                    }
+
+
+                    // =================================================
+                    // GIVE 300 COINS
+                    // =================================================
+
+                    try {
+
+                        isUpdatingCoins = true;
+
+
+                        // ---------------------------------------------
+                        // Local
+                        // ---------------------------------------------
+
+                        userData.coins =
+                            (userData.coins || 0) +
+                            reward;
+
+                        saveCoinsToLocal(
+                            userData.coins
+                        );
+
+                        updateUI();
+
+
+                        // ---------------------------------------------
+                        // Firebase
+                        // ---------------------------------------------
+
+                        try {
+
+                            await db
+                                .collection('users')
+                                .doc(currentUser.uid)
+                                .update({
+
+                                    coins:
+                                        firebase.firestore
+                                            .FieldValue
+                                            .increment(
+                                                reward
+                                            )
+
+                                });
+
+
+                            await db
+                                .collection('transactions')
+                                .add({
+
+                                    userId:
+                                        currentUser.uid,
+
+                                    type:
+                                        'daily_bonus',
+
+                                    amount:
+                                        reward,
+
+                                    description:
+                                        'နေ့စဉ်ဘောနပ်စ် (၃) - Download App 2 - ' +
+                                        reward +
+                                        ' Coins',
+
+                                    timestamp:
+                                        firebase.firestore
+                                            .FieldValue
+                                            .serverTimestamp()
+
+                                });
+
+                        } catch (e) {
+
+                            console.error(
+                                'Firestore bonus error:',
+                                e
+                            );
+
+
+                            saveTransactionLocal(
+                                'daily_bonus',
+                                reward,
+                                'နေ့စဉ်ဘောနပ်စ် (၃) - Download App 2 - ' +
+                                reward +
+                                ' Coins [Local]'
+                            );
+
+                            showLocalModeIndicator(
+                                true
+                            );
+
+                            usingLocalData =
+                                true;
+
+                        }
+
+
+                        // ---------------------------------------------
+                        // Mark claimed
+                        // ---------------------------------------------
+
+                        localStorage.setItem(
+                            'lastDailyBonus3Date',
+                            checkToday
+                        );
+
+
+                        updateDailyBonusUI();
+
+
+                        // ---------------------------------------------
+                        // Success message
+                        // ---------------------------------------------
+
+                        showToast(
+                            '🎉 +' +
+                            reward +
+                            ' Coins ရရှိပါပြီ! (Download App 2)',
+                            'success'
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            'Download Bonus 2 error:',
+                            error
+                        );
+
+
+                        showToast(
+                            '❌ Download Bonus မအောင်မြင်ပါ။',
+                            'error'
+                        );
+
+
+                        downloadBonusRunning2 =
+                            false;
+
+
+                        updateDailyBonusUI();
+
+
+                    } finally {
+
+                        isUpdatingCoins =
+                            false;
+
+                    }
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+// ============================================================
+// INITIAL UI UPDATE
+// ============================================================
+
+updateDailyBonusUI();
         // ============================================================
         //  THEME TOGGLE
         // ============================================================
