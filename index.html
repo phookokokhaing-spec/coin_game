@@ -17,7 +17,7 @@
     <script src="https://www.youtube.com/iframe_api">
     </script>
     <style>
-        /* ===== ALL STYLES ===== */
+        /* ===== ALL STYLES (unchanged) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -31,8 +31,8 @@
             --text-primary: #f0f0f5;
             --text-secondary: rgba(255, 255, 255, 0.6);
             --text-muted: rgba(255, 255, 255, 0.3);
-            --accent: #d32f2f;
-            --accent-hover: #b71c1c;
+            --accent: #7c3aed;
+            --accent-hover: #6d28d9;
             --success: #2e7d32;
             --success-hover: #1b5e20;
             --warning: #ffa726;
@@ -187,7 +187,7 @@
         }
         .auth-box .form-group input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
         }
         .auth-box .btn {
             width: 100%;
@@ -200,7 +200,7 @@
             transition: var(--transition);
             background: linear-gradient(145deg, var(--accent), var(--accent-hover));
             color: #fff;
-            box-shadow: 0 4px 20px rgba(211, 47, 47, 0.3);
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
         }
         .auth-box .btn:hover {
             transform: scale(1.02);
@@ -229,7 +229,7 @@
             text-decoration: underline;
         }
         .auth-box .error-msg {
-            background: rgba(211, 47, 47, 0.15);
+            background: rgba(124, 58, 237, 0.15);
             border-radius: 10px;
             padding: 10px;
             font-size: 13px;
@@ -334,7 +334,7 @@
             flex-shrink: 0;
         }
         .top-bar .icon-btn:hover {
-            background: rgba(211, 47, 47, 0.15);
+            background: rgba(124, 58, 237, 0.15);
             border-color: var(--accent);
             color: var(--text-primary);
         }
@@ -411,7 +411,7 @@
             font-size: 13px;
             cursor: pointer;
             display: none;
-            box-shadow: 0 8px 32px rgba(211, 47, 47, 0.5);
+            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.5);
             animation: bounce 1.4s infinite ease-in-out;
             z-index: 10;
         }
@@ -460,11 +460,11 @@
         }
         .menu-item.active {
             color: #fff;
-            background: rgba(211, 47, 47, 0.15);
+            background: rgba(124, 58, 237, 0.15);
         }
         .menu-item.active i {
             color: var(--accent);
-            text-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
+            text-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
         }
         .menu-item.active span {
             color: var(--accent);
@@ -571,7 +571,7 @@
             color: var(--accent);
         }
         .bottom-nav .nav-item.active i {
-            text-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
+            text-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
         }
         .bottom-nav .nav-item .badge {
             position: absolute;
@@ -1041,6 +1041,24 @@
         }
 
         /* ===== RESPONSIVE ===== */
+        
+        #adIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+        }
+        @media (max-width: 480px) {
+            #adModal .modal-content {
+                max-width: 100%;
+                margin: 8px;
+                max-height: 95vh;
+            }
+            #adModal iframe {
+                height: 240px;
+            }
+        }
+
         @media (max-width: 480px) {
             .top-bar {
                 padding: 6px 10px;
@@ -1160,11 +1178,12 @@
             }
         }
 
-        /* AD MODAL - NO IFRAME, JUST COUNTDOWN + OPEN WEBSITE */
+        /* AD MODAL - IN-APP IFRAME (40 SECONDS) */
         .ad-full-container {
             background: var(--bg-primary);
             width: 100%;
-            height: 300px;
+            height: auto;
+            min-height: 120px;
             border-radius: 16px;
             overflow: hidden;
             position: relative;
@@ -1172,12 +1191,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
         }
         .ad-full-container .ad-icon {
-            font-size: 72px;
+            font-size: 36px;
             color: var(--accent);
-            margin-bottom: 16px;
+            margin-bottom: 6px;
             animation: pulse 1.5s ease-in-out infinite;
         }
         @keyframes pulse {
@@ -1192,20 +1211,20 @@
             }
         }
         .ad-full-container .ad-title {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-primary);
         }
         .ad-full-container .ad-subtitle {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
             margin-top: 4px;
         }
         .ad-full-container .ad-countdown-big {
-            font-size: 64px;
+            font-size: 42px;
             font-weight: 800;
             color: var(--accent);
-            margin-top: 12px;
+            margin-top: 6px;
         }
 
         .ad-footer {
@@ -1287,7 +1306,7 @@
             bottom: 75px;
             left: 50%;
             transform: translateX(-50%);
-            background: #ff6b00;
+            background: #7c3aed;
             color: #fff;
             padding: 4px 16px;
             border-radius: 20px;
@@ -1298,7 +1317,7 @@
             transition: opacity 0.5s;
             pointer-events: none;
             white-space: nowrap;
-            box-shadow: 0 4px 16px rgba(255, 107, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
         }
         #localModeIndicator.show {
             opacity: 0.9;
@@ -1497,7 +1516,7 @@
             <button class="close" onclick="closeModal('profileModal')">&times;</button>
             <h3><i class="fa-regular fa-user"></i> Profile</h3>
             <div class="profile-pic">
-                <img id="profileImg" src="https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72" alt="Profile" />
+                <img id="profileImg" src="https://ui-avatars.com/api/?name=User&background=7c3aed&color=fff&size=72" alt="Profile" />
                 <input type="file" id="profileUpload" accept="image/*" onchange="uploadProfileImg(event)" />
             </div>
             <label>အသုံးပြုသူအမည်</label>
@@ -1796,20 +1815,27 @@
         </div>
     </div>
 
-    <!-- ===== AD MODAL - NO IFRAME, OPEN WEBSITE ===== -->
+    <!-- ===== AD MODAL - IN-APP IFRAME (40 SECONDS) ===== -->
     <div id="adModal" class="modal">
-        <div class="modal-content" style="text-align:center; padding:0; max-width:420px; border-radius:16px; overflow:hidden;">
-            <div style="padding:12px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="margin:0; font-size:15px; color:var(--accent);">
+        <div class="modal-content" style="text-align:center; padding:0; max-width:420px; border-radius:16px; overflow:hidden; max-height:90vh;">
+            <div style="padding:10px 14px; background:var(--bg-card); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:14px; color:var(--accent);">
                     <i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...
                 </h3>
                 <button onclick="closeAdModal()" style="background:none;border:none;color:var(--text-secondary);font-size:20px;cursor:pointer;padding:4px 8px;">✕</button>
             </div>
-            <div class="ad-full-container" id="adFullContainer">
-                <div class="ad-icon"><i class="fas fa-ad"></i></div>
-                <div class="ad-title">ကြော်ငြာကိုဖွင့်နေပါသည်...</div>
-                <div class="ad-subtitle">ကျေးဇူးပြု၍ စောင့်ဆိုင်းပါ</div>
-                <div class="ad-countdown-big" id="adCountdownBig">3</div>
+            <!-- IFRAME: Ad loads here, user stays in app! -->
+            <div style="width:100%; height:280px; background:var(--bg-primary); position:relative; overflow:hidden;">
+                <iframe id="adIframe" src="about:blank" style="width:100%; height:100%; border:none;" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+                <div id="adOverlay" style="position:absolute; top:0; left:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.7); color:#fff; font-size:14px; z-index:5;">
+                    <div><i class="fas fa-spinner fa-spin" style="font-size:24px; margin-bottom:8px;"></i><br>ကြော်ငြာဖွင့်နေပါသည်...</div>
+                </div>
+            </div>
+            <div class="ad-full-container" id="adFullContainer" style="height:auto; padding:12px;">
+                <div class="ad-icon" style="font-size:36px; margin-bottom:6px;"><i class="fas fa-ad"></i></div>
+                <div class="ad-title" style="font-size:14px;">ကြော်ငြာကြည့်ရှုခြင်း</div>
+                <div class="ad-subtitle" style="font-size:12px;">ကျေးဇူးပြု၍ 40 စက္ကန့် စောင့်ဆိုင်းပါ</div>
+                <div class="ad-countdown-big" id="adCountdownBig" style="font-size:42px; margin-top:6px;">40</div>
             </div>
             <div class="ad-footer">
                 <div class="progress-container">
@@ -1817,9 +1843,9 @@
                 </div>
                 <div class="ad-actions">
                     <button class="claim-btn" id="adSkipBtn" disabled>
-                        ⏳ <span id="adCountdown">3</span> စက္ကန့်စောင့်ပါ...
+                        ⏳ <span id="adCountdown">40</span> စက္ကန့်စောင့်ပါ...
                     </button>
-                    <button class="open-btn" onclick="openAdWebsite()" title="ကြော်ငြာဖွင့်ရန်">
+                    <button class="open-btn" onclick="openAdWebsite()" title="ဘရောက်ဇာမှာ ပြန်ဖွင့်ရန်">
                         <i class="fas fa-external-link-alt"></i>
                     </button>
                     <button class="open-btn" onclick="closeAdModal()">✕</button>
@@ -2175,9 +2201,9 @@
                     title.textContent = '🔍 ရှာဖွေမှုရလဒ်များ';
                     const q = document.getElementById('searchInput').value.trim();
                     if (q) {
-                        list = [{ name: '🔍 "' + q + '" ရှာဖွေရန်', id: 'fHnXtisVCGs' }];
+                        list = [{ name: '🔍 "' + q + '" ရှာဖွေရန်', id: 'you2gfY4hGA' }];
                     } else {
-                        list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'fHnXtisVCGs' }];
+                        list = [{ name: 'သီချင်းအမည် သို့မဟုတ် ဗီဒီယိုအမည် ရိုက်ထည့်ပါ', id: 'you2gfY4hGA' }];
                     }
                     break;
                 }
@@ -2188,7 +2214,7 @@
             }
 
             if (!list || list.length === 0) {
-                list = [{ name: 'ဗီဒီယိုမရှိသေးပါ', id: 'fHnXtisVCGs' }];
+                list = [{ name: 'ဗီဒီယိုမရှိသေးပါ', id: 'you2gfY4hGA' }];
             }
 
             count.textContent = list.length;
@@ -2228,7 +2254,7 @@
         }
 
         // ============================================================
-        //  WATCH TIMER - EXACT 120 SECONDS - WORKS ON EVERY VIDEO PLAY
+        //  WATCH TIMER - EXACT 120 SECONDS
         // ============================================================
         const TARGET_WATCH = 120;
         let watchTime = 0;
@@ -2265,12 +2291,8 @@
             updateWatchTimerDisplay();
 
             watchInterval = setInterval(() => {
-                if (isAdShowing) {
-                    return;
-                }
-                if (!isVideoPlaying) {
-                    return;
-                }
+                if (isAdShowing) return;
+                if (!isVideoPlaying) return;
                 watchTime++;
                 updateWatchTimerDisplay();
 
@@ -2304,6 +2326,9 @@
         // ============================================================
         //  YOUTUBE PLAYER
         // ============================================================
+        let player = null;
+        let currentVideoId = "you2gfY4hGA";
+
         function initPlayer() {
             if (typeof YT !== 'undefined' && YT.Player) {
                 player = new YT.Player('player', {
@@ -2315,6 +2340,11 @@
                         'onReady': () => {
                             document.getElementById('videoError').style.display = 'none';
                             resetWatchTimer();
+                            if (player && player.playVideo) {
+                                setTimeout(() => {
+                                    if (player && player.playVideo) player.playVideo();
+                                }, 500);
+                            }
                         },
                         'onStateChange': onPlayerStateChange,
                         'onError': (e) => {
@@ -2342,14 +2372,30 @@
                 return;
             }
             currentVideoId = id;
-            // COMPLETE RESET when loading new video
             resetWatchTimer();
             document.getElementById('videoError').style.display = 'none';
             document.getElementById('coinPopup').style.display = 'none';
             isAdShowing = false;
             isVideoPlaying = false;
+
+            if (!player) {
+                initPlayer();
+                setTimeout(() => {
+                    if (player && player.loadVideoById) {
+                        player.loadVideoById(id);
+                        setTimeout(() => {
+                            if (player && player.playVideo) player.playVideo();
+                        }, 500);
+                    }
+                }, 1000);
+                return;
+            }
+
             if (player && player.loadVideoById) {
                 player.loadVideoById(id);
+                setTimeout(() => {
+                    if (player && player.playVideo) player.playVideo();
+                }, 800);
             }
         }
 
@@ -2378,250 +2424,1143 @@
             }
         }
 
-        // ============================================================
-        //  CLAIM COIN - 3 SECONDS AD (NO IFRAME, OPENS WEBSITE)
-        // ============================================================
-        // Updated AD LINKS as requested - 3 links rotation
-        const AD_LINKS = [
-            "https://www.profitableratecpmnetwork.com/me7qastab?key=fabc89d437efbad483c8a910118deb1e",
-            "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d",
-            "https://www.profitableratecpmnetwork.com/uw3ckb3ie?key=6710938164a4254e8236611b92be03fe"
+        // // ============================================================
+// CLAIM COIN - FULL FIXED VERSION
+// 40 SECONDS COUNTDOWN
+// SECOND / THIRD LOOP SAFE
+// ============================================================
+
+const AD_LINKS = [
+    "https://www.profitableratecpmnetwork.com/me7qastab?key=fabc89d437efbad483c8a910118deb1e",
+    "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d",
+    "https://www.profitableratecpmnetwork.com/uw3ckb3ie?key=6710938164a4254e8236611b92be03fe"
+];
+
+let adLinks =
+    JSON.parse(localStorage.getItem('adLinks')) || AD_LINKS;
+
+let adIndex =
+    parseInt(
+        localStorage.getItem('currentAdIndex'),
+        10
+    ) || 0;
+
+const AD_REWARD = 20;
+const AD_DURATION = 40;
+
+let currentAdUrl = '';
+let savedVideoTime = 0;
+
+let adCountdownInterval = null;
+let isAdClaiming = false;
+
+
+// ============================================================
+// STOP AD COUNTDOWN
+// ============================================================
+
+function stopAdCountdown() {
+
+    if (adCountdownInterval !== null) {
+
+        clearInterval(adCountdownInterval);
+
+        adCountdownInterval = null;
+
+    }
+
+}
+
+
+// ============================================================
+// CLAIM COIN
+// ============================================================
+
+function claimCoin() {
+
+    // --------------------------------------------------------
+    // Stop any previous countdown
+    // --------------------------------------------------------
+
+    stopAdCountdown();
+
+
+    // --------------------------------------------------------
+    // Prevent duplicate claim
+    // --------------------------------------------------------
+
+    if (isAdClaiming) {
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Check ad links
+    // --------------------------------------------------------
+
+    if (!adLinks || adLinks.length === 0) {
+
+        showToast(
+            '❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။',
+            'error'
+        );
+
+        const coinPopup =
+            document.getElementById('coinPopup');
+
+        if (coinPopup) {
+
+            coinPopup.style.display = 'none';
+
+        }
+
+        isAdShowing = false;
+
+        resetWatchTimer();
+
+        if (player && player.playVideo) {
+
+            setTimeout(() => {
+
+                if (player && player.playVideo) {
+
+                    player.playVideo();
+
+                }
+
+            }, 500);
+
+        }
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Prevent reward update collision
+    // --------------------------------------------------------
+
+    if (isUpdatingCoins) {
+
+        showToast(
+            '⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။',
+            'warning'
+        );
+
+        return;
+
+    }
+
+
+    // ========================================================
+    // SAVE YOUTUBE POSITION
+    // ========================================================
+
+    if (
+        player &&
+        typeof player.getCurrentTime === 'function'
+    ) {
+
+        try {
+
+            savedVideoTime =
+                player.getCurrentTime();
+
+        } catch (error) {
+
+            console.warn(
+                'Could not save video time:',
+                error
+            );
+
+            savedVideoTime = 0;
+
+        }
+
+    }
+
+
+    // ========================================================
+    // SYNC LOCAL COINS
+    // ========================================================
+
+    const localCoins =
+        getCoinsFromLocal();
+
+    if (localCoins !== null) {
+
+        userData.coins =
+            localCoins;
+
+        updateUI();
+
+    }
+
+
+    // ========================================================
+    // HIDE COIN POPUP
+    // ========================================================
+
+    const coinPopup =
+        document.getElementById('coinPopup');
+
+    if (coinPopup) {
+
+        coinPopup.style.display = 'none';
+
+    }
+
+
+    // ========================================================
+    // GET NEXT AD LINK
+    // ========================================================
+
+    currentAdUrl =
+        adLinks[
+            adIndex % adLinks.length
         ];
 
-        let adLinks = JSON.parse(localStorage.getItem('adLinks')) || AD_LINKS;
-        let adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
-        const AD_REWARD = 20;
-        let currentAdUrl = '';
+    adIndex =
+        (adIndex + 1) %
+        adLinks.length;
 
-        // ============================================================
-        //  🔥 FIX: GLOBAL SAVED VIDEO TIME
-        // ============================================================
-        let savedVideoTime = 0;   // <-- Video time သိမ်းဖို့ ဒီ Variable ကိုထည့်ထားတယ်
+    localStorage.setItem(
+        'currentAdIndex',
+        adIndex
+    );
 
-        // ============================================================
-        //  CLAIM COIN (FIXED: Save time before showing ad)
-        // ============================================================
-        function claimCoin() {
-            if (!adLinks || adLinks.length === 0) {
-                showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
-                document.getElementById('coinPopup').style.display = 'none';
-                resetWatchTimer();
-                isAdShowing = false;
-                if (player && player.playVideo) {
-                    setTimeout(() => { if (player && player.playVideo) player.playVideo(); }, 500);
-                }
-                return;
+
+    // ========================================================
+    // LOAD AD IFRAME
+    // ========================================================
+
+    const adFrame =
+        document.getElementById('adIframe');
+
+    if (adFrame) {
+
+        // Clear previous iframe first
+        adFrame.src = 'about:blank';
+
+        // Load new ad after short delay
+        setTimeout(() => {
+
+            if (adFrame) {
+
+                adFrame.src =
+                    currentAdUrl;
+
             }
 
-            if (isUpdatingCoins) {
-                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
-                return;
+        }, 50);
+
+    }
+
+
+    // ========================================================
+    // SHOW AD MODAL
+    // ========================================================
+
+    const adModal =
+        document.getElementById('adModal');
+
+    if (adModal) {
+
+        adModal.classList.add('show');
+
+    }
+
+
+    // ========================================================
+    // GET AD UI ELEMENTS
+    // ========================================================
+
+    const progressBar =
+        document.getElementById(
+            'adProgressBar'
+        );
+
+    const timerBig =
+        document.getElementById(
+            'adCountdownBig'
+        );
+
+    const skipBtn =
+        document.getElementById(
+            'adSkipBtn'
+        );
+
+    const statusText =
+        document.getElementById(
+            'adStatusText'
+        );
+
+
+    // ========================================================
+    // SAFETY CHECK
+    // ========================================================
+
+    if (
+        !progressBar ||
+        !timerBig ||
+        !skipBtn ||
+        !statusText
+    ) {
+
+        console.error(
+            '❌ Ad UI elements မတွေ့ပါ။',
+            {
+                progressBar,
+                timerBig,
+                skipBtn,
+                statusText
+            }
+        );
+
+        return;
+
+    }
+
+
+    // ========================================================
+    // CREATE A FRESH CLAIM BUTTON
+    // ========================================================
+    // This removes old click listeners and old DOM state.
+    // ========================================================
+
+    const freshSkipBtn =
+        skipBtn.cloneNode(false);
+
+    skipBtn.parentNode.replaceChild(
+        freshSkipBtn,
+        skipBtn
+    );
+
+    freshSkipBtn.id =
+        'adSkipBtn';
+
+
+    // ========================================================
+    // INITIAL BUTTON UI
+    // ========================================================
+
+    freshSkipBtn.disabled = true;
+
+    freshSkipBtn.className =
+        'claim-btn';
+
+
+    // IMPORTANT:
+    // Do NOT use id="adCountdown" here.
+    // Use a class so duplicate IDs cannot happen.
+
+    freshSkipBtn.innerHTML =
+        `⏳ <span class="ad-countdown-value">${AD_DURATION}</span> စက္ကန့်စောင့်ပါ...`;
+
+
+    // Get the CURRENT countdown element
+    const timerSmall =
+        freshSkipBtn.querySelector(
+            '.ad-countdown-value'
+        );
+
+
+    // ========================================================
+    // RESET PROGRESS
+    // ========================================================
+
+    progressBar.style.width =
+        '0%';
+
+
+    // ========================================================
+    // RESET BIG TIMER
+    // ========================================================
+
+    timerBig.textContent =
+        AD_DURATION;
+
+
+    // ========================================================
+    // RESET SMALL TIMER
+    // ========================================================
+
+    if (timerSmall) {
+
+        timerSmall.textContent =
+            AD_DURATION;
+
+    }
+
+
+    // ========================================================
+    // RESET STATUS
+    // ========================================================
+
+    statusText.textContent =
+        '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
+
+    statusText.className =
+        'status-text';
+
+
+    // ========================================================
+    // COUNTDOWN STATE
+    // ========================================================
+
+    let isClaimed = false;
+
+    const startTime =
+        Date.now();
+
+
+    // ========================================================
+    // START 40 SECOND COUNTDOWN
+    // ========================================================
+
+    adCountdownInterval =
+        setInterval(() => {
+
+            // ------------------------------------------------
+            // Calculate actual elapsed seconds
+            // ------------------------------------------------
+
+            const elapsed =
+                Math.floor(
+                    (
+                        Date.now() -
+                        startTime
+                    ) / 1000
+                );
+
+
+            // ------------------------------------------------
+            // Remaining time
+            // ------------------------------------------------
+
+            const timeLeft =
+                Math.max(
+                    AD_DURATION -
+                    elapsed,
+                    0
+                );
+
+
+            // ------------------------------------------------
+            // Progress percentage
+            // ------------------------------------------------
+
+            const progressPercent =
+                Math.min(
+                    (
+                        elapsed /
+                        AD_DURATION
+                    ) * 100,
+                    100
+                );
+
+
+            // ------------------------------------------------
+            // Update progress bar
+            // ------------------------------------------------
+
+            progressBar.style.width =
+                progressPercent + '%';
+
+
+            // ------------------------------------------------
+            // Update BIG timer
+            // ------------------------------------------------
+
+            timerBig.textContent =
+                timeLeft;
+
+
+            // ------------------------------------------------
+            // Update SMALL timer
+            // ------------------------------------------------
+
+            if (timerSmall) {
+
+                timerSmall.textContent =
+                    timeLeft;
+
             }
 
-            // 🔥 FIX: Video ရဲ့ လက်ရှိအချိန်ကို သိမ်းမယ်
-            if (player && player.getCurrentTime) {
-                savedVideoTime = player.getCurrentTime();
-                console.log('⏱️ Saved video time:', savedVideoTime);
-            }
 
-            const localCoins = getCoinsFromLocal();
-            if (localCoins !== null) {
-                userData.coins = localCoins;
-                updateUI();
-            }
+            // =================================================
+            // 40 SECONDS COMPLETE
+            // =================================================
 
-            document.getElementById('coinPopup').style.display = 'none';
-            document.getElementById('adModal').classList.add('show');
+            if (timeLeft <= 0) {
 
-            currentAdUrl = adLinks[adIndex % adLinks.length];
+                stopAdCountdown();
 
-            const progressBar = document.getElementById('adProgressBar');
-            const timerEl = document.getElementById('adCountdown');
-            const timerBig = document.getElementById('adCountdownBig');
-            const skipBtn = document.getElementById('adSkipBtn');
-            const statusText = document.getElementById('adStatusText');
 
-            // Reset
-            progressBar.style.width = '0%';
-            timerEl.textContent = '3';
-            timerBig.textContent = '3';
-            skipBtn.disabled = true;
-            skipBtn.innerHTML = '⏳ <span id="adCountdown">3</span> စက္ကန့်စောင့်ပါ...';
-            skipBtn.className = 'claim-btn';
-            skipBtn.onclick = null;
-            statusText.textContent = '⏳ ကြော်ငြာကြည့်ရှုနေပါသည်...';
-            statusText.className = 'status-text';
+                // ---------------------------------------------
+                // Complete progress
+                // ---------------------------------------------
 
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-                window._adCountdownInterval = null;
-            }
+                progressBar.style.width =
+                    '100%';
 
-            // Open the ad website immediately
-            openAdWebsite();
 
-            let timeLeft = 3;
-            timerEl.textContent = timeLeft;
-            timerBig.textContent = timeLeft;
-            progressBar.style.width = '0%';
+                // ---------------------------------------------
+                // Enable claim button
+                // ---------------------------------------------
 
-            window._adCountdownInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.textContent = timeLeft;
-                timerBig.textContent = timeLeft;
-                progressBar.style.width = ((3 - timeLeft) / 3 * 100) + '%';
+                freshSkipBtn.disabled =
+                    false;
 
-                if (timeLeft <= 0) {
-                    clearInterval(window._adCountdownInterval);
-                    window._adCountdownInterval = null;
-                    skipBtn.disabled = false;
-                    skipBtn.innerHTML = '✅ 20 Coins ရယူမည်';
-                    skipBtn.className = 'claim-btn active';
-                    skipBtn.onclick = closeAdAndClaim;
-                    progressBar.style.width = '100%';
-                    statusText.textContent = '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
-                    statusText.className = 'status-text done';
-                }
-            }, 1000);
-        }
+                freshSkipBtn.className =
+                    'claim-btn active';
 
-        function openAdWebsite() {
-            if (currentAdUrl) {
-                try {
-                    const popup = window.open(
-                        currentAdUrl,
-                        'adPopup',
-                        'width=420,height=620,scrollbars=yes,resizable=no,menubar=no,toolbar=no,location=no,status=no'
-                    );
-                    if (popup) popup.focus();
-                    else window.open(currentAdUrl, '_blank');
-                } catch (e) {
-                    window.open(currentAdUrl, '_blank');
-                }
-            }
-        }
+                freshSkipBtn.innerHTML =
+                    '✅ 20 Coins ရယူမည်';
 
-        // ============================================================
-        //  GIVE AD REWARD (FIXED: Use seekTo instead of loadVideo)
-        // ============================================================
-        async function giveAdReward(reward) {
-            if (!currentUser) {
-                showToast('❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။', 'error');
-                return;
-            }
-            if (isUpdatingCoins) {
-                showToast('⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။', 'warning');
-                return;
-            }
 
-            try {
-                isUpdatingCoins = true;
-                const currentCoins = userData.coins || 0;
-                const newCoins = currentCoins + reward;
-                userData.coins = newCoins;
-                saveCoinsToLocal(newCoins);
-                updateUI();
+                // ---------------------------------------------
+                // Completed status
+                // ---------------------------------------------
 
-                try {
-                    const userRef = db.collection('users').doc(currentUser.uid);
-                    await userRef.update({
-                        coins: firebase.firestore.FieldValue.increment(reward)
-                    });
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'ad_watch',
-                        amount: reward,
-                        description: 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins)',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ!');
-                } catch (firestoreError) {
-                    console.error('Firestore error, saving locally:', firestoreError);
-                    saveTransactionLocal('ad_watch', reward, 'ကြော်ငြာကြည့်ရှုခြင်း (' + reward + ' Coins) [Local]');
-                    showToast('✅ +' + reward + ' Coins ရရှိပါပြီ! (Local Save)', 'success');
-                    showLocalModeIndicator(true);
-                    usingLocalData = true;
-                }
+                statusText.textContent =
+                    '✅ ကြော်ငြာကြည့်ရှုပြီးပါပြီ!';
 
-                // Reset and reload video to restart timer
-                isAdShowing = false;
-                isVideoPlaying = false;
-                resetWatchTimer();
+                statusText.className =
+                    'status-text done';
 
-                // ========== 🔥 FIX: loadVideo ကိုဖျက်၊ seekTo ကိုသုံး ==========
-                if (player && player.seekTo && savedVideoTime !== undefined) {
-                    console.log('⏩ Seeking to saved time:', savedVideoTime);
-                    player.seekTo(savedVideoTime, true);
-                    setTimeout(() => {
-                        if (player && player.playVideo) {
-                            player.playVideo();
-                            setTimeout(() => {
-                                if (player && player.getPlayerState && player.getPlayerState() === YT.PlayerState
-                                    .PLAYING) {
-                                    startWatchTimer();
-                                }
-                            }, 500);
+
+                // =============================================
+                // CLAIM BUTTON EVENT
+                // =============================================
+
+                const handleClaimClick =
+                    function (event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        if (isClaimed) {
+
+                            return;
+
                         }
-                    }, 300);
-                } else if (currentVideoId && player && player.loadVideoById) {
-                    // Fallback to loadVideo if seek fails (မဖြစ်သင့်ပေမယ့် အာမခံထားတယ်)
-                    console.warn('⚠️ seekTo failed, falling back to loadVideo');
-                    player.loadVideoById(currentVideoId);
-                    setTimeout(() => {
-                        if (player && player.playVideo) player.playVideo();
-                    }, 500);
-                } else {
-                    if (player && player.playVideo) {
-                        setTimeout(() => { if (player && player.playVideo) player.playVideo(); }, 800);
+
+
+                        isClaimed = true;
+
+
+                        // Disable immediately
+                        // to prevent double click
+
+                        freshSkipBtn.disabled =
+                            true;
+
+                        freshSkipBtn.innerHTML =
+                            '⏳ Coin ထည့်ပေးနေပါသည်...';
+
+
+                        // Give reward
+
+                        closeAdAndClaim();
+
+                    };
+
+
+                freshSkipBtn.addEventListener(
+                    'click',
+                    handleClaimClick,
+                    {
+                        once: true
                     }
+                );
+
+            }
+
+        }, 250);
+
+}
+
+
+// ============================================================
+// OPEN AD WEBSITE
+// ============================================================
+
+function openAdWebsite() {
+
+    if (currentAdUrl) {
+
+        window.open(
+            currentAdUrl,
+            '_blank'
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// GIVE AD REWARD
+// ============================================================
+
+async function giveAdReward(reward) {
+
+    // --------------------------------------------------------
+    // Check login
+    // --------------------------------------------------------
+
+    if (!currentUser) {
+
+        showToast(
+            '❌ ကျေးဇူးပြု၍ အကောင့်ဝင်ပါ။',
+            'error'
+        );
+
+        isAdClaiming = false;
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Prevent duplicate update
+    // --------------------------------------------------------
+
+    if (isUpdatingCoins) {
+
+        showToast(
+            '⏳ ကြော်ငြာပေါင်းနေပါသည်။ ခဏစောင့်ပါ။',
+            'warning'
+        );
+
+        isAdClaiming = false;
+
+        return;
+
+    }
+
+
+    try {
+
+        isUpdatingCoins = true;
+
+
+        // ====================================================
+        // UPDATE LOCAL COINS
+        // ====================================================
+
+        const currentCoins =
+            userData.coins || 0;
+
+        const newCoins =
+            currentCoins + reward;
+
+        userData.coins =
+            newCoins;
+
+        saveCoinsToLocal(
+            newCoins
+        );
+
+        updateUI();
+
+
+        // ====================================================
+        // FIREBASE UPDATE
+        // ====================================================
+
+        try {
+
+            const userRef =
+                db.collection('users')
+                  .doc(currentUser.uid);
+
+
+            await userRef.update({
+
+                coins:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(reward)
+
+            });
+
+
+            // ------------------------------------------------
+            // Transaction record
+            // ------------------------------------------------
+
+            await db
+                .collection('transactions')
+                .add({
+
+                    userId:
+                        currentUser.uid,
+
+                    type:
+                        'ad_watch',
+
+                    amount:
+                        reward,
+
+                    description:
+                        'ကြော်ငြာကြည့်ရှုခြင်း (' +
+                        reward +
+                        ' Coins)',
+
+                    timestamp:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+
+            showToast(
+                '✅ +' +
+                reward +
+                ' Coins ရရှိပါပြီ!'
+            );
+
+        } catch (firestoreError) {
+
+            console.error(
+                'Firestore error, saving locally:',
+                firestoreError
+            );
+
+
+            // ------------------------------------------------
+            // Local transaction fallback
+            // ------------------------------------------------
+
+            saveTransactionLocal(
+                'ad_watch',
+                reward,
+                'ကြော်ငြာကြည့်ရှုခြင်း (' +
+                reward +
+                ' Coins) [Local]'
+            );
+
+
+            showToast(
+                '✅ +' +
+                reward +
+                ' Coins ရရှိပါပြီ! (Local Save)',
+                'success'
+            );
+
+
+            showLocalModeIndicator(
+                true
+            );
+
+            usingLocalData =
+                true;
+
+        }
+
+
+        // ====================================================
+        // RESET AD STATE
+        // ====================================================
+
+        isAdShowing = false;
+
+        isVideoPlaying = false;
+
+        resetWatchTimer();
+
+
+        // ====================================================
+        // CLEAR AD IFRAME
+        // ====================================================
+
+        const adFrame =
+            document.getElementById(
+                'adIframe'
+            );
+
+        if (adFrame) {
+
+            adFrame.src =
+                'about:blank';
+
+        }
+
+
+        // ====================================================
+        // RESUME YOUTUBE VIDEO
+        // ====================================================
+
+        if (
+            player &&
+            typeof player.seekTo === 'function' &&
+            savedVideoTime !== undefined
+        ) {
+
+            // -----------------------------------------------
+            // Return to saved position
+            // -----------------------------------------------
+
+            player.seekTo(
+                savedVideoTime,
+                true
+            );
+
+
+            setTimeout(() => {
+
+                if (
+                    player &&
+                    typeof player.playVideo ===
+                    'function'
+                ) {
+
+                    player.playVideo();
+
+
+                    setTimeout(() => {
+
+                        if (!isAdShowing) {
+
+                            startWatchTimer();
+
+                        }
+
+                    }, 500);
+
+                } else {
+
+                    if (!isAdShowing) {
+
+                        startWatchTimer();
+
+                    }
+
                 }
 
-            } catch (error) {
-                console.error('Ad reward error:', error);
-                showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
-                isAdShowing = false;
-                isVideoPlaying = false;
-                resetWatchTimer();
-            } finally {
+            }, 300);
+
+        } else if (
+            currentVideoId &&
+            player &&
+            typeof player.loadVideoById ===
+            'function'
+        ) {
+
+            // -----------------------------------------------
+            // Reload current video if needed
+            // -----------------------------------------------
+
+            player.loadVideoById(
+                currentVideoId
+            );
+
+
+            setTimeout(() => {
+
+                if (
+                    player &&
+                    typeof player.playVideo ===
+                    'function'
+                ) {
+
+                    player.playVideo();
+
+                }
+
+
                 setTimeout(() => {
-                    isUpdatingCoins = false;
-                    syncLocalTransactions();
-                }, 2000);
-            }
-        }
 
-        function closeAdAndClaim() {
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-                window._adCountdownInterval = null;
-            }
-            document.getElementById('adModal').classList.remove('show');
+                    if (!isAdShowing) {
 
-            if (adLinks && adLinks.length > 0) {
-                adIndex = (adIndex + 1) % adLinks.length;
-                localStorage.setItem('currentAdIndex', adIndex);
-            }
-            isAdShowing = false;
-            giveAdReward(AD_REWARD);
-        }
+                        startWatchTimer();
 
-        function closeAdModal() {
-            if (window._adCountdownInterval) {
-                clearInterval(window._adCountdownInterval);
-                window._adCountdownInterval = null;
-            }
-            document.getElementById('adModal').classList.remove('show');
-            document.getElementById('coinPopup').style.display = 'none';
-            isAdShowing = false;
-            isVideoPlaying = false;
-            resetWatchTimer();
-            if (player && player.playVideo) {
-                setTimeout(() => {
-                    if (player && player.playVideo) player.playVideo();
+                    }
+
                 }, 500);
+
+            }, 500);
+
+        } else {
+
+            // -----------------------------------------------
+            // Fallback resume
+            // -----------------------------------------------
+
+            if (
+                player &&
+                typeof player.playVideo ===
+                'function'
+            ) {
+
+                setTimeout(() => {
+
+                    if (
+                        player &&
+                        typeof player.playVideo ===
+                        'function'
+                    ) {
+
+                        player.playVideo();
+
+                    }
+
+
+                    setTimeout(() => {
+
+                        if (!isAdShowing) {
+
+                            startWatchTimer();
+
+                        }
+
+                    }, 500);
+
+                }, 800);
+
             }
+
         }
 
+    } catch (error) {
+
+        console.error(
+            'Ad reward error:',
+            error
+        );
+
+
+        showToast(
+            '❌ Coin ပေါင်းမအောင်မြင်ပါ။',
+            'error'
+        );
+
+
+        isAdShowing = false;
+
+        isVideoPlaying = false;
+
+        resetWatchTimer();
+
+    } finally {
+
+        // ----------------------------------------------------
+        // Unlock coin update
+        // ----------------------------------------------------
+
+        setTimeout(() => {
+
+            isUpdatingCoins =
+                false;
+
+            syncLocalTransactions();
+
+        }, 2000);
+
+
+        // ----------------------------------------------------
+        // Unlock ad claim
+        // ----------------------------------------------------
+
+        setTimeout(() => {
+
+            isAdClaiming =
+                false;
+
+        }, 1500);
+
+    }
+
+}
+
+
+// ============================================================
+// CLOSE AD AND CLAIM REWARD
+// ============================================================
+
+function closeAdAndClaim() {
+
+    // --------------------------------------------------------
+    // Stop countdown
+    // --------------------------------------------------------
+
+    stopAdCountdown();
+
+
+    // --------------------------------------------------------
+    // Close modal
+    // --------------------------------------------------------
+
+    const adModal =
+        document.getElementById(
+            'adModal'
+        );
+
+    if (adModal) {
+
+        adModal.classList.remove(
+            'show'
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Clear iframe
+    // --------------------------------------------------------
+
+    const adFrame =
+        document.getElementById(
+            'adIframe'
+        );
+
+    if (adFrame) {
+
+        adFrame.src =
+            'about:blank';
+
+    }
+
+
+    // --------------------------------------------------------
+    // Set claim state
+    // --------------------------------------------------------
+
+    isAdShowing = false;
+
+    isAdClaiming = true;
+
+
+    // --------------------------------------------------------
+    // Give 20 coins
+    // --------------------------------------------------------
+
+    giveAdReward(
+        AD_REWARD
+    );
+
+}
+
+
+// ============================================================
+// CLOSE AD WITHOUT CLAIMING
+// ============================================================
+
+function closeAdModal() {
+
+    // --------------------------------------------------------
+    // Stop countdown
+    // --------------------------------------------------------
+
+    stopAdCountdown();
+
+
+    // --------------------------------------------------------
+    // Close modal
+    // --------------------------------------------------------
+
+    const adModal =
+        document.getElementById(
+            'adModal'
+        );
+
+    if (adModal) {
+
+        adModal.classList.remove(
+            'show'
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Hide coin popup
+    // --------------------------------------------------------
+
+    const coinPopup =
+        document.getElementById(
+            'coinPopup'
+        );
+
+    if (coinPopup) {
+
+        coinPopup.style.display =
+            'none';
+
+    }
+
+
+    // --------------------------------------------------------
+    // Clear iframe
+    // --------------------------------------------------------
+
+    const adFrame =
+        document.getElementById(
+            'adIframe'
+        );
+
+    if (adFrame) {
+
+        adFrame.src =
+            'about:blank';
+
+    }
+
+
+    // --------------------------------------------------------
+    // Reset states
+    // --------------------------------------------------------
+
+    isAdShowing = false;
+
+    isVideoPlaying = false;
+
+    isAdClaiming = false;
+
+
+    // --------------------------------------------------------
+    // Reset watch timer
+    // --------------------------------------------------------
+
+    resetWatchTimer();
+
+
+    // --------------------------------------------------------
+    // Resume YouTube
+    // --------------------------------------------------------
+
+    if (
+        player &&
+        typeof player.playVideo ===
+        'function'
+    ) {
+
+        setTimeout(() => {
+
+            if (
+                player &&
+                typeof player.playVideo ===
+                'function'
+            ) {
+
+                player.playVideo();
+
+            }
+
+        }, 500);
+
+    }
+
+}
         // ============================================================
         //  YOUTUBE SEARCH
         // ============================================================
@@ -2679,7 +3618,7 @@
                         const thumb = item.thumbnail || 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
                         card.innerHTML =
                             `<img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x70?text=No+Image'" />
-                                 <div class="title">${item.name}</div>`;
+                                     <div class="title">${item.name}</div>`;
                         card.onclick = () => { loadVideo(item.id);
                             resetWatchTimer(); };
                         container.appendChild(card);
@@ -2718,19 +3657,15 @@
         ];
         let appIndex = parseInt(localStorage.getItem('currentAppIndex')) || 0;
 
-        // Use updated AD_LINKS
         adLinks = JSON.parse(localStorage.getItem('adLinks')) || AD_LINKS;
         adIndex = parseInt(localStorage.getItem('currentAdIndex')) || 0;
-        const AD_REWARD_CONST = 20;
 
         const GIFT_FEE = 20;
 
         let isWithdrawOpen = localStorage.getItem('isWithdrawOpen') === 'true';
         let withdrawDate = localStorage.getItem('withdrawDate') || '';
 
-        let player = null;
         let currentCategory = 'myvideo';
-        let currentVideoId = "fHnXtisVCGs";
 
         const ADMIN_IDS = ["2021666", "7625227853"];
 
@@ -3080,7 +4015,7 @@
             document.getElementById('marketUsdt').textContent = '$' + usdt.toFixed(2);
             document.getElementById('exchangeCoins').textContent = coins;
 
-            const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(username) + '&background=d32f2f&color=fff&size=72';
+            const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(username) + '&background=7c3aed&color=fff&size=72';
             document.getElementById('profileImg').src = localStorage.getItem('profileImg') || avatar;
 
             updateWithdrawUI();
@@ -3103,12 +4038,11 @@
         }
 
         // ============================================================
-        //  DAILY BONUS - 3 TYPES - ONE TIME PER DAY EACH
+        //  DAILY BONUS - 3 TYPES
         // ============================================================
         function updateDailyBonusUI() {
             const today = new Date().toDateString();
 
-            // Bonus 1: Daily Claim 100 Coins
             const last1 = localStorage.getItem('lastDailyBonus1Date') || '';
             const btn1 = document.getElementById('dailyBonus1Btn');
             const status1 = document.getElementById('dailyBonus1Status');
@@ -3124,7 +4058,6 @@
                 status1.style.color = 'var(--text-muted)';
             }
 
-            // Bonus 2: Download App 1 300 Coins
             const last2 = localStorage.getItem('lastDailyBonus2Date') || '';
             const btn2 = document.getElementById('dailyBonus2Btn');
             const status2 = document.getElementById('dailyBonus2Status');
@@ -3140,7 +4073,6 @@
                 status2.style.color = 'var(--text-muted)';
             }
 
-            // Bonus 3: Download App 2 300 Coins
             const last3 = localStorage.getItem('lastDailyBonus3Date') || '';
             const btn3 = document.getElementById('dailyBonus3Btn');
             const status3 = document.getElementById('dailyBonus3Status');
@@ -3157,7 +4089,6 @@
             }
         }
 
-        // Bonus 1: Daily Claim 100 Coins
         async function claimDailyBonus1() {
             const today = new Date().toDateString();
             const last = localStorage.getItem('lastDailyBonus1Date') || '';
@@ -3207,7 +4138,6 @@
             }
         }
 
-        // Bonus 2: Download App 1 - 300 Coins
         async function claimDailyBonus2() {
             const today = new Date().toDateString();
             const last = localStorage.getItem('lastDailyBonus2Date') || '';
@@ -3271,7 +4201,6 @@
             }
         }
 
-        // Bonus 3: Download App 2 - 300 Coins
         async function claimDailyBonus3() {
             const today = new Date().toDateString();
             const last = localStorage.getItem('lastDailyBonus3Date') || '';
@@ -3624,17 +4553,17 @@
                     const localTag = item.source === 'local' && !item.synced ? ' 🔄' : '';
 
                     html += `
-                            <div class="transaction-item">
-                                <div class="left">
-                                    <div class="type">${type.icon} ${type.label}${localTag}</div>
-                                    <div class="detail">${item.description || ''}</div>
-                                    <div class="date">${time}</div>
+                                <div class="transaction-item">
+                                    <div class="left">
+                                        <div class="type">${type.icon} ${type.label}${localTag}</div>
+                                        <div class="detail">${item.description || ''}</div>
+                                        <div class="date">${time}</div>
+                                    </div>
+                                    <div class="right ${isPositive ? 'positive' : 'negative'}">
+                                        ${sign}${amount}
+                                    </div>
                                 </div>
-                                <div class="right ${isPositive ? 'positive' : 'negative'}">
-                                    ${sign}${amount}
-                                </div>
-                            </div>
-                        `;
+                            `;
                 });
 
                 container.innerHTML = html;
@@ -3786,21 +4715,21 @@
                     const time = d.requestedAt ? new Date(d.requestedAt.seconds * 1000).toLocaleString() : 'N/A';
 
                     html += `
-                            <tr>
-                                <td><strong>${d.username || 'User'}</strong><br><span style="font-size:9px;color:var(--text-muted);">${d.email || ''}</span></td>
-                                <td><strong>$${d.amount.toFixed(2)}</strong></td>
-                                <td class="${statusClass}">${statusText}</td>
-                                <td style="font-size:10px;color:var(--text-muted);">${time}</td>
-                                <td>
-                                    ${d.status === 'pending' ? `
-                                        <button class="btn-sm green" onclick="approveWithdraw('${doc.id}', ${d.amount})" style="margin-right:4px;">Approve</button>
-                                        <button class="btn-sm red" onclick="rejectWithdraw('${doc.id}')">Reject</button>
-                                    ` : `
-                                        <span style="font-size:10px;color:var(--text-muted);">Done</span>
-                                    `}
-                                </td>
-                            </tr>
-                        `;
+                                <tr>
+                                    <td><strong>${d.username || 'User'}</strong><br><span style="font-size:9px;color:var(--text-muted);">${d.email || ''}</span></td>
+                                    <td><strong>$${d.amount.toFixed(2)}</strong></td>
+                                    <td class="${statusClass}">${statusText}</td>
+                                    <td style="font-size:10px;color:var(--text-muted);">${time}</td>
+                                    <td>
+                                        ${d.status === 'pending' ? `
+                                            <button class="btn-sm green" onclick="approveWithdraw('${doc.id}', ${d.amount})" style="margin-right:4px;">Approve</button>
+                                            <button class="btn-sm red" onclick="rejectWithdraw('${doc.id}')">Reject</button>
+                                        ` : `
+                                            <span style="font-size:10px;color:var(--text-muted);">Done</span>
+                                        `}
+                                    </td>
+                                </tr>
+                            `;
                 });
                 tbody.innerHTML = html;
                 updateWithdrawBadge();
@@ -3877,7 +4806,6 @@
             try {
                 const snapshot = await db.collection('users')
                     .orderBy('createdAt', 'desc')
-                    .limit(100)
                     .get();
                 if (snapshot.empty) {
                     table.innerHTML =
@@ -3918,33 +4846,33 @@
                     }
 
                     html += `
-                            <tr>
-                                <td>
-                                    <strong>${data.username || 'User'}</strong>
-                                    ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
-                                    ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
-                                    <br>
-                                    <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
-                                </td>
-                                <td><strong>${data.coins || 0}</strong></td>
-                                <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
-                                <td>${statusHtml}</td>
-                                <td style="font-size:10px;color:var(--text-muted);">${lastActiveStr}</td>
-                                <td>
-                                    <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
-                                        ${!isAdminUser ? `
-                                            <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
-                                                    onclick="toggleBan('${userId}')" 
-                                                    style="width:100%;">
-                                                ${data.isBanned ? 'Unban' : 'Ban'}
-                                            </button>
-                                        ` : `
-                                            <span style="font-size:9px;color:var(--text-muted);">Admin</span>
-                                        `}
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
+                                <tr>
+                                    <td>
+                                        <strong>${data.username || 'User'}</strong>
+                                        ${isCurrentUser ? ' <span style="font-size:8px;color:#4caf50;">(You)</span>' : ''}
+                                        ${isAdminUser ? ' <span style="font-size:8px;color:#ffa726;">(Admin)</span>' : ''}
+                                        <br>
+                                        <span style="font-size:9px;color:var(--text-muted);">${data.email || ''}</span>
+                                    </td>
+                                    <td><strong>${data.coins || 0}</strong></td>
+                                    <td><strong>${(data.usdt || 0).toFixed(2)}</strong></td>
+                                    <td>${statusHtml}</td>
+                                    <td style="font-size:10px;color:var(--text-muted);">${lastActiveStr}</td>
+                                    <td>
+                                        <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+                                            ${!isAdminUser ? `
+                                                <button class="btn-sm ${data.isBanned ? 'green' : 'red'}" 
+                                                        onclick="toggleBan('${userId}')" 
+                                                        style="width:100%;">
+                                                    ${data.isBanned ? 'Unban' : 'Ban'}
+                                                </button>
+                                            ` : `
+                                                <span style="font-size:9px;color:var(--text-muted);">Admin</span>
+                                            `}
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
                 });
                 table.innerHTML = html;
             } catch (error) {
@@ -4053,11 +4981,11 @@
             links.forEach((link, index) => {
                 const displayLink = link.length > 40 ? link.substring(0, 40) + '...' : link;
                 html += `
-                        <tr>
-                            <td class="ad-link-cell"><a href="${link}" target="_blank">${displayLink}</a></td>
-                            <td><button class="btn-sm red" onclick="adminRemoveAppLink(${index})" style="padding:4px 10px;font-size:9px;"><i class="fas fa-trash"></i> ဖျက်</button></td>
-                        </tr>
-                    `;
+                            <tr>
+                                <td class="ad-link-cell"><a href="${link}" target="_blank">${displayLink}</a></td>
+                                <td><button class="btn-sm red" onclick="adminRemoveAppLink(${index})" style="padding:4px 10px;font-size:9px;"><i class="fas fa-trash"></i> ဖျက်</button></td>
+                            </tr>
+                        `;
             });
             tbody.innerHTML = html;
         }
@@ -4100,11 +5028,11 @@
             links.forEach((link, index) => {
                 const displayLink = link.length > 40 ? link.substring(0, 40) + '...' : link;
                 html += `
-                        <tr>
-                            <td class="ad-link-cell"><a href="${link}" target="_blank">${displayLink}</a></td>
-                            <td><button class="btn-sm red" onclick="adminRemoveAdLink(${index})" style="padding:4px 10px;font-size:9px;"><i class="fas fa-trash"></i> ဖျက်</button></td>
-                        </tr>
-                    `;
+                            <tr>
+                                <td class="ad-link-cell"><a href="${link}" target="_blank">${displayLink}</a></td>
+                                <td><button class="btn-sm red" onclick="adminRemoveAdLink(${index})" style="padding:4px 10px;font-size:9px;"><i class="fas fa-trash"></i> ဖျက်</button></td>
+                            </tr>
+                        `;
             });
             tbody.innerHTML = html;
         }
@@ -4278,29 +5206,15 @@
         updateUI();
         updateWithdrawBadge();
         document.getElementById('profileImg').src = localStorage.getItem('profileImg') ||
-            'https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&size=72';
+            'https://ui-avatars.com/api/?name=User&background=7c3aed&color=fff&size=72';
         updateDailyBonusUI();
         resetWatchTimer();
         isAdShowing = false;
         isVideoPlaying = false;
 
         console.log('✅ App initialized successfully!');
-        console.log('📹 Video Management: LOCAL ONLY (Shared with all users)');
-        console.log('💾 Local Storage: Coin & Video data stored locally');
-        console.log('🔥 Firebase: Auth, Coins, USDT, Exchange Rate only');
-        console.log('🔄 Sync: Firestore sync when online');
-        console.log('🎬 Video Watch: 2 min watch → Ad → 20 Coins (FIXED: Video does not restart)');
-        console.log('📅 Daily Bonus: 3 types - each one time per day');
-        console.log('   1️⃣ Daily Claim: 100 Coins');
-        console.log('   2️⃣ Download App 1: 300 Coins');
-        console.log('   3️⃣ Download App 2: 300 Coins');
-        console.log('⏱️ Watch Timer: EXACT 120 seconds (2 minutes) with complete reset');
-        console.log('🔄 FIXED: Timer restarts after coin claim using seekTo instead of loadVideo');
-        console.log('🌐 Ad: Opens website in new tab/popup - 3 seconds wait then claim');
-        console.log('✅ Loop: Watch 2 min → Ad 3 sec → Claim 20 Coins → Watch 2 min again (smooth continue)');
-        console.log('📌 AD LINKS UPDATED with 3 new links (rotating)');
-        console.log('📌 Timer shows on every video play and card click');
+        console.log('🔥 FIXED: Ad countdown now works perfectly on every loop (no stuck at 0)');
+        console.log('🔥 FIX: Global adCountdownInterval variable to prevent multiple intervals');
     </script>
 </body>
 </html>
-
