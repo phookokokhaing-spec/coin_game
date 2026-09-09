@@ -2061,7 +2061,7 @@ const MYANMAR_MOVIES = [
     { name: "ပန်းနုရောင် (ဟာသကား) မြင့်မြတ်", id: "Gv7eXtFzP8w" },
     { name: "ကျွန်တော်မုန်းသောအမျိုးသမီး (မြင့်မြတ်)", id: "uw5tQnBzHDE" },
     { name: "လေပြည်နမ်းတိုင်းအချစ်ပန်းပွင့်စေ (မြင့်မြတ်)", id: "ovl5VfEaW6M" },
-    
+
     // အခြားနာမည်ကျော် မြန်မာဇာတ်ကားများ
     { name: "ဝတစ်ထောင်သိန်းမောင် (စ/ဆုံး)", id: "you2gfY4hGA" },
     { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မောင်မောင်တာနောယက္ခ", id: "B-RUIXjbodQ" },
@@ -2083,7 +2083,7 @@ const MYANMAR_MOVIES = [
     { name: "#မြန်မာဇာတ်ကား စ/ဆုံး သံမဏိသစ္စာဓား", id: "mVjwRVXLqNc" },
     { name: "'တိုက်မောင်းကို မိုက်ကြောင်း မပြောနဲ့' အပိုင်း(၁)", id: "y5owcs7CyVM" },
     { name: "#မြန်မာဇာတ်ကား စ/ဆုံး အချစ်ကြမ်းကြမ်းအလွမ်းဝေးဝေး", id: "msFM4TIkfnI" },
-    
+
     // နောက်ထပ် ဗီဒီယိုအသစ်များ
     { name: "ဗီဒီယို အသစ် 1", id: "EsQubSzRbRk" },
     { name: "ဗီဒီယို အသစ် 2", id: "pey2PW6_1hs" },
@@ -2095,7 +2095,23 @@ const MYANMAR_MOVIES = [
     { name: "ဗီဒီယို အသစ် 8", id: "QXsFGBkso6o" },
     { name: "ဗီဒီယို အသစ် 9", id: "cXJgfkSF7bg" },
     { name: "ဗီဒီယို အသစ် 10", id: "yy9LXZc3oBA" },
-    { name: "ဗီဒီယို အသစ် 11", id: "kwj4T7_2uxw" }
+    { name: "ဗီဒီယို အသစ် 11", id: "kwj4T7_2uxw" },
+
+    // ============================================================
+    // YouTube Video အသစ်များ
+    // ============================================================
+    { name: "Episode 01", id: "HjsqLvxXqIQ" },
+    { name: "Episode 02", id: "o-BM_i64_rE" },
+    { name: "Episode 03", id: "xWfsW1qL1M8" },
+    { name: "Episode 04", id: "LFNZWGpSYXY" },
+    { name: "Episode 05", id: "zhhybIoNzEM" },
+    { name: "Episode 06", id: "RcggsacqO7g" },
+    { name: "Episode 07", id: "CDZGMij87OI" },
+    { name: "Episode 08", id: "oqJCXJXTHOI" },
+    { name: "Episode 09", id: "vajHPg9aITA" },
+    { name: "Episode 10", id: "dnjqJYSPKaI" },
+    { name: "Episode 11", id: "mZ-_CAwQ4eY" },
+    { name: "Episode 12", id: "JYNyQcblzgI" }
 ];
 
 // ============================================================
@@ -2103,13 +2119,15 @@ const MYANMAR_MOVIES = [
 // ============================================================
 function getDefaultMyVideos() {
     const stored = localStorage.getItem('videos_myvideo');
+
     if (stored) { 
         try { 
             const v = JSON.parse(stored); 
             if (v && v.length > 0) return v; 
         } catch (e) {} 
     }
-    return MYANMAR_MOVIES; // NAY_HTOO_VIDEOS ကိုဖယ်ရှားပြီး MYANMAR_MOVIES ကိုသုံးပါ
+
+    return MYANMAR_MOVIES;
 }
 
 const defaultSongList = [
@@ -2132,27 +2150,36 @@ const defaultCartoonList = [
 function getVideosFromLocal(category) {
     const key = 'videos_' + category;
     const stored = localStorage.getItem(key);
+
     if (stored) { 
         try { 
             return JSON.parse(stored); 
         } catch (e) {} 
     }
+
     switch (category) {
         case 'myvideo':
             return getDefaultMyVideos();
+
         case 'song':
             return defaultSongList;
+
         case 'video':
             return defaultVideoList;
+
         case 'cartoon':
             return defaultCartoonList;
+
         default:
             return getDefaultMyVideos();
     }
 }
 
 function saveVideosToLocal(category, videos) {
-    localStorage.setItem('videos_' + category, JSON.stringify(videos));
+    localStorage.setItem(
+        'videos_' + category,
+        JSON.stringify(videos)
+    );
 }
 
         function adminAddVideoLocal() {
