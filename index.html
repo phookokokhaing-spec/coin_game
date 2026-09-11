@@ -416,21 +416,11 @@
         .ad-link-cell a { color: var(--accent); text-decoration: none; }
         .ad-link-cell a:hover { text-decoration: underline; }
 
-        .ad-progress-container {
-            width: 100%; height: 4px; background: var(--border-color);
-            border-radius: 4px; margin-top: 8px; overflow: hidden;
-        }
-        .ad-progress-bar { height: 100%; background: var(--accent); width: 0%; border-radius: 4px; transition: width 0.3s ease; }
-
         .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
         .status-dot.online { background: #4caf50; box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); }
         .status-dot.offline { background: #ff5252; box-shadow: 0 0 8px rgba(255, 82, 82, 0.3); }
 
-        #adIframe { width: 100%; height: 100%; border: none; background: #fff; }
-
         @media (max-width: 480px) {
-            #adModal .modal-content { max-width: 100%; margin: 8px; max-height: 95vh; }
-            #adModal iframe { height: 240px; }
             .top-bar { padding: 6px 10px; gap: 4px; border-radius: 40px; min-height: 42px; }
             .top-bar input { font-size: 10px; padding: 4px 10px; }
             .top-bar .coin-box { font-size: 11px; padding: 3px 8px; }
@@ -466,23 +456,6 @@
             .playlist-section { padding: 6px; }
             .video-card .title { font-size: 8px; padding: 3px 6px; }
         }
-
-        .ad-full-container {
-            background: var(--bg-primary); width: 100%; height: auto; min-height: 120px;
-            border-radius: 16px; overflow: hidden; position: relative;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px;
-        }
-        .ad-full-container .ad-icon {
-            font-size: 36px; color: var(--accent); margin-bottom: 6px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-        .ad-full-container .ad-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-        .ad-full-container .ad-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-        .ad-full-container .ad-countdown-big { font-size: 42px; font-weight: 800; color: var(--accent); margin-top: 6px; }
 
         .ad-footer { padding: 12px 16px; background: var(--bg-card); border-top: 1px solid var(--border-color); }
         .ad-footer .progress-container {
@@ -848,8 +821,8 @@
                 <hr class="divider" />
 
                 <div class="admin-section">
-                    <h4>📢 Ad Links (Coin 20)</h4>
-                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link ထည့်/ဖျက်</p>
+                    <h4>📢 Ad Links (Coin 20 — 20 seconds)</h4>
+                    <p style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ad Link ထည့်/ဖျက် — Website ကို Tab အသစ်မှာ ဖွင့်မည်</p>
                     <div class="admin-row" style="margin-bottom:6px;">
                         <input type="text" id="adminAdLink" placeholder="Ad Link (URL)" style="flex:2;" />
                         <button class="btn-sm green" onclick="adminAddAdLink()"><i class="fas fa-plus"></i> ထည့်</button>
@@ -860,7 +833,7 @@
                             <tbody id="adListBody"></tbody>
                         </table>
                     </div>
-                    <div id="adListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">Ad Link မရှိသေးပါ</div>
+                    <div id="adListEmpty" style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px;display:none;">Ad Link မရှိသေးပါ — ထည့်ပါ</div>
                 </div>
 
                 <hr class="divider" />
@@ -1005,37 +978,49 @@
         </div>
     </div>
 
-    <!-- ===== Ad Modal ===== -->
+    <!-- ===== Ad Modal (No Iframe — Opens in new tab) ===== -->
     <div id="adModal" class="modal">
-        <div class="modal-content" style="text-align:center; padding:0; max-width:420px; border-radius:16px; overflow:hidden; max-height:90vh;">
-            <div style="padding:10px 14px; background:var(--bg-card); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+        <div class="modal-content" style="text-align:center; padding:0; max-width:400px; border-radius:16px; overflow:hidden;">
+            <div style="padding:12px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
                 <h3 style="margin:0; font-size:14px; color:var(--accent);">
                     <i class="fa-regular fa-clock"></i> ကြော်ငြာကြည့်ရှုနေပါသည်...
                 </h3>
                 <button onclick="closeAdModal()" style="background:none;border:none;color:var(--text-secondary);font-size:20px;cursor:pointer;padding:4px 8px;">✕</button>
             </div>
-            <div style="width:100%; height:280px; background:var(--bg-primary); position:relative; overflow:hidden;">
-                <iframe id="adIframe" src="about:blank" style="width:100%; height:100%; border:none;" sandbox="allow-scripts allow-popups allow-forms"></iframe>
-                <div id="adOverlay" style="position:absolute; top:0; left:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.7); color:#fff; font-size:14px; z-index:5;">
-                    <div><i class="fas fa-spinner fa-spin" style="font-size:24px; margin-bottom:8px;"></i><br>ကြော်ငြာဖွင့်နေပါသည်...</div>
+
+            <div style="padding:24px 16px;">
+                <div style="font-size:52px; color:var(--accent); margin-bottom:10px;">
+                    <i class="fas fa-external-link-alt"></i>
+                </div>
+                <div style="font-size:15px; font-weight:700; margin-bottom:6px;">
+                    ကြော်ငြာကို Tab အသစ်မှာ ဖွင့်ထားပါသည်
+                </div>
+                <div style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">
+                    ကျေးဇူးပြု၍ <strong>20 စက္ကန့်</strong> စောင့်ဆိုင်းပါ
+                </div>
+
+                <div style="font-size:60px; font-weight:800; color:var(--accent); font-variant-numeric: tabular-nums; line-height:1;" id="adCountdownBig">
+                    20
+                </div>
+
+                <div style="margin-top:20px;">
+                    <button onclick="openAdWebsite()" style="
+                        padding:10px 24px; border:1px solid var(--border-color);
+                        border-radius:10px; background:var(--bg-card);
+                        color:var(--text-primary); font-size:13px;
+                        cursor:pointer;">
+                        <i class="fas fa-external-link-alt"></i> ကြော်ငြာကို ပြန်ဖွင့်ရန်
+                    </button>
                 </div>
             </div>
-            <div class="ad-full-container" id="adFullContainer" style="height:auto; padding:12px;">
-                <div class="ad-icon" style="font-size:36px; margin-bottom:6px;"><i class="fas fa-ad"></i></div>
-                <div class="ad-title" style="font-size:14px;">ကြော်ငြာကြည့်ရှုခြင်း</div>
-                <div class="ad-subtitle" style="font-size:12px;">ကျေးဇူးပြု၍ 40 စက္ကန့် စောင့်ဆိုင်းပါ</div>
-                <div class="ad-countdown-big" id="adCountdownBig" style="font-size:42px; margin-top:6px;">40</div>
-            </div>
+
             <div class="ad-footer">
                 <div class="progress-container">
                     <div class="progress-bar" id="adProgressBar"></div>
                 </div>
                 <div class="ad-actions">
                     <button class="claim-btn" id="adSkipBtn" disabled>
-                        ⏳ <span id="adCountdown">40</span> စက္ကန့်စောင့်ပါ...
-                    </button>
-                    <button class="open-btn" onclick="openAdWebsite()" title="ဘရောက်ဇာမှာ ဖွင့်ရန်">
-                        <i class="fas fa-external-link-alt"></i>
+                        ⏳ <span id="adCountdown">20</span> စက္ကန့်စောင့်ပါ...
                     </button>
                     <button class="open-btn" onclick="closeAdModal()">✕</button>
                 </div>
@@ -1052,21 +1037,20 @@
         // ============================================================
         //  🔥 FIREBASE CONFIG
         // ============================================================
-   const firebaseConfig = {
-  apiKey: "AIzaSyDwwogSFqbYeOC8iJGRTIy3g1bAS76OPSA",
-  authDomain: "reward-e3bc9.firebaseapp.com",
-  projectId: "reward-e3bc9",
-  storageBucket: "reward-e3bc9.firebasestorage.app",
-  messagingSenderId: "1022349591803",
-  appId: "1:1022349591803:web:2f588295c715d5a003dc5e",
-  measurementId: "G-D88MXYWS77"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4LfmZL-_AicVGkaHEVnbwdlCtsJGKmBk",
+            authDomain: "play-pauk.firebaseapp.com",
+            projectId: "play-pauk",
+            storageBucket: "play-pauk.firebasestorage.app",
+            messagingSenderId: "1071661436309",
+            appId: "1:1071661436309:web:c3e568e114711649c63a9c",
+            measurementId: "G-VW1MD3JRD6"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
         const storage = firebase.storage();
 
-        // Enable offline persistence
         db.enablePersistence({ synchronizeTabs: true })
             .catch((err) => {
                 if (err.code === 'failed-precondition') console.warn('Persistence failed: Multiple tabs open');
@@ -1086,7 +1070,7 @@
         let usingLocalData = false;
         let currentCategory = 'myvideo';
 
-        let adLinks = [];
+        let adLinks = [];   // ✅ No default — Admin must add
         let adIndex = 0;
         let appLinks = [];
         let appIndex = 0;
@@ -1094,7 +1078,7 @@
         const ADMIN_IDS = ["2021666", "7625227853"];
         const GIFT_FEE = 20;
         const AD_REWARD = 20;
-        const AD_DURATION = 40;
+        const AD_DURATION = 20;   // ✅ 20 seconds
         const TARGET_WATCH = 120;
 
         let isWithdrawOpen = localStorage.getItem('isWithdrawOpen') === 'true';
@@ -1452,7 +1436,7 @@
         }
 
         // ============================================================
-        //  ⏱️ WATCH TIMER
+        //  ⏱️ WATCH TIMER (FIXED)
         // ============================================================
         let watchTime = 0;
         let watchInterval = null;
@@ -1512,10 +1496,12 @@
         }
 
         // ============================================================
-        //  🎥 YOUTUBE PLAYER
+        //  🎥 YOUTUBE PLAYER (FIXED)
         // ============================================================
         let player = null;
         let currentVideoId = "you2gfY4hGA";
+        let playerReady = false;
+        let savedVideoTime = 0;
 
         function initPlayer() {
             if (player && player.loadVideoById) return;
@@ -1524,12 +1510,20 @@
                 player = new YT.Player('player', {
                     height: '100%', width: '100%',
                     videoId: currentVideoId,
-                    playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
+                    playerVars: { 
+                        'playsinline': 1, 
+                        'rel': 0, 
+                        'modestbranding': 1,
+                        'enablejsapi': 1
+                    },
                     events: {
                         'onReady': () => {
+                            playerReady = true;
                             document.getElementById('videoError').style.display = 'none';
                             resetWatchTimer();
-                            setTimeout(() => { if (player && player.playVideo) player.playVideo(); }, 500);
+                            setTimeout(() => { 
+                                if (player && player.playVideo) player.playVideo(); 
+                            }, 500);
                         },
                         'onStateChange': onPlayerStateChange,
                         'onError': (e) => {
@@ -1554,34 +1548,52 @@
                 err.querySelector('span').textContent = 'မှန်ကန်သော Video ID မဟုတ်ပါ';
                 return;
             }
+            
             currentVideoId = id;
             resetWatchTimer();
             document.getElementById('videoError').style.display = 'none';
             document.getElementById('coinPopup').style.display = 'none';
             isAdShowing = false;
             isVideoPlaying = false;
+            savedVideoTime = 0;
 
-            if (!player) {
-                initPlayer();
-                setTimeout(() => {
-                    if (player && player.loadVideoById) {
+            // If player not ready, wait and retry
+            if (!player || !playerReady) {
+                if (!player) initPlayer();
+                
+                let retryCount = 0;
+                const checkPlayer = setInterval(() => {
+                    retryCount++;
+                    if (player && playerReady && player.loadVideoById) {
+                        clearInterval(checkPlayer);
                         player.loadVideoById(id);
-                        setTimeout(() => { if (player && player.playVideo) player.playVideo(); }, 500);
+                        setTimeout(() => { 
+                            if (player && player.playVideo) player.playVideo(); 
+                        }, 500);
+                    } else if (retryCount > 20) {
+                        clearInterval(checkPlayer);
+                        console.warn('Player not ready after retries');
                     }
-                }, 1000);
+                }, 300);
                 return;
             }
 
+            // Player is ready, load directly
             if (player && player.loadVideoById) {
                 player.loadVideoById(id);
-                setTimeout(() => { if (player && player.playVideo) player.playVideo(); }, 800);
+                setTimeout(() => { 
+                    if (player && player.playVideo) player.playVideo(); 
+                }, 800);
             }
         }
 
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
                 isVideoPlaying = true;
-                if (isAdShowing) { isAdShowing = false; resetWatchTimer(); }
+                if (isAdShowing) { 
+                    isAdShowing = false; 
+                    resetWatchTimer(); 
+                }
                 if (!isAdShowing && watchTime < TARGET_WATCH) startWatchTimer();
             } else if (event.data === YT.PlayerState.PAUSED) {
                 isVideoPlaying = false;
@@ -1593,10 +1605,9 @@
         }
 
         // ============================================================
-        //  📺 AD SYSTEM
+        //  📺 AD SYSTEM — No Iframe, Opens in NEW TAB
         // ============================================================
         let currentAdUrl = '';
-        let savedVideoTime = 0;
         let adCountdownInterval = null;
         let isAdClaiming = false;
 
@@ -1611,12 +1622,15 @@
             stopAdCountdown();
             if (isAdClaiming) return;
 
+            // ✅ No default ads — Admin must add
             if (!adLinks || adLinks.length === 0) {
                 showToast('❌ ကြော်ငြာ Link မရှိပါ။ Admin ကို ဆက်သွယ်ပါ။', 'error');
                 document.getElementById('coinPopup').style.display = 'none';
                 isAdShowing = false;
                 resetWatchTimer();
-                if (player && player.playVideo) setTimeout(() => player.playVideo(), 500);
+                if (player && player.playVideo) {
+                    setTimeout(() => player.playVideo(), 500);
+                }
                 return;
             }
 
@@ -1625,8 +1639,18 @@
                 return;
             }
 
+            // Save video position BEFORE opening ad
             if (player && typeof player.getCurrentTime === 'function') {
-                try { savedVideoTime = player.getCurrentTime(); } catch (error) { savedVideoTime = 0; }
+                try { 
+                    savedVideoTime = player.getCurrentTime(); 
+                } catch (error) { 
+                    savedVideoTime = 0; 
+                }
+            }
+            
+            // Pause video while ad is showing
+            if (player && typeof player.pauseVideo === 'function') {
+                try { player.pauseVideo(); } catch(e) {}
             }
 
             const localCoins = getCoinsFromLocal();
@@ -1638,10 +1662,13 @@
             adIndex = (adIndex + 1) % adLinks.length;
             localStorage.setItem('currentAdIndex', adIndex);
 
-            const adFrame = document.getElementById('adIframe');
-            if (adFrame) {
-                adFrame.src = 'about:blank';
-                setTimeout(() => { if (adFrame) adFrame.src = currentAdUrl; }, 50);
+            // ✅ Open ad in NEW TAB (No iframe)
+            try {
+                const popup = window.open(currentAdUrl, 'adTab', 'width=500,height=700,scrollbars=yes,resizable=yes');
+                if (popup) popup.focus();
+                else showToast('⚠️ Popup block ဖြစ်နေပါသည်။ "ပြန်ဖွင့်ရန်" button ကို နှိပ်ပါ။', 'warning');
+            } catch (e) {
+                console.warn('Window.open error:', e);
             }
 
             const adModal = document.getElementById('adModal');
@@ -1706,7 +1733,60 @@
             }, 250);
         }
 
-        function openAdWebsite() { if (currentAdUrl) window.open(currentAdUrl, '_blank'); }
+        function openAdWebsite() {
+            if (currentAdUrl) window.open(currentAdUrl, '_blank');
+        }
+
+        // ✅ RESUME VIDEO AFTER AD
+        function resumeVideoAfterAd() {
+            isAdShowing = false;
+            
+            if (!player || !playerReady) {
+                console.warn('Player not ready, reinitializing...');
+                initPlayer();
+                setTimeout(() => {
+                    if (player && player.loadVideoById && currentVideoId) {
+                        player.loadVideoById(currentVideoId);
+                        setTimeout(() => {
+                            if (player && player.playVideo) player.playVideo();
+                            setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 500);
+                        }, 500);
+                    }
+                }, 1000);
+                return;
+            }
+
+            try {
+                if (savedVideoTime > 0 && player.seekTo) {
+                    player.seekTo(savedVideoTime, true);
+                    setTimeout(() => {
+                        if (player && player.playVideo) {
+                            player.playVideo();
+                            setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 800);
+                        }
+                    }, 500);
+                } else if (currentVideoId && player.loadVideoById) {
+                    player.loadVideoById(currentVideoId);
+                    setTimeout(() => {
+                        if (player && player.playVideo) {
+                            player.playVideo();
+                            setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 800);
+                        }
+                    }, 800);
+                } else if (player.playVideo) {
+                    player.playVideo();
+                    setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 800);
+                }
+            } catch (error) {
+                console.error('Resume video error:', error);
+                if (currentVideoId && player && player.loadVideoById) {
+                    player.loadVideoById(currentVideoId);
+                    setTimeout(() => {
+                        if (player && player.playVideo) player.playVideo();
+                    }, 800);
+                }
+            }
+        }
 
         async function giveAdReward(reward) {
             if (!currentUser) {
@@ -1750,39 +1830,18 @@
                 isVideoPlaying = false;
                 resetWatchTimer();
 
-                const adFrame = document.getElementById('adIframe');
-                if (adFrame) adFrame.src = 'about:blank';
+                // Resume video AFTER resetting timer
+                setTimeout(() => {
+                    resumeVideoAfterAd();
+                }, 300);
 
-                if (player && typeof player.seekTo === 'function' && savedVideoTime !== undefined) {
-                    player.seekTo(savedVideoTime, true);
-                    setTimeout(() => {
-                        if (player && typeof player.playVideo === 'function') {
-                            player.playVideo();
-                            setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 500);
-                        } else {
-                            if (!isAdShowing) startWatchTimer();
-                        }
-                    }, 300);
-                } else if (currentVideoId && player && typeof player.loadVideoById === 'function') {
-                    player.loadVideoById(currentVideoId);
-                    setTimeout(() => {
-                        if (player && typeof player.playVideo === 'function') player.playVideo();
-                        setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 500);
-                    }, 500);
-                } else {
-                    if (player && typeof player.playVideo === 'function') {
-                        setTimeout(() => {
-                            if (player && typeof player.playVideo === 'function') player.playVideo();
-                            setTimeout(() => { if (!isAdShowing) startWatchTimer(); }, 500);
-                        }, 800);
-                    }
-                }
             } catch (error) {
                 console.error('Ad reward error:', error);
                 showToast('❌ Coin ပေါင်းမအောင်မြင်ပါ။', 'error');
                 isAdShowing = false;
                 isVideoPlaying = false;
                 resetWatchTimer();
+                setTimeout(() => resumeVideoAfterAd(), 300);
             } finally {
                 setTimeout(() => {
                     releaseCoinLock();
@@ -1796,8 +1855,6 @@
             stopAdCountdown();
             const adModal = document.getElementById('adModal');
             if (adModal) adModal.classList.remove('show');
-            const adFrame = document.getElementById('adIframe');
-            if (adFrame) adFrame.src = 'about:blank';
             isAdShowing = false;
             isAdClaiming = true;
             giveAdReward(AD_REWARD);
@@ -1809,18 +1866,15 @@
             if (adModal) adModal.classList.remove('show');
             const coinPopup = document.getElementById('coinPopup');
             if (coinPopup) coinPopup.style.display = 'none';
-            const adFrame = document.getElementById('adIframe');
-            if (adFrame) adFrame.src = 'about:blank';
             isAdShowing = false;
             isVideoPlaying = false;
             isAdClaiming = false;
             resetWatchTimer();
 
-            if (player && typeof player.playVideo === 'function') {
-                setTimeout(() => {
-                    if (player && typeof player.playVideo === 'function') player.playVideo();
-                }, 500);
-            }
+            // Resume video
+            setTimeout(() => {
+                resumeVideoAfterAd();
+            }, 500);
         }
 
         // ============================================================
@@ -3474,7 +3528,7 @@
         }
 
         // ============================================================
-        //  📢 ADMIN - AD LINKS
+        //  📢 ADMIN - AD LINKS  — NO DEFAULTS, Admin must add
         // ============================================================
         async function loadAdLinksFromFirestore() {
             try {
@@ -3482,23 +3536,14 @@
                 if (doc.exists && doc.data().links) {
                     adLinks = doc.data().links;
                     localStorage.setItem('adLinks', JSON.stringify(adLinks));
-                } else if (adLinks.length === 0) {
-                    adLinks = [
-                        "https://www.profitableratecpmnetwork.com/me7qastab?key=fabc89d437efbad483c8a910118deb1e",
-                        "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d",
-                        "https://www.profitableratecpmnetwork.com/uw3ckb3ie?key=6710938164a4254e8236611b92be03fe"
-                    ];
-                    localStorage.setItem('adLinks', JSON.stringify(adLinks));
+                } else {
+                    // ✅ No defaults — Admin must add
+                    adLinks = [];
+                    localStorage.setItem('adLinks', JSON.stringify([]));
                 }
             } catch (error) {
                 console.warn('Load ad links error, using local:', error);
-                if (adLinks.length === 0) {
-                    adLinks = JSON.parse(localStorage.getItem('adLinks')) || [
-                        "https://www.profitableratecpmnetwork.com/me7qastab?key=fabc89d437efbad483c8a910118deb1e",
-                        "https://www.profitableratecpmnetwork.com/w6qmstib9?key=f80a4ef492a1303e55c7ec0a5c4d486d",
-                        "https://www.profitableratecpmnetwork.com/uw3ckb3ie?key=6710938164a4254e8236611b92be03fe"
-                    ];
-                }
+                adLinks = JSON.parse(localStorage.getItem('adLinks')) || [];
             }
         }
 
@@ -3702,15 +3747,13 @@
         restoreDownloadBonusTimers();
 
         console.log('✅ App initialized successfully!');
+        console.log('✅ No iframe — Ads open in new tab');
+        console.log('✅ Ad links from Firestore (Admin adds — no defaults)');
+        console.log('✅ 20 seconds countdown');
+        console.log('✅ Video resume after ad FIXED');
         console.log('✅ Pagination: 50 users per page');
-        console.log('✅ Server-side email search: 1-2 reads');
+        console.log('✅ Server-side email search');
         console.log('✅ Filter: All / Active / Offline / Banned');
-        console.log('✅ Read counter in admin panel');
-        console.log('✅ Firestore index error handler');
-        console.log('✅ Quota exceeded handler');
-        console.log('✅ Transaction history limit(50)');
-        console.log('✅ Withdraw requests limit(30)');
-        console.log('✅ Banned users limit(30)');
     </script>
 </body>
 </html>
