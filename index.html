@@ -1244,6 +1244,640 @@ tbody tr:hover { background: rgba(45, 212, 191, 0.06); }
     .bottom-nav .nav-item i { font-size: 16px; }
     .playlist-section { padding: 8px; }
 }
+
+/* ============================================================
+   PREMIUM 3D / RAISED UI ENHANCEMENT
+   Glass + Soft 3D + Neumorphism
+   ============================================================ */
+
+/* ===== GLOBAL 3D DEPTH ===== */
+
+button,
+.btn,
+.btn-icon,
+.icon-btn,
+.menu-item,
+.nav-item,
+.video-card,
+.market-card,
+.transaction-item,
+.daily-bonus-btn,
+.exchange-quick button {
+    -webkit-tap-highlight-color: transparent;
+    transform-style: preserve-3d;
+}
+
+
+/* ============================================================
+   3D BUTTON SYSTEM
+   ============================================================ */
+
+.auth-box .btn,
+.modal-content .btn,
+.top-bar .btn-icon,
+.btn-sm,
+.exchange-quick button,
+.daily-bonus-btn {
+    position: relative;
+    border-top: 1px solid rgba(255,255,255,0.28);
+    border-left: 1px solid rgba(255,255,255,0.16);
+    border-right: 1px solid rgba(0,0,0,0.18);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+
+    box-shadow:
+        0 8px 0 rgba(0,0,0,0.18),
+        0 14px 28px rgba(0,0,0,0.32),
+        inset 0 1px 1px rgba(255,255,255,0.3),
+        inset 0 -4px 8px rgba(0,0,0,0.12);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease;
+}
+
+
+/* Floating */
+
+.auth-box .btn:hover,
+.modal-content .btn:hover,
+.top-bar .btn-icon:hover,
+.btn-sm:hover:not(:disabled),
+.exchange-quick button:hover,
+.daily-bonus-btn:hover:not(:disabled) {
+    transform: translateY(-4px) translateZ(8px);
+
+    box-shadow:
+        0 10px 0 rgba(0,0,0,0.16),
+        0 20px 38px rgba(0,0,0,0.38),
+        0 0 30px rgba(45,212,191,0.22),
+        inset 0 1px 2px rgba(255,255,255,0.4);
+}
+
+
+/* Pressed / 3D button */
+
+.auth-box .btn:active,
+.modal-content .btn:active,
+.top-bar .btn-icon:active,
+.btn-sm:active,
+.exchange-quick button:active,
+.daily-bonus-btn:active {
+    transform: translateY(3px) translateZ(0) scale(0.98);
+
+    box-shadow:
+        0 2px 0 rgba(0,0,0,0.22),
+        0 5px 12px rgba(0,0,0,0.25),
+        inset 0 4px 10px rgba(0,0,0,0.18),
+        inset 0 1px 2px rgba(255,255,255,0.12);
+}
+
+
+/* ============================================================
+   TOP COIN — 3D COIN BADGE
+   ============================================================ */
+
+.top-bar .coin-box {
+    border-top: 1px solid rgba(255,255,255,0.6);
+    border-left: 1px solid rgba(255,255,255,0.35);
+    border-bottom: 3px solid rgba(170,105,0,0.55);
+
+    box-shadow:
+        0 5px 0 rgba(140,90,0,0.3),
+        0 12px 28px rgba(0,0,0,0.35),
+        0 0 25px rgba(251,191,36,0.35),
+        inset 0 2px 3px rgba(255,255,255,0.55),
+        inset 0 -5px 10px rgba(150,80,0,0.16);
+
+    transform: translateY(-1px);
+}
+
+.top-bar .coin-box:hover {
+    transform: translateY(-4px) scale(1.04);
+
+    box-shadow:
+        0 8px 0 rgba(140,90,0,0.3),
+        0 18px 35px rgba(0,0,0,0.4),
+        0 0 35px rgba(251,191,36,0.55),
+        inset 0 2px 4px rgba(255,255,255,0.65);
+}
+
+
+/* ============================================================
+   3D ROUND ICON BUTTONS
+   ============================================================ */
+
+.top-bar .icon-btn {
+    border: 1px solid rgba(255,255,255,0.14);
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            rgba(255,255,255,0.18),
+            transparent 35%
+        ),
+        var(--bg-input);
+
+    box-shadow:
+        5px 5px 12px rgba(0,0,0,0.35),
+        -3px -3px 8px rgba(255,255,255,0.04),
+        inset 2px 2px 5px rgba(255,255,255,0.08),
+        inset -3px -3px 8px rgba(0,0,0,0.2);
+
+    transition:
+        transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow 0.22s ease,
+        color 0.22s ease;
+}
+
+.top-bar .icon-btn:hover {
+    transform: translateY(-4px) scale(1.08) rotate(0deg);
+
+    box-shadow:
+        0 8px 18px rgba(0,0,0,0.38),
+        0 0 25px rgba(45,212,191,0.35),
+        inset 2px 2px 6px rgba(255,255,255,0.15),
+        inset -3px -4px 8px rgba(0,0,0,0.22);
+}
+
+.top-bar .icon-btn:active {
+    transform: translateY(2px) scale(0.94);
+
+    box-shadow:
+        inset 3px 4px 9px rgba(0,0,0,0.28),
+        inset -2px -2px 5px rgba(255,255,255,0.05);
+}
+
+
+/* ============================================================
+   MENU CATEGORY — RAISED PILL
+   ============================================================ */
+
+.menu-item {
+    border: 1px solid transparent;
+
+    box-shadow:
+        0 5px 12px rgba(0,0,0,0.12),
+        inset 0 1px 1px rgba(255,255,255,0.03);
+
+    transition:
+        transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.menu-item:hover:not(.active) {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 18px rgba(0,0,0,0.28),
+        0 0 18px rgba(45,212,191,0.15),
+        inset 0 1px 2px rgba(255,255,255,0.08);
+}
+
+.menu-item.active {
+    transform: translateY(-4px);
+
+    border-top: 1px solid rgba(255,255,255,0.5);
+    border-left: 1px solid rgba(255,255,255,0.25);
+    border-bottom: 3px solid rgba(0,100,90,0.45);
+
+    box-shadow:
+        0 7px 0 rgba(0,100,90,0.3),
+        0 15px 30px rgba(0,0,0,0.35),
+        0 0 30px rgba(45,212,191,0.4),
+        inset 0 2px 3px rgba(255,255,255,0.4),
+        inset 0 -5px 10px rgba(0,0,0,0.12);
+}
+
+.menu-item.active:active {
+    transform: translateY(1px);
+
+    box-shadow:
+        0 2px 0 rgba(0,100,90,0.3),
+        inset 0 4px 8px rgba(0,0,0,0.15);
+}
+
+
+/* ============================================================
+   ICON 3D POP
+   ============================================================ */
+
+.menu-item i,
+.bottom-nav .nav-item i {
+    filter:
+        drop-shadow(0 3px 2px rgba(0,0,0,0.35))
+        drop-shadow(0 0 8px rgba(45,212,191,0.15));
+
+    transition:
+        transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+        filter 0.25s ease;
+}
+
+.menu-item:hover i {
+    transform: translateY(-3px) scale(1.18);
+
+    filter:
+        drop-shadow(0 5px 3px rgba(0,0,0,0.4))
+        drop-shadow(0 0 14px rgba(45,212,191,0.5));
+}
+
+.menu-item.active i {
+    transform: translateY(-4px) scale(1.2);
+
+    filter:
+        drop-shadow(0 5px 3px rgba(0,0,0,0.35))
+        drop-shadow(0 0 12px rgba(255,255,255,0.25));
+}
+
+
+/* ============================================================
+   VIDEO CARD — 3D FLOATING CARD
+   ============================================================ */
+
+.video-card {
+    border-top: 1px solid rgba(255,255,255,0.16);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    border-right: 1px solid rgba(0,0,0,0.18);
+    border-bottom: 3px solid rgba(0,0,0,0.3);
+
+    box-shadow:
+        0 7px 0 rgba(0,0,0,0.18),
+        0 14px 28px rgba(0,0,0,0.35),
+        inset 0 1px 2px rgba(255,255,255,0.08);
+
+    transition:
+        transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+}
+
+.video-card:hover {
+    transform:
+        translateY(-8px)
+        scale(1.025)
+        rotateX(2deg);
+
+    box-shadow:
+        0 11px 0 rgba(0,0,0,0.16),
+        0 25px 50px rgba(0,0,0,0.45),
+        0 0 35px rgba(45,212,191,0.3),
+        inset 0 1px 3px rgba(255,255,255,0.15);
+}
+
+.video-card:active {
+    transform:
+        translateY(-2px)
+        scale(0.985);
+
+    box-shadow:
+        0 3px 0 rgba(0,0,0,0.2),
+        0 8px 18px rgba(0,0,0,0.3),
+        inset 0 4px 8px rgba(0,0,0,0.15);
+}
+
+
+/* ===== VIDEO THUMBNAIL 3D ===== */
+
+.video-card img {
+    transition:
+        transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+        filter 0.35s ease;
+}
+
+.video-card:hover img {
+    transform: scale(1.07);
+
+    filter:
+        brightness(1.08)
+        saturate(1.12);
+}
+
+
+/* ============================================================
+   VIDEO CONTAINER — RAISED SCREEN
+   ============================================================ */
+
+.video-container {
+    border-top: 1px solid rgba(255,255,255,0.18);
+    border-left: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 4px solid rgba(0,0,0,0.35);
+
+    box-shadow:
+        0 8px 0 rgba(0,0,0,0.18),
+        0 18px 40px rgba(0,0,0,0.45),
+        0 0 35px rgba(45,212,191,0.18),
+        inset 0 2px 3px rgba(255,255,255,0.06);
+}
+
+
+/* ============================================================
+   COIN POPUP — 3D REWARD BUTTON
+   ============================================================ */
+
+#coinPopup {
+    border-top: 1px solid rgba(255,255,255,0.7);
+    border-left: 1px solid rgba(255,255,255,0.4);
+    border-bottom: 4px solid rgba(150,90,0,0.5);
+
+    box-shadow:
+        0 7px 0 rgba(140,90,0,0.35),
+        0 18px 40px rgba(0,0,0,0.4),
+        0 0 35px rgba(251,191,36,0.6),
+        inset 0 2px 4px rgba(255,255,255,0.55),
+        inset 0 -5px 8px rgba(150,80,0,0.14);
+}
+
+#coinPopup:hover {
+    transform: translateY(-5px) scale(1.08);
+
+    box-shadow:
+        0 9px 0 rgba(140,90,0,0.35),
+        0 25px 50px rgba(0,0,0,0.45),
+        0 0 45px rgba(251,191,36,0.8);
+}
+
+#coinPopup:active {
+    transform: translateY(2px) scale(0.97);
+
+    box-shadow:
+        0 2px 0 rgba(140,90,0,0.35),
+        inset 0 5px 10px rgba(120,70,0,0.2);
+}
+
+
+/* ============================================================
+   BOTTOM NAV — RAISED ICON BUTTONS
+   ============================================================ */
+
+.bottom-nav .nav-item {
+    transition:
+        transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+        color 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+.bottom-nav .nav-item i {
+    width: 44px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.07),
+            rgba(0,0,0,0.14)
+        );
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        5px 5px 10px rgba(0,0,0,0.25),
+        -3px -3px 7px rgba(255,255,255,0.025),
+        inset 1px 1px 2px rgba(255,255,255,0.08),
+        inset -2px -2px 5px rgba(0,0,0,0.18);
+}
+
+.bottom-nav .nav-item:hover {
+    transform: translateY(-4px);
+}
+
+.bottom-nav .nav-item:hover i {
+    transform: translateY(-2px) scale(1.08);
+
+    box-shadow:
+        0 8px 18px rgba(0,0,0,0.3),
+        0 0 20px rgba(45,212,191,0.25),
+        inset 1px 1px 3px rgba(255,255,255,0.12);
+}
+
+.bottom-nav .nav-item.active i {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(45,212,191,0.28),
+            rgba(20,184,166,0.12)
+        );
+
+    border-color: rgba(45,212,191,0.35);
+
+    box-shadow:
+        0 7px 16px rgba(0,0,0,0.3),
+        0 0 25px rgba(45,212,191,0.35),
+        inset 2px 2px 4px rgba(255,255,255,0.12),
+        inset -3px -3px 6px rgba(0,0,0,0.2);
+}
+
+
+/* ============================================================
+   MARKET / TRANSACTION CARDS — RAISED
+   ============================================================ */
+
+.market-card,
+.transaction-item {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-left: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 3px solid rgba(0,0,0,0.22);
+
+    box-shadow:
+        0 5px 0 rgba(0,0,0,0.12),
+        0 12px 25px rgba(0,0,0,0.25),
+        inset 0 1px 2px rgba(255,255,255,0.06);
+}
+
+.market-card:hover,
+.transaction-item:hover {
+    transform: translateY(-5px) translateX(0) scale(1.015);
+
+    box-shadow:
+        0 8px 0 rgba(0,0,0,0.12),
+        0 20px 38px rgba(0,0,0,0.35),
+        0 0 25px rgba(45,212,191,0.18),
+        inset 0 1px 3px rgba(255,255,255,0.1);
+}
+
+
+/* ============================================================
+   DAILY BONUS — 3D REWARD TILE
+   ============================================================ */
+
+.daily-bonus-btn {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 3px solid rgba(0,0,0,0.25);
+
+    box-shadow:
+        0 6px 0 rgba(0,0,0,0.14),
+        0 12px 25px rgba(0,0,0,0.25),
+        inset 0 1px 2px rgba(255,255,255,0.08);
+}
+
+.daily-bonus-btn:hover:not(:disabled) {
+    transform: translateY(-5px) translateX(0);
+
+    box-shadow:
+        0 9px 0 rgba(0,0,0,0.12),
+        0 20px 35px rgba(0,0,0,0.35),
+        0 0 25px rgba(251,191,36,0.25),
+        inset 0 1px 3px rgba(255,255,255,0.12);
+}
+
+
+/* ============================================================
+   BONUS COIN — MINI 3D CHIP
+   ============================================================ */
+
+.daily-bonus-btn .bonus-coin {
+    border-top: 1px solid rgba(255,255,255,0.65);
+    border-left: 1px solid rgba(255,255,255,0.35);
+    border-bottom: 3px solid rgba(150,90,0,0.45);
+
+    box-shadow:
+        0 4px 0 rgba(140,90,0,0.25),
+        0 7px 16px rgba(0,0,0,0.25),
+        inset 0 2px 3px rgba(255,255,255,0.45),
+        inset 0 -3px 6px rgba(120,70,0,0.12);
+}
+
+
+/* ============================================================
+   EXCHANGE QUICK BUTTONS — 3D CHIPS
+   ============================================================ */
+
+.exchange-quick button {
+    box-shadow:
+        0 5px 0 rgba(0,0,0,0.16),
+        0 9px 18px rgba(0,0,0,0.22),
+        inset 1px 1px 2px rgba(255,255,255,0.08),
+        inset -2px -2px 5px rgba(0,0,0,0.14);
+}
+
+.exchange-quick button:active {
+    transform: translateY(3px) scale(0.96);
+
+    box-shadow:
+        0 1px 0 rgba(0,0,0,0.18),
+        inset 3px 4px 7px rgba(0,0,0,0.2);
+}
+
+
+/* ============================================================
+   INPUT — SOFT PRESSED / INSET
+   ============================================================ */
+
+.auth-box .form-group input,
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.top-bar input {
+
+    border-top-color: rgba(0,0,0,0.18);
+    border-left-color: rgba(0,0,0,0.12);
+
+    box-shadow:
+        inset 3px 4px 8px rgba(0,0,0,0.18),
+        inset -2px -2px 5px rgba(255,255,255,0.035),
+        0 2px 5px rgba(0,0,0,0.12);
+}
+
+.auth-box .form-group input:focus,
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus,
+.top-bar input:focus {
+
+    box-shadow:
+        inset 3px 4px 8px rgba(0,0,0,0.15),
+        0 0 0 3px rgba(45,212,191,0.12),
+        0 0 25px rgba(45,212,191,0.22);
+}
+
+
+/* ============================================================
+   TABLE — SLIGHTLY RAISED ROWS
+   ============================================================ */
+
+tbody tr {
+    box-shadow: inset 0 -1px rgba(255,255,255,0.025);
+}
+
+tbody tr:hover {
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.2),
+        inset 0 1px rgba(255,255,255,0.05);
+}
+
+
+/* ============================================================
+   STATUS DOT — 3D LED
+   ============================================================ */
+
+.status-dot {
+    border: 2px solid rgba(255,255,255,0.15);
+
+    box-shadow:
+        0 2px 4px rgba(0,0,0,0.3),
+        0 0 12px currentColor,
+        inset 1px 1px 2px rgba(255,255,255,0.45);
+}
+
+
+/* ============================================================
+   3D CARD LIGHT SWEEP
+   ============================================================ */
+
+.video-card::after,
+.market-card::after,
+.daily-bonus-btn::after {
+    background:
+        linear-gradient(
+            120deg,
+            transparent 25%,
+            rgba(255,255,255,0.07) 45%,
+            transparent 65%
+        );
+
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+}
+
+.video-card:hover::after,
+.market-card:hover::after,
+.daily-bonus-btn:hover::after {
+    opacity: 1;
+    transform: translateX(120%);
+}
+
+
+/* ============================================================
+   MOBILE — KEEP 3D BUT NOT TOO HEAVY
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .video-card:hover {
+        transform: translateY(-5px) scale(1.015);
+    }
+
+    .menu-item.active {
+        transform: translateY(-2px);
+    }
+
+    .top-bar .icon-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+    }
+
+    .bottom-nav .nav-item i {
+        width: 40px;
+        height: 35px;
+        border-radius: 12px;
+    }
+}
     </style>
 </head>
 <body>
