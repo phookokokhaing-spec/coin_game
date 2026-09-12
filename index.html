@@ -18,7 +18,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
-    /* Deep space palette */
     --bg-0: #08080f;
     --bg-1: #0f0f1a;
     --bg-2: #16162a;
@@ -27,7 +26,6 @@
     --glass-2: rgba(45, 45, 75, 0.5);
     --glass-border: rgba(255, 255, 255, 0.08);
 
-    /* Neon accents */
     --neon-1: #a855f7;
     --neon-2: #6366f1;
     --neon-3: #22d3ee;
@@ -37,12 +35,10 @@
     --green: #22c55e;
     --red: #ef4444;
 
-    /* Text */
     --text-1: #ffffff;
     --text-2: rgba(255, 255, 255, 0.7);
     --text-3: rgba(255, 255, 255, 0.4);
 
-    /* Shadows */
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
@@ -50,7 +46,6 @@
     --glow-cyan: 0 0 40px rgba(34, 211, 238, 0.35);
     --glow-gold: 0 0 40px rgba(251, 191, 36, 0.5);
 
-    /* Radius */
     --r-sm: 12px;
     --r-md: 18px;
     --r-lg: 24px;
@@ -93,9 +88,7 @@ body {
     overscroll-behavior: none;
 }
 
-/* ============================================================
-   🌌 ANIMATED BACKGROUND
-   ============================================================ */
+/* Background */
 .bg-layer {
     position: fixed;
     inset: 0;
@@ -134,7 +127,6 @@ body {
     66% { transform: translate(-30px, 30px) scale(0.9); }
 }
 
-/* Grid overlay */
 .bg-layer::after {
     content: '';
     position: absolute;
@@ -153,9 +145,7 @@ body {
     border-radius: 10px;
 }
 
-/* ============================================================
-   💫 SPLASH SCREEN
-   ============================================================ */
+/* Splash */
 #splash {
     position: fixed; inset: 0; z-index: 9999;
     background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #08080f 70%);
@@ -172,15 +162,8 @@ body {
     opacity: 0.2;
 }
 @keyframes rotate { to { transform: rotate(360deg); } }
-
 #splash.hide { opacity: 0; transform: scale(1.15); pointer-events: none; }
-
-#splash .logo-wrap {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-}
-
+#splash .logo-wrap { position: relative; z-index: 1; text-align: center; }
 #splash .logo {
     font-size: 52px;
     font-weight: 900;
@@ -201,7 +184,6 @@ body {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.06); }
 }
-
 #splash .tagline {
     position: relative;
     margin-top: 8px;
@@ -211,7 +193,6 @@ body {
     text-transform: uppercase;
     z-index: 1;
 }
-
 #splash .loader {
     position: relative;
     margin-top: 40px;
@@ -235,9 +216,7 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ============================================================
-   🔐 AUTH SCREEN
-   ============================================================ */
+/* Auth */
 #authScreen {
     display: none;
     flex: 1;
@@ -249,7 +228,6 @@ body {
     z-index: 1;
 }
 #authScreen.active { display: flex; }
-
 .auth-box {
     background: var(--glass);
     backdrop-filter: blur(30px);
@@ -277,7 +255,6 @@ body {
     background-size: 300% 100%;
     animation: shine 4s linear infinite;
 }
-
 .auth-box .brand { text-align: center; margin-bottom: 28px; }
 .auth-box .brand .emoji {
     font-size: 40px;
@@ -300,7 +277,6 @@ body {
     color: var(--text-2);
     margin-top: 6px;
 }
-
 .auth-box .form-group { margin-bottom: 14px; }
 .auth-box .form-group label {
     display: block;
@@ -326,7 +302,6 @@ body {
     border-color: var(--neon-1);
     box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15), var(--glow-purple);
 }
-
 .auth-box .btn {
     width: 100%;
     padding: 14px;
@@ -357,7 +332,6 @@ body {
     box-shadow: 0 12px 32px rgba(168, 85, 247, 0.6);
 }
 .auth-box .btn:active { transform: translateY(0) scale(0.98); }
-
 .auth-box .toggle-link {
     text-align: center;
     margin-top: 18px;
@@ -371,7 +345,6 @@ body {
     transition: var(--transition);
 }
 .auth-box .toggle-link span:hover { text-decoration: underline; }
-
 .auth-box .error-msg {
     background: rgba(239, 68, 68, 0.15);
     border: 1px solid rgba(239, 68, 68, 0.3);
@@ -389,9 +362,7 @@ body {
     75% { transform: translateX(6px); }
 }
 
-/* ============================================================
-   📱 APP CONTAINER - NEW LAYOUT
-   ============================================================ */
+/* App container */
 #appContainer {
     display: none;
     flex: 1;
@@ -405,9 +376,7 @@ body {
 }
 #appContainer.active { display: flex; }
 
-/* ============================================================
-   TOP HEADER - NEW STYLE
-   ============================================================ */
+/* Header */
 .app-header {
     display: flex;
     align-items: center;
@@ -416,7 +385,6 @@ body {
     margin-bottom: 10px;
     flex-shrink: 0;
 }
-
 .user-chip {
     display: flex;
     align-items: center;
@@ -477,7 +445,6 @@ body {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
 }
-
 .header-actions {
     display: flex;
     gap: 6px;
@@ -506,7 +473,7 @@ body {
 }
 .hd-btn:active { transform: translateY(0) scale(0.95); }
 
-/* Coin display - hero style */
+/* Coin hero */
 .coin-hero {
     display: flex;
     align-items: center;
@@ -533,7 +500,6 @@ body {
     0% { left: -100%; }
     50%, 100% { left: 200%; }
 }
-
 .coin-hero .coin-icon {
     font-size: 28px;
     filter: drop-shadow(0 0 12px var(--gold-1));
@@ -544,11 +510,7 @@ body {
     0%, 100% { transform: rotateY(0deg) scale(1); }
     50% { transform: rotateY(180deg) scale(1.15); }
 }
-
-.coin-hero .coin-info {
-    flex: 1;
-    min-width: 0;
-}
+.coin-hero .coin-info { flex: 1; min-width: 0; }
 .coin-hero .coin-label {
     font-size: 10px;
     color: rgba(251, 191, 36, 0.8);
@@ -566,10 +528,7 @@ body {
     letter-spacing: -0.5px;
     font-variant-numeric: tabular-nums;
 }
-.coin-hero .usdt-info {
-    text-align: right;
-    flex-shrink: 0;
-}
+.coin-hero .usdt-info { text-align: right; flex-shrink: 0; }
 .coin-hero .usdt-info .label {
     font-size: 9px;
     color: var(--text-3);
@@ -583,9 +542,7 @@ body {
     color: var(--green);
 }
 
-/* ============================================================
-   SEARCH BAR - NEW
-   ============================================================ */
+/* Search */
 .search-wrap {
     position: relative;
     margin-bottom: 10px;
@@ -641,9 +598,7 @@ body {
     box-shadow: 0 8px 24px rgba(168, 85, 247, 0.6);
 }
 
-/* ============================================================
-   VIDEO PLAYER - CINEMA STYLE
-   ============================================================ */
+/* Cinema */
 .cinema-wrap {
     position: relative;
     margin-bottom: 10px;
@@ -655,7 +610,6 @@ body {
     aspect-ratio: 16/9;
     max-height: 240px;
 }
-
 .cinema-wrap::before {
     content: '';
     position: absolute;
@@ -664,9 +618,7 @@ body {
     pointer-events: none;
     z-index: 2;
 }
-
 #player { width: 100%; height: 100%; position: relative; z-index: 1; }
-
 .video-error {
     position: absolute;
     top: 50%; left: 50%;
@@ -685,8 +637,6 @@ body {
     color: var(--neon-1);
     filter: drop-shadow(0 0 20px var(--neon-1));
 }
-
-/* Watch timer - floating chip */
 .watch-timer {
     position: absolute;
     bottom: 14px; left: 14px;
@@ -709,8 +659,6 @@ body {
     color: var(--neon-3);
     animation: pulseDot 1.5s infinite;
 }
-
-/* Coin Reward Button - FLOATING */
 #coinPopup {
     position: absolute;
     bottom: 14px; right: 14px;
@@ -742,9 +690,7 @@ body {
     box-shadow: 0 3px 0 rgba(150, 90, 0, 0.5), 0 8px 16px rgba(251, 191, 36, 0.5);
 }
 
-/* ============================================================
-   CATEGORY PILLS - FLOATING SCROLL
-   ============================================================ */
+/* Pills */
 .pills-scroll {
     display: flex;
     gap: 8px;
@@ -755,7 +701,6 @@ body {
     scrollbar-width: none;
 }
 .pills-scroll::-webkit-scrollbar { display: none; }
-
 .pill {
     display: flex;
     align-items: center;
@@ -793,9 +738,7 @@ body {
     filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
 }
 
-/* ============================================================
-   VIDEO LIST - NEW CARD STYLE
-   ============================================================ */
+/* List */
 .list-wrap {
     flex: 1;
     min-height: 0;
@@ -828,13 +771,11 @@ body {
     font-weight: 700;
     border: 1px solid var(--glass-border);
 }
-
 .v-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
-
 .v-card {
     background: var(--glass);
     backdrop-filter: blur(20px);
@@ -851,13 +792,11 @@ body {
     from { opacity: 0; transform: translateY(20px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 .v-card:hover {
     transform: translateY(-6px);
     border-color: var(--neon-1);
     box-shadow: var(--shadow-md), var(--glow-purple);
 }
-
 .v-thumb {
     position: relative;
     width: 100%;
@@ -873,7 +812,6 @@ body {
     display: block;
 }
 .v-card:hover .v-thumb img { transform: scale(1.1); }
-
 .v-thumb .play-overlay {
     position: absolute;
     inset: 0;
@@ -900,7 +838,6 @@ body {
     transition: transform 0.4s var(--bounce);
 }
 .v-card:hover .play-overlay .play-icon { transform: scale(1); }
-
 .v-title {
     padding: 9px 11px;
     font-size: 11px;
@@ -913,8 +850,6 @@ body {
     overflow: hidden;
     min-height: 42px;
 }
-
-/* Delete button overlay */
 .v-delete {
     position: absolute;
     top: 6px;
@@ -937,8 +872,6 @@ body {
 }
 .v-card:hover .v-delete { opacity: 1; }
 .v-delete:hover { transform: scale(1.15); background: var(--red); }
-
-/* Search loading / empty */
 .search-loading, .search-no-results {
     grid-column: 1 / -1;
     text-align: center;
@@ -954,9 +887,7 @@ body {
 }
 .search-loading i { animation: spin 1s linear infinite; }
 
-/* ============================================================
-   BOTTOM NAVIGATION - NEW
-   ============================================================ */
+/* Bottom nav */
 .bottom-nav {
     position: relative;
     display: flex;
@@ -984,7 +915,6 @@ body {
     border-radius: 2px;
     filter: blur(1px);
 }
-
 .nav-btn {
     display: flex;
     flex-direction: column;
@@ -1028,7 +958,6 @@ body {
     border-radius: 4px;
     box-shadow: 0 0 12px var(--neon-1);
 }
-
 .nav-btn .badge {
     position: absolute;
     top: 0;
@@ -1044,9 +973,7 @@ body {
     box-shadow: 0 0 10px rgba(244, 114, 182, 0.7);
 }
 
-/* ============================================================
-   🎉 COIN ANIMATION OVERLAY - THE STAR OF THE SHOW
-   ============================================================ */
+/* Coin animation overlay */
 #coinAnimationOverlay {
     position: fixed;
     inset: 0;
@@ -1069,8 +996,6 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
-/* Burst rings */
 .burst-ring {
     position: absolute;
     border-radius: 50%;
@@ -1089,8 +1014,6 @@ body {
     0% { width: 0; height: 0; opacity: 1; }
     100% { width: 400px; height: 400px; opacity: 0; }
 }
-
-/* Coin particle */
 .coin-particle {
     position: absolute;
     width: 28px;
@@ -1127,8 +1050,6 @@ body {
         transform: rotate(720deg) scale(0.6);
     }
 }
-
-/* Main reward card */
 .reward-card {
     position: relative;
     z-index: 10;
@@ -1151,7 +1072,6 @@ body {
     60% { transform: scale(1.1) rotate(3deg); }
     100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
-
 .reward-coin-icon {
     font-size: 72px;
     line-height: 1;
@@ -1164,7 +1084,6 @@ body {
     0%, 100% { transform: translateY(0) rotate(-5deg); }
     50% { transform: translateY(-12px) rotate(5deg); }
 }
-
 .reward-label {
     font-size: 12px;
     color: var(--gold-1);
@@ -1174,7 +1093,6 @@ body {
     margin-bottom: 8px;
     text-shadow: 0 0 20px var(--gold-1);
 }
-
 .reward-amount {
     font-size: 56px;
     font-weight: 900;
@@ -1194,14 +1112,12 @@ body {
     color: var(--gold-1);
     -webkit-text-fill-color: var(--gold-1);
 }
-
 .reward-sub {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.6);
     font-weight: 600;
     margin-top: 4px;
 }
-
 .reward-total {
     margin-top: 16px;
     padding-top: 16px;
@@ -1216,8 +1132,6 @@ body {
     font-weight: 900;
     margin-left: 4px;
 }
-
-/* Confetti */
 .confetti {
     position: absolute;
     width: 10px;
@@ -1238,9 +1152,7 @@ body {
     }
 }
 
-/* ============================================================
-   📦 MODALS - BOTTOM SHEET STYLE
-   ============================================================ */
+/* Modals */
 .modal {
     position: fixed;
     inset: 0;
@@ -1254,7 +1166,6 @@ body {
     padding: 0;
 }
 .modal.show { display: flex; }
-
 .modal-content {
     background: var(--bg-1);
     background-image: linear-gradient(180deg, var(--bg-2), var(--bg-1));
@@ -1274,8 +1185,6 @@ body {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
 }
-
-/* Handle bar */
 .modal-content::before {
     content: '';
     display: block;
@@ -1286,7 +1195,6 @@ body {
     margin: 0 auto 16px;
     opacity: 0.5;
 }
-
 .modal-content .close {
     position: absolute;
     top: 18px; right: 18px;
@@ -1308,7 +1216,6 @@ body {
     border-color: var(--red);
     transform: rotate(90deg);
 }
-
 .modal-content h3 {
     font-size: 18px;
     font-weight: 800;
@@ -1331,7 +1238,6 @@ body {
     color: #fff;
     box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
 }
-
 .modal-content label {
     font-size: 10px;
     font-weight: 700;
@@ -1363,7 +1269,6 @@ body {
     box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.12);
 }
 .modal-content input::placeholder { color: var(--text-3); }
-
 .modal-content .btn {
     width: 100%;
     padding: 13px;
@@ -1426,8 +1331,6 @@ body {
     padding: 6px 12px;
     border-radius: var(--r-full);
 }
-
-/* Stat cards */
 .stat-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1463,8 +1366,6 @@ body {
 }
 .stat-card.coin .s-value { color: var(--gold-1); text-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
 .stat-card.usdt .s-value { color: var(--green); text-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
-
-/* Admin sections */
 .admin-section {
     background: var(--glass);
     border: 1px solid var(--glass-border);
@@ -1485,7 +1386,6 @@ body {
 .admin-section p { font-size: 11px; color: var(--text-2); margin-bottom: 8px; }
 .admin-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .admin-row input { flex: 1; min-width: 70px; margin-bottom: 0; }
-
 .btn-sm {
     padding: 9px 16px;
     font-size: 11px;
@@ -1504,7 +1404,6 @@ body {
 .btn-sm:hover { transform: translateY(-2px); }
 .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-/* Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -1536,7 +1435,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 .status-offline { color: var(--red); }
 .status-online { color: var(--green); }
 
-/* Toast */
 .toast {
     position: fixed;
     top: 20px; left: 50%;
@@ -1566,7 +1464,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 .toast.error { border-color: var(--red); box-shadow: var(--shadow-lg), 0 0 40px rgba(239, 68, 68, 0.4); }
 .toast.warning { border-color: var(--gold-1); box-shadow: var(--shadow-lg), 0 0 40px rgba(251, 191, 36, 0.4); }
 
-/* Exchange */
 .exchange-quick { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .exchange-quick button {
     padding: 7px 16px;
@@ -1605,8 +1502,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     margin-left: 8px;
     font-weight: 800;
 }
-
-/* Market cards */
 .market-card {
     background: var(--glass);
     backdrop-filter: blur(20px);
@@ -1638,8 +1533,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-
-/* Transaction */
 .transaction-item {
     background: var(--glass);
     backdrop-filter: blur(20px);
@@ -1664,7 +1557,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 .transaction-item .right.positive { color: var(--green); text-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
 .transaction-item .right.negative { color: var(--red); }
 
-/* Daily bonus */
 .daily-bonus-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
 .daily-bonus-btn {
     display: flex;
@@ -1700,7 +1592,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 }
 .daily-bonus-btn .bonus-status { font-size: 10px; color: var(--text-3); font-weight: 700; }
 
-/* Local indicator */
 #localModeIndicator {
     position: fixed;
     bottom: 85px; left: 50%;
@@ -1721,7 +1612,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 }
 #localModeIndicator.show { opacity: 0.95; }
 
-/* Ad footer */
 .ad-footer { padding: 14px 16px; background: var(--bg-2); border-top: 1px solid var(--glass-border); }
 .ad-footer .progress-container {
     width: 100%; height: 6px;
@@ -1773,7 +1663,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     transition: var(--transition);
 }
 .ad-footer .ad-actions .open-btn:hover { border-color: var(--red); color: var(--red); }
-
 .ad-footer .ad-status {
     margin-top: 8px;
     font-size: 12px;
@@ -1785,7 +1674,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 .ad-footer .ad-status .reward-text { color: var(--gold-1); font-weight: 900; }
 .ad-footer .ad-status .status-text.done { color: var(--green); }
 
-/* Status dots */
 .status-dot {
     display: inline-block;
     width: 8px; height: 8px;
@@ -1795,7 +1683,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 .status-dot.online { background: var(--green); box-shadow: 0 0 10px var(--green); }
 .status-dot.offline { background: var(--red); box-shadow: 0 0 10px var(--red); }
 
-/* Responsive */
 @media (max-width: 480px) {
     #splash .logo { font-size: 40px; }
     .coin-hero .coin-value { font-size: 20px; }
@@ -1814,14 +1701,12 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 </head>
 <body>
 
-    <!-- Background orbs -->
     <div class="bg-layer">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
     </div>
 
-    <!-- Splash -->
     <div id="splash">
         <div class="logo-wrap">
             <div class="logo">𝙋𝙇𝘼𝙔 𝙋𝘼𝙐𝙆</div>
@@ -1833,7 +1718,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     <div id="localModeIndicator">📱 Local Mode</div>
     <div id="toast" class="toast"></div>
 
-    <!-- 🎉 COIN ANIMATION OVERLAY -->
     <div id="coinAnimationOverlay">
         <div class="burst-ring"></div>
         <div class="burst-ring"></div>
@@ -1848,7 +1732,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- ===== AUTH ===== -->
+    <!-- AUTH -->
     <div id="authScreen">
         <div class="auth-box">
             <div class="brand">
@@ -1888,9 +1772,8 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- ===== MAIN APP ===== -->
+    <!-- MAIN APP -->
     <div id="appContainer">
-        <!-- Header -->
         <div class="app-header">
             <div class="user-chip" onclick="openModal('profileModal')">
                 <img id="headerAvatar" class="avatar" src="https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&size=72" alt="avatar" />
@@ -1905,12 +1788,11 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 </button>
                 <button class="hd-btn admin-lock-btn" id="adminLockBtn" onclick="handleAdminLockClick()">
                     <i class="fa-solid fa-lock"></i>
-                    <span class="tap-counter" id="tapCounter">0</span>
+                    <span class="tap-counter" id="tapCounter" style="position:absolute;top:-6px;right:-6px;background:var(--neon-1);color:#fff;font-size:9px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Coin Hero -->
         <div class="coin-hero">
             <span class="coin-icon">🪙</span>
             <div class="coin-info">
@@ -1923,7 +1805,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             </div>
         </div>
 
-        <!-- Search -->
         <div class="search-wrap">
             <i class="fas fa-search search-icon"></i>
             <input type="text" id="searchInput" placeholder="YouTube မှာ ရှာရန်..." />
@@ -1932,7 +1813,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             </button>
         </div>
 
-        <!-- Video player -->
         <div class="cinema-wrap">
             <div id="player"></div>
             <div class="video-error" id="videoError">
@@ -1948,7 +1828,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             </button>
         </div>
 
-        <!-- Category pills -->
         <div class="pills-scroll">
             <div class="pill active" onclick="switchCategory('myvideo', this)">
                 <i class="fa-solid fa-clapperboard"></i><span>My Video</span>
@@ -1962,12 +1841,14 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             <div class="pill" onclick="switchCategory('cartoon', this)">
                 <i class="fa-solid fa-face-smile"></i><span>Cartoon</span>
             </div>
+            <div class="pill" onclick="switchCategory('rss', this)">
+                <i class="fas fa-satellite-dish"></i><span>Channels</span>
+            </div>
             <div class="pill" onclick="switchCategory('search', this)">
                 <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
             </div>
         </div>
 
-        <!-- Video list -->
         <div class="list-wrap">
             <div class="list-header">
                 <h4 id="playlistTitle">📽️ My Videos</h4>
@@ -1976,7 +1857,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             <div id="playlistContainer" class="v-grid"></div>
         </div>
 
-        <!-- Bottom nav -->
         <div class="bottom-nav">
             <button class="nav-btn active" onclick="switchNav('home', this)">
                 <i class="fas fa-home"></i><span>Home</span>
@@ -1996,7 +1876,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- ===== Profile Modal ===== -->
+    <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('profileModal')">&times;</button>
@@ -2337,7 +2217,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- ===== SCRIPTS ===== -->
     <script>
         // ============================================================
         //  🔥 FIREBASE
@@ -2359,6 +2238,224 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 
         const YOUTUBE_API_KEY = 'AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI';
+
+        // ============================================================
+        //  📡 RSS FEED SYSTEM - THE 3 CHANNELS
+        // ============================================================
+        const RSS_CHANNELS = [
+            {
+                id: 'UCNHIxx5X9XND2BMZ4LV73Fg',
+                name: 'Heart & Soul Creation',
+                emoji: '🎬'
+            },
+            {
+                id: 'UCZpd3IpUl7c7vLYIIiWzoOA',
+                name: 'Drama Recap',
+                emoji: '📺'
+            },
+            {
+                id: 'UCgsfh9N8xpBbzmfdV6wzgFA',
+                name: 'Mg Kyaw AI',
+                emoji: '🤖'
+            }
+        ];
+
+        const CORS_PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+
+        const RSS_CACHE_TIME = 30 * 60 * 1000;
+
+        async function fetchChannelRSS(channelId) {
+            const cacheKey = `rss_cache_${channelId}`;
+            let cached = null;
+            try {
+                const c = localStorage.getItem(cacheKey);
+                if (c) {
+                    cached = JSON.parse(c);
+                    if (Date.now() - cached.timestamp < RSS_CACHE_TIME) {
+                        console.log(`📦 Cache: ${channelId.substring(0, 10)}...`);
+                        return cached.data;
+                    }
+                }
+            } catch (e) {}
+
+            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+            for (const proxy of CORS_PROXIES) {
+                try {
+                    console.log(`🌐 Fetching: ${channelId.substring(0, 10)}...`);
+                    const response = await fetch(proxy + encodeURIComponent(rssUrl));
+                    if (!response.ok) continue;
+
+                    const xmlText = await response.text();
+                    if (!xmlText.includes('<entry>')) continue;
+
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                    const entries = xmlDoc.querySelectorAll('entry');
+
+                    const videos = [];
+                    entries.forEach(entry => {
+                        const videoId = entry.getElementsByTagName('yt:videoId')[0]?.textContent;
+                        const title = entry.getElementsByTagName('title')[0]?.textContent;
+                        const published = entry.getElementsByTagName('published')[0]?.textContent;
+                        const thumbnail = entry.getElementsByTagName('media:thumbnail')[0]?.getAttribute('url');
+
+                        const stats = entry.getElementsByTagName('media:statistics')[0];
+                        const views = stats ? parseInt(stats.getAttribute('views')) : 0;
+
+                        if (videoId && title) {
+                            videos.push({
+                                id: videoId,
+                                name: title,
+                                published: published,
+                                views: views,
+                                thumbnail: thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+                            });
+                        }
+                    });
+
+                    if (videos.length > 0) {
+                        try {
+                            localStorage.setItem(cacheKey, JSON.stringify({
+                                data: videos,
+                                timestamp: Date.now()
+                            }));
+                        } catch (e) {}
+                        console.log(`✅ ${videos.length} videos: ${channelId.substring(0, 10)}...`);
+                        return videos;
+                    }
+                } catch (error) {
+                    console.warn(`Proxy failed:`, error.message);
+                    continue;
+                }
+            }
+
+            if (cached) {
+                console.log('⚠️ Using cached data (proxy failed)');
+                return cached.data;
+            }
+            return [];
+        }
+
+        async function loadRSSVideos() {
+            const container = document.getElementById('playlistContainer');
+            const title = document.getElementById('playlistTitle');
+            const count = document.getElementById('playlistCount');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="search-loading">
+                    <i class="fas fa-satellite-dish"></i>
+                    <p>Channel တွေကနေ Video တွေ ရယူနေပါသည်...</p>
+                    <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
+                        (ပထမဆုံးအကြိမ် 10-20 စက္ကန့် ကြာနိုင်ပါတယ်)
+                    </p>
+                </div>
+            `;
+            title.textContent = '📡 YouTube Channels';
+            count.textContent = '...';
+
+            try {
+                const allVideos = [];
+
+                for (const channel of RSS_CHANNELS) {
+                    const videos = await fetchChannelRSS(channel.id);
+                    videos.forEach(v => {
+                        allVideos.push({
+                            ...v,
+                            channelName: channel.name,
+                            channelEmoji: channel.emoji
+                        });
+                    });
+                }
+
+                allVideos.sort((a, b) => new Date(b.published) - new Date(a.published));
+                count.textContent = allVideos.length;
+
+                if (allVideos.length === 0) {
+                    container.innerHTML = `
+                        <div class="search-no-results">
+                            <i class="fas fa-video-slash"></i>
+                            <p>Video မတွေ့ပါ</p>
+                            <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
+                                Internet စစ်ပါ သို့မဟုတ် ခဏနေမှ ပြန်စမ်းပါ
+                            </p>
+                            <button class="btn" onclick="loadRSSVideos()" 
+                                    style="margin-top:12px;width:auto;padding:8px 20px;font-size:12px;">
+                                <i class="fas fa-sync"></i> ပြန်စမ်းမည်
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+                allVideos.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'v-card';
+                    card.style.animationDelay = (index * 0.03) + 's';
+
+                    const pubDate = new Date(item.published);
+                    const daysAgo = Math.floor((Date.now() - pubDate) / (1000 * 60 * 60 * 24));
+                    let timeAgo = '';
+                    if (daysAgo === 0) timeAgo = 'Today';
+                    else if (daysAgo === 1) timeAgo = 'Yesterday';
+                    else if (daysAgo < 7) timeAgo = daysAgo + 'd ago';
+                    else if (daysAgo < 30) timeAgo = Math.floor(daysAgo / 7) + 'w ago';
+                    else if (daysAgo < 365) timeAgo = Math.floor(daysAgo / 30) + 'mo ago';
+                    else timeAgo = Math.floor(daysAgo / 365) + 'y ago';
+
+                    let viewsText = '';
+                    if (item.views > 1000000) viewsText = (item.views / 1000000).toFixed(1) + 'M';
+                    else if (item.views > 1000) viewsText = (item.views / 1000).toFixed(0) + 'K';
+                    else if (item.views > 0) viewsText = item.views.toString();
+
+                    card.innerHTML = `
+                        <div class="v-thumb">
+                            <img src="${item.thumbnail}" loading="lazy" 
+                                 onerror="this.src='https://via.placeholder.com/320x180/1a1a2e/a855f7?text=No+Image'" />
+                            <div class="play-overlay">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div style="position:absolute;bottom:6px;right:6px;
+                                        background:rgba(0,0,0,0.85);padding:3px 8px;
+                                        border-radius:6px;font-size:9px;color:#fff;font-weight:700;
+                                        backdrop-filter:blur(4px);">
+                                ${timeAgo}
+                            </div>
+                        </div>
+                        <div class="v-title">${item.name}</div>
+                        <div style="padding:0 10px 8px;display:flex;
+                                    justify-content:space-between;align-items:center;
+                                    font-size:9px;color:var(--text-3);">
+                            <span>${item.channelEmoji} ${item.channelName}</span>
+                            ${viewsText ? `<span>👁️ ${viewsText}</span>` : ''}
+                        </div>
+                    `;
+
+                    card.onclick = () => loadVideo(item.id);
+                    container.appendChild(card);
+                });
+
+                console.log(`✅ Total ${allVideos.length} videos loaded`);
+            } catch (error) {
+                console.error('Load RSS error:', error);
+                container.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Video တွေ ရယူမရပါ</p>
+                        <button class="btn" onclick="loadRSSVideos()" 
+                                style="margin-top:12px;width:auto;padding:8px 20px;font-size:12px;">
+                            <i class="fas fa-sync"></i> ပြန်စမ်းမည်
+                        </button>
+                    </div>
+                `;
+            }
+        }
 
         // ============================================================
         //  STATE
@@ -2398,24 +2495,20 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         }
 
         // ============================================================
-        //  🎉 COIN ANIMATION - THE STAR FUNCTION
+        //  COIN ANIMATION
         // ============================================================
         function showCoinAnimation(amount, totalCoins) {
             const overlay = document.getElementById('coinAnimationOverlay');
             const amountEl = document.getElementById('rewardAmountNum');
             const totalEl = document.getElementById('rewardTotalCoins');
 
-            // Reset content
             amountEl.textContent = '0';
             totalEl.textContent = totalCoins;
 
-            // Clear old particles
             document.querySelectorAll('.coin-particle, .confetti').forEach(el => el.remove());
 
-            // Show overlay
             overlay.classList.add('show');
 
-            // Spawn coin particles
             for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
                     const coin = document.createElement('div');
@@ -2429,7 +2522,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 }, i * 40);
             }
 
-            // Spawn confetti
             const colors = ['#a855f7', '#22d3ee', '#f472b6', '#fbbf24', '#22c55e'];
             for (let i = 0; i < 40; i++) {
                 setTimeout(() => {
@@ -2448,7 +2540,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 }, i * 25);
             }
 
-            // Count-up animation
             const duration = 1200;
             const start = Date.now();
             const countUp = () => {
@@ -2457,21 +2548,14 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 const eased = 1 - Math.pow(1 - progress, 3);
                 const current = Math.round(amount * eased);
                 amountEl.textContent = current;
-                if (progress < 1) {
-                    requestAnimationFrame(countUp);
-                } else {
-                    amountEl.textContent = amount;
-                }
+                if (progress < 1) requestAnimationFrame(countUp);
+                else amountEl.textContent = amount;
             };
             requestAnimationFrame(countUp);
 
-            // Haptic feedback (if supported)
             if (navigator.vibrate) navigator.vibrate([50, 30, 50, 30, 100]);
 
-            // Auto-dismiss
-            setTimeout(() => {
-                overlay.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { overlay.classList.remove('show'); }, 3000);
         }
 
         // ============================================================
@@ -2484,19 +2568,19 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             adminTapCount++;
             const counter = document.getElementById('tapCounter');
             counter.textContent = adminTapCount;
-            counter.classList.add('show');
+            counter.style.opacity = '1';
 
             clearTimeout(adminTapTimeout);
             adminTapTimeout = setTimeout(() => {
                 adminTapCount = 0;
                 counter.textContent = '0';
-                counter.classList.remove('show');
+                counter.style.opacity = '0';
             }, 3000);
 
             if (adminTapCount >= 12) {
                 adminTapCount = 0;
                 counter.textContent = '0';
-                counter.classList.remove('show');
+                counter.style.opacity = '0';
                 clearTimeout(adminTapTimeout);
                 showToast('🔓 Admin Panel opened!', 'success');
                 openModal('adminModal');
@@ -2714,7 +2798,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         }
 
         // ============================================================
-        //  RENDER PLAYLIST - NEW CARD STYLE
+        //  RENDER PLAYLIST
         // ============================================================
         function renderPlaylist(category) {
             const container = document.getElementById('playlistContainer');
@@ -3102,14 +3186,12 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     usingLocalData = true;
                 }
 
-                // 🎉 SHOW COIN ANIMATION
                 showCoinAnimation(reward, newCoins);
 
                 isAdShowing = false;
                 isVideoPlaying = false;
                 resetWatchTimer();
                 setTimeout(() => resumeVideoAfterAd(), 300);
-
             } catch (error) {
                 console.error(error);
                 showToast('❌ Failed', 'error');
@@ -3867,13 +3949,19 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         }
 
         // ============================================================
-        //  CATEGORY
+        //  CATEGORY (WITH RSS SUPPORT)
         // ============================================================
         function switchCategory(category, el) {
             currentCategory = category;
             document.querySelectorAll('.pill').forEach(e => e.classList.remove('active'));
             if (el) el.classList.add('active');
-            renderPlaylist(category);
+
+            if (category === 'rss') {
+                loadRSSVideos();
+            } else {
+                renderPlaylist(category);
+            }
+
             resetWatchTimer();
             isAdShowing = false;
             isVideoPlaying = false;
@@ -4623,7 +4711,8 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             if (tab === 'search') document.getElementById('searchInput').focus();
             else if (tab === 'home') {
                 document.getElementById('searchInput').blur();
-                renderPlaylist(currentCategory);
+                if (currentCategory === 'rss') loadRSSVideos();
+                else renderPlaylist(currentCategory);
                 resetWatchTimer();
             }
         }
@@ -4640,6 +4729,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 
         console.log('✅ New Design Loaded');
         console.log('✅ Coin Animation Active');
+        console.log('✅ RSS Channels: Heart & Soul + Drama Recap + Mg Kyaw AI');
     </script>
 </body>
 </html>
