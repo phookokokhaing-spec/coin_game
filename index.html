@@ -12,9 +12,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
     <style>
-/* ============================================================
-   🎨 NEW DESIGN SYSTEM - DEEP SPACE + NEON
-   ============================================================ */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
@@ -25,7 +22,6 @@
     --glass: rgba(30, 30, 55, 0.6);
     --glass-2: rgba(45, 45, 75, 0.5);
     --glass-border: rgba(255, 255, 255, 0.08);
-
     --neon-1: #a855f7;
     --neon-2: #6366f1;
     --neon-3: #22d3ee;
@@ -34,24 +30,20 @@
     --gold-2: #f59e0b;
     --green: #22c55e;
     --red: #ef4444;
-
     --text-1: #ffffff;
     --text-2: rgba(255, 255, 255, 0.7);
     --text-3: rgba(255, 255, 255, 0.4);
-
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
     --glow-purple: 0 0 40px rgba(168, 85, 247, 0.4);
     --glow-cyan: 0 0 40px rgba(34, 211, 238, 0.35);
     --glow-gold: 0 0 40px rgba(251, 191, 36, 0.5);
-
     --r-sm: 12px;
     --r-md: 18px;
     --r-lg: 24px;
     --r-xl: 32px;
     --r-full: 999px;
-
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -88,7 +80,6 @@ body {
     overscroll-behavior: none;
 }
 
-/* Background */
 .bg-layer {
     position: fixed;
     inset: 0;
@@ -145,7 +136,6 @@ body {
     border-radius: 10px;
 }
 
-/* Splash */
 #splash {
     position: fixed; inset: 0; z-index: 9999;
     background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #08080f 70%);
@@ -216,7 +206,6 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Auth */
 #authScreen {
     display: none;
     flex: 1;
@@ -362,7 +351,6 @@ body {
     75% { transform: translateX(6px); }
 }
 
-/* App container */
 #appContainer {
     display: none;
     flex: 1;
@@ -376,7 +364,6 @@ body {
 }
 #appContainer.active { display: flex; }
 
-/* Header */
 .app-header {
     display: flex;
     align-items: center;
@@ -473,7 +460,6 @@ body {
 }
 .hd-btn:active { transform: translateY(0) scale(0.95); }
 
-/* Coin hero */
 .coin-hero {
     display: flex;
     align-items: center;
@@ -542,7 +528,6 @@ body {
     color: var(--green);
 }
 
-/* Search */
 .search-wrap {
     position: relative;
     margin-bottom: 10px;
@@ -598,7 +583,6 @@ body {
     box-shadow: 0 8px 24px rgba(168, 85, 247, 0.6);
 }
 
-/* Cinema */
 .cinema-wrap {
     position: relative;
     margin-bottom: 10px;
@@ -690,7 +674,6 @@ body {
     box-shadow: 0 3px 0 rgba(150, 90, 0, 0.5), 0 8px 16px rgba(251, 191, 36, 0.5);
 }
 
-/* Pills */
 .pills-scroll {
     display: flex;
     gap: 8px;
@@ -738,7 +721,6 @@ body {
     filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
 }
 
-/* List */
 .list-wrap {
     flex: 1;
     min-height: 0;
@@ -887,7 +869,6 @@ body {
 }
 .search-loading i { animation: spin 1s linear infinite; }
 
-/* Bottom nav */
 .bottom-nav {
     position: relative;
     display: flex;
@@ -973,7 +954,6 @@ body {
     box-shadow: 0 0 10px rgba(244, 114, 182, 0.7);
 }
 
-/* Coin animation overlay */
 #coinAnimationOverlay {
     position: fixed;
     inset: 0;
@@ -1032,23 +1012,10 @@ body {
     top: -50px;
 }
 @keyframes coinFall {
-    0% {
-        top: -50px;
-        opacity: 0;
-        transform: rotate(0deg) scale(0.4);
-    }
-    15% {
-        opacity: 1;
-        transform: rotate(180deg) scale(1.1);
-    }
-    85% {
-        opacity: 1;
-    }
-    100% {
-        top: 110vh;
-        opacity: 0;
-        transform: rotate(720deg) scale(0.6);
-    }
+    0% { top: -50px; opacity: 0; transform: rotate(0deg) scale(0.4); }
+    15% { opacity: 1; transform: rotate(180deg) scale(1.1); }
+    85% { opacity: 1; }
+    100% { top: 110vh; opacity: 0; transform: rotate(720deg) scale(0.6); }
 }
 .reward-card {
     position: relative;
@@ -1142,17 +1109,10 @@ body {
     animation: confettiBurst 1.5s ease-out forwards;
 }
 @keyframes confettiBurst {
-    0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(0deg) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(var(--tx, 200px), var(--ty, 200px)) rotate(var(--rot, 720deg)) scale(0.3);
-    }
+    0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translate(var(--tx, 200px), var(--ty, 200px)) rotate(var(--rot, 720deg)) scale(0.3); }
 }
 
-/* Modals */
 .modal {
     position: fixed;
     inset: 0;
@@ -1310,7 +1270,6 @@ body {
     box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4);
 }
 
-/* Profile */
 .profile-pic { text-align: center; margin-bottom: 20px; position: relative; display: inline-block; width: 100%; }
 .profile-pic img {
     width: 90px; height: 90px;
@@ -1732,7 +1691,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- AUTH -->
     <div id="authScreen">
         <div class="auth-box">
             <div class="brand">
@@ -1772,7 +1730,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- MAIN APP -->
     <div id="appContainer">
         <div class="app-header">
             <div class="user-chip" onclick="openModal('profileModal')">
@@ -1876,7 +1833,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('profileModal')">&times;</button>
@@ -1941,7 +1897,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- History Modal -->
     <div id="historyModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('historyModal')">&times;</button>
@@ -1955,7 +1910,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- Market Modal -->
     <div id="marketModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('marketModal')">&times;</button>
@@ -1986,7 +1940,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- Exchange Modal -->
     <div id="exchangeModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('exchangeModal')">&times;</button>
@@ -2016,7 +1969,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- Admin Modal -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('adminModal')">&times;</button>
@@ -2167,7 +2119,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- Ad Modal -->
     <div id="adModal" class="modal">
         <div class="modal-content" style="text-align:center; padding:0; border-radius:var(--r-xl) var(--r-xl) 0 0;">
             <div style="padding:14px 18px; background:var(--bg-2); border-bottom:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; border-radius:var(--r-xl) var(--r-xl) 0 0;">
@@ -2240,7 +2191,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         const YOUTUBE_API_KEY = 'AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI';
 
         // ============================================================
-        //  📡 RSS FEED SYSTEM - THE 3 CHANNELS
+        //  📡 RSS FEED SYSTEM - 6 CHANNELS
         // ============================================================
         const RSS_CHANNELS = [
             {
@@ -2257,6 +2208,21 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 id: 'UCgsfh9N8xpBbzmfdV6wzgFA',
                 name: 'Mg Kyaw AI',
                 emoji: '🤖'
+            },
+            {
+                id: 'UCaL6FKyJ75fAKANYL2P7t_g',
+                name: 'Mahar Entertainment',
+                emoji: '🎥'
+            },
+            {
+                id: 'UC1ghHlhem7676hJfsyoON5Q',
+                name: 'Barbie Myanmar',
+                emoji: '💃'
+            },
+            {
+                id: 'UCesiu2rvAlopyNVzEK4RFMA',
+                name: 'SEIN HTAY Film Production',
+                emoji: '🎞️'
             }
         ];
 
@@ -2303,7 +2269,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                         const title = entry.getElementsByTagName('title')[0]?.textContent;
                         const published = entry.getElementsByTagName('published')[0]?.textContent;
                         const thumbnail = entry.getElementsByTagName('media:thumbnail')[0]?.getAttribute('url');
-
                         const stats = entry.getElementsByTagName('media:statistics')[0];
                         const views = stats ? parseInt(stats.getAttribute('views')) : 0;
 
@@ -2350,9 +2315,9 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             container.innerHTML = `
                 <div class="search-loading">
                     <i class="fas fa-satellite-dish"></i>
-                    <p>Channel တွေကနေ Video တွေ ရယူနေပါသည်...</p>
+                    <p>Channel ၆ ခုကနေ Video တွေ ရယူနေပါသည်...</p>
                     <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
-                        (ပထမဆုံးအကြိမ် 10-20 စက္ကန့် ကြာနိုင်ပါတယ်)
+                        (ပထမဆုံးအကြိမ် 20-40 စက္ကန့် ကြာနိုင်ပါတယ်)
                     </p>
                 </div>
             `;
@@ -2362,8 +2327,13 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             try {
                 const allVideos = [];
 
-                for (const channel of RSS_CHANNELS) {
-                    const videos = await fetchChannelRSS(channel.id);
+                // ⚡ Promise.all — channel ၆ ခု တစ်ပြိုင်နက် ဆွဲယူ
+                const results = await Promise.all(
+                    RSS_CHANNELS.map(channel => fetchChannelRSS(channel.id))
+                );
+
+                results.forEach((videos, i) => {
+                    const channel = RSS_CHANNELS[i];
                     videos.forEach(v => {
                         allVideos.push({
                             ...v,
@@ -2371,7 +2341,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                             channelEmoji: channel.emoji
                         });
                     });
-                }
+                });
 
                 allVideos.sort((a, b) => new Date(b.published) - new Date(a.published));
                 count.textContent = allVideos.length;
@@ -2397,7 +2367,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 allVideos.forEach((item, index) => {
                     const card = document.createElement('div');
                     card.className = 'v-card';
-                    card.style.animationDelay = (index * 0.03) + 's';
+                    card.style.animationDelay = (index * 0.02) + 's';
 
                     const pubDate = new Date(item.published);
                     const daysAgo = Math.floor((Date.now() - pubDate) / (1000 * 60 * 60 * 24));
@@ -2441,7 +2411,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     container.appendChild(card);
                 });
 
-                console.log(`✅ Total ${allVideos.length} videos loaded`);
+                console.log(`✅ Total ${allVideos.length} videos loaded from 6 channels`);
             } catch (error) {
                 console.error('Load RSS error:', error);
                 container.innerHTML = `
@@ -2797,9 +2767,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             container.innerHTML = html;
         }
 
-        // ============================================================
-        //  RENDER PLAYLIST
-        // ============================================================
         function renderPlaylist(category) {
             const container = document.getElementById('playlistContainer');
             const title = document.getElementById('playlistTitle');
@@ -3292,9 +3259,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             if (e.key === 'Enter') { e.preventDefault(); searchYouTube(); }
         });
 
-        // ============================================================
-        //  SPLASH
-        // ============================================================
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash').classList.add('hide');
@@ -3302,9 +3266,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }, 1500);
         });
 
-        // ============================================================
-        //  TOAST
-        // ============================================================
         function showToast(msg, type = 'success') {
             const el = document.getElementById('toast');
             el.textContent = msg;
@@ -3313,9 +3274,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             el._timeout = setTimeout(() => el.classList.remove('show'), 3500);
         }
 
-        // ============================================================
-        //  EXCHANGE RATE
-        // ============================================================
         async function loadExchangeRate() {
             try {
                 const doc = await db.collection('settings').doc('exchangeRate').get();
@@ -3360,9 +3318,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             } catch (error) { showToast('❌ Failed', 'error'); }
         }
 
-        // ============================================================
-        //  AUTH
-        // ============================================================
         function toggleAuth(mode) {
             document.getElementById('loginForm').style.display = mode === 'login' ? 'block' : 'none';
             document.getElementById('signupForm').style.display = mode === 'signup' ? 'block' : 'none';
@@ -3432,9 +3387,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             showToast('👋 Logged out');
         }
 
-        // ============================================================
-        //  AUTO BAN
-        // ============================================================
         async function checkAutoBan(userId) {
             try {
                 const doc = await db.collection('users').doc(userId).get();
@@ -3458,9 +3410,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             } catch (error) {}
         }
 
-        // ============================================================
-        //  AUTH STATE
-        // ============================================================
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
@@ -3557,9 +3506,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         });
 
-        // ============================================================
-        //  UI UPDATE
-        // ============================================================
         function updateUI() {
             const localCoins = getCoinsFromLocal();
             if (localCoins !== null && !isUpdatingCoins) userData.coins = localCoins;
@@ -3614,9 +3560,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
-        // ============================================================
-        //  DAILY BONUS
-        // ============================================================
         const DAILY_BONUS_DOWNLOAD_WAIT = 120;
         let downloadBonusTimer1 = null;
         let downloadBonusTimer2 = null;
@@ -3815,9 +3758,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             resumeDownloadTimer(3, DAILY_BONUS_DOWNLOAD_WAIT);
         }
 
-        // ============================================================
-        //  THEME
-        // ============================================================
         let isDark = true;
         function toggleTheme() {
             isDark = !isDark;
@@ -3833,9 +3773,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             if (icon) icon.className = 'fas fa-sun';
         }
 
-        // ============================================================
-        //  MODALS
-        // ============================================================
         function openModal(id) { document.getElementById(id).classList.add('show'); }
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
         document.querySelectorAll('.modal').forEach(el => {
@@ -3847,9 +3784,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             setTimeout(() => loadTransactionHistory(), 300);
         }
 
-        // ============================================================
-        //  ONLINE/OFFLINE
-        // ============================================================
         window.addEventListener('online', function() {
             if (currentUser) {
                 syncLocalTransactions();
@@ -3872,9 +3806,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             if (currentUser) { showLocalModeIndicator(true); usingLocalData = true; }
         });
 
-        // ============================================================
-        //  COIN GIFT
-        // ============================================================
         async function sendCoinGift() {
             const receiverEmail = document.getElementById('giftReceiverEmail').value.trim();
             const amount = parseInt(document.getElementById('giftAmount').value);
@@ -3948,9 +3879,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
-        // ============================================================
-        //  CATEGORY (WITH RSS SUPPORT)
-        // ============================================================
         function switchCategory(category, el) {
             currentCategory = category;
             document.querySelectorAll('.pill').forEach(e => e.classList.remove('active'));
@@ -3967,9 +3895,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             isVideoPlaying = false;
         }
 
-        // ============================================================
-        //  PROFILE
-        // ============================================================
         function uploadProfileImg(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -3994,9 +3919,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
-        // ============================================================
-        //  TRANSACTION HISTORY
-        // ============================================================
         async function loadTransactionHistory() {
             const container = document.getElementById('transactionList');
             if (!currentUser) {
@@ -4071,9 +3993,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
-        // ============================================================
-        //  EXCHANGE
-        // ============================================================
         function setExchangeAmount(val) {
             document.getElementById('exchangeInput').value = val;
             calculateExchange();
@@ -4124,9 +4043,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
-        // ============================================================
-        //  WITHDRAW
-        // ============================================================
         async function requestWithdraw() {
             if (!isWithdrawOpen) { showToast('❌ Withdraw locked', 'error'); return; }
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
@@ -4230,9 +4146,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             } catch (error) { showToast('❌ Failed', 'error'); }
         }
 
-        // ============================================================
-        //  ADMIN USERS
-        // ============================================================
         const USERS_PER_PAGE = 50;
         let userPageStack = [];
         let currentUserPage = 1;
@@ -4465,9 +4378,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             } catch (error) { showToast('❌ Failed', 'error'); }
         }
 
-        // ============================================================
-        //  ADMIN
-        // ============================================================
         function verifyAdmin() {
             const id = document.getElementById('adminIdInput').value.trim();
             if (ADMIN_IDS.includes(id)) {
@@ -4497,9 +4407,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             showToast('👋 Admin logged out');
         }
 
-        // ============================================================
-        //  APP LINKS
-        // ============================================================
         async function loadAppLinksFromFirestore() {
             try {
                 const doc = await db.collection('settings').doc('appLinks').get();
@@ -4564,9 +4471,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             showToast('✅ Deleted');
         }
 
-        // ============================================================
-        //  AD LINKS
-        // ============================================================
         async function loadAdLinksFromFirestore() {
             try {
                 const doc = await db.collection('settings').doc('adLinks').get();
@@ -4629,9 +4533,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             showToast('✅ Deleted');
         }
 
-        // ============================================================
-        //  WITHDRAW CONTROL
-        // ============================================================
         function adminToggleWithdraw() {
             isWithdrawOpen = !isWithdrawOpen;
             localStorage.setItem('isWithdrawOpen', isWithdrawOpen);
@@ -4659,9 +4560,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             showToast('✅ Date set: ' + date);
         }
 
-        // ============================================================
-        //  COIN MANAGEMENT
-        // ============================================================
         async function adminAddCoin() {
             const targetEmail = document.getElementById('adminTargetEmail').value.trim();
             const amount = parseInt(document.getElementById('adminCoinAmount').value);
@@ -4702,9 +4600,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             document.getElementById('adminCoinAmount').value = '';
         }
 
-        // ============================================================
-        //  NAVIGATION
-        // ============================================================
         function switchNav(tab, el) {
             document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
             if (el) el.classList.add('active');
@@ -4717,9 +4612,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
-        // ============================================================
-        //  INIT
-        // ============================================================
         renderPlaylist('myvideo');
         updateUI();
         updateWithdrawBadge();
@@ -4729,7 +4621,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 
         console.log('✅ New Design Loaded');
         console.log('✅ Coin Animation Active');
-        console.log('✅ RSS Channels: Heart & Soul + Drama Recap + Mg Kyaw AI');
+        console.log('✅ RSS Channels: 6 channels loaded');
     </script>
 </body>
 </html>
