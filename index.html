@@ -504,6 +504,275 @@ body {
 }
 .pill.active i { filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); }
 
+/* ============================================================
+   🎬 CHANNEL FILTER BAR (NEW)
+   ============================================================ */
+.channel-filter-bar {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--r-md);
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    animation: slideDown 0.3s var(--bounce);
+}
+.channel-filter-bar.show { display: flex; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+.filter-search-box {
+    position: relative;
+}
+.filter-search-box input {
+    width: 100%;
+    padding: 9px 36px 9px 36px;
+    border-radius: var(--r-full);
+    border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-1);
+    font-size: 12px;
+    outline: none;
+    transition: var(--transition);
+}
+.filter-search-box input:focus { border-color: var(--neon-1); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15); }
+.filter-search-box input::placeholder { color: var(--text-3); }
+.filter-search-box .search-icon-small {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-3);
+    font-size: 12px;
+    pointer-events: none;
+}
+.filter-search-box .clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-2);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: var(--transition);
+}
+.filter-search-box .clear-btn.show { display: flex; }
+.filter-search-box .clear-btn:hover { background: var(--red); color: #fff; }
+
+.filter-channels {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+.filter-channels::-webkit-scrollbar { display: none; }
+
+.filter-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--r-full);
+    color: var(--text-2);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.filter-chip:hover { color: var(--text-1); border-color: var(--neon-1); transform: translateY(-1px); }
+.filter-chip.active {
+    background: linear-gradient(135deg, var(--neon-1), var(--neon-2));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.5);
+}
+
+.filter-sorts {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 8px;
+}
+.filter-sorts::-webkit-scrollbar { display: none; }
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--r-full);
+    color: var(--text-3);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.sort-btn:hover { color: var(--text-1); border-color: var(--neon-3); }
+.sort-btn.active {
+    background: linear-gradient(135deg, var(--neon-3), var(--neon-2));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4);
+}
+
+/* ============================================================
+   SERIES GROUP STYLES (NEW)
+   ============================================================ */
+.series-group {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(34, 211, 238, 0.05));
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: var(--r-md);
+    padding: 12px;
+    margin-bottom: 4px;
+    position: relative;
+    overflow: hidden;
+}
+.series-group::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-1), var(--neon-3));
+    opacity: 0.6;
+}
+.series-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+.series-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+.series-title-wrap .series-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.series-title-wrap .series-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+.series-title-wrap .series-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.series-title-wrap .series-meta {
+    font-size: 10px;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+}
+.series-episodes-count {
+    background: linear-gradient(135deg, var(--neon-1), var(--neon-2));
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: var(--r-full);
+    font-size: 9px;
+    font-weight: 800;
+}
+.series-play-all-btn {
+    background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+    color: #1a1a2e;
+    border: none;
+    padding: 8px 14px;
+    border-radius: var(--r-full);
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+}
+.series-play-all-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 20px rgba(251, 191, 36, 0.6); }
+.series-play-all-btn:active { transform: translateY(0) scale(0.98); }
+
+.series-episodes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px;
+}
+.series-episode {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+.series-episode:hover {
+    transform: translateY(-3px);
+    border-color: var(--neon-1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), var(--glow-purple);
+}
+.series-episode .ep-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+    background: #000;
+}
+.series-episode .ep-title {
+    padding: 5px 8px;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.series-episode .ep-number {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+    color: #1a1a2e;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 .list-wrap { flex: 1; min-height: 0; overflow-y: auto; margin-bottom: 8px; padding-bottom: 8px; }
 .list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding: 0 4px; }
 .list-header h4 {
@@ -680,9 +949,6 @@ body {
     box-shadow: 0 0 10px rgba(244, 114, 182, 0.7);
 }
 
-/* ============================================================
-   🎉 COIN ANIMATION - ULTRA PREMIUM
-   ============================================================ */
 #coinAnimationOverlay {
     position: fixed;
     inset: 0;
@@ -702,18 +968,12 @@ body {
     animation: overlayFadeIn 0.4s ease;
 }
 @keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* Screen shake */
-#coinAnimationOverlay.shake {
-    animation: screenShake 0.6s ease-in-out;
-}
+#coinAnimationOverlay.shake { animation: screenShake 0.6s ease-in-out; }
 @keyframes screenShake {
     0%, 100% { transform: translate(0, 0); }
     10%, 30%, 50%, 70%, 90% { transform: translate(-3px, 2px); }
     20%, 40%, 60%, 80% { transform: translate(3px, -2px); }
 }
-
-/* Burst rings - 6 rings */
 .burst-ring {
     position: absolute;
     border-radius: 50%;
@@ -735,8 +995,6 @@ body {
     0% { width: 0; height: 0; opacity: 1; border-width: 6px; }
     100% { width: 500px; height: 500px; opacity: 0; border-width: 1px; }
 }
-
-/* Coin particles */
 .coin-particle {
     position: absolute;
     width: 32px;
@@ -760,8 +1018,6 @@ body {
     85% { opacity: 1; transform: rotate(540deg) scale(1); }
     100% { top: 110vh; opacity: 0; transform: rotate(900deg) scale(0.5); }
 }
-
-/* Sparkle stars */
 .sparkle {
     position: absolute;
     font-size: 20px;
@@ -770,21 +1026,10 @@ body {
     opacity: 0;
 }
 @keyframes sparkleFly {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.3) rotate(0deg);
-    }
-    20% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.3) rotate(180deg);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.2) rotate(720deg);
-    }
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(0deg); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotate(180deg); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.2) rotate(720deg); }
 }
-
-/* Confetti */
 .confetti {
     position: absolute;
     width: 12px;
@@ -796,17 +1041,9 @@ body {
     pointer-events: none;
 }
 @keyframes confettiBurst {
-    0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(0deg) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(var(--tx, 200px), var(--ty, 200px)) rotate(var(--rot, 720deg)) scale(0.3);
-    }
+    0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translate(var(--tx, 200px), var(--ty, 200px)) rotate(var(--rot, 720deg)) scale(0.3); }
 }
-
-/* Reward card */
 .reward-card {
     position: relative;
     z-index: 10;
@@ -862,7 +1099,6 @@ body {
     60% { transform: scale(1.15) rotate(5deg); }
     100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
-
 .reward-coin-icon {
     font-size: 88px;
     line-height: 1;
@@ -875,7 +1111,6 @@ body {
     0%, 100% { transform: translateY(0) rotate(-8deg) scale(1); }
     50% { transform: translateY(-15px) rotate(8deg) scale(1.08); }
 }
-
 .reward-label {
     font-size: 13px;
     color: var(--gold-1);
@@ -890,7 +1125,6 @@ body {
     0%, 100% { text-shadow: 0 0 25px var(--gold-1); }
     50% { text-shadow: 0 0 45px var(--gold-1), 0 0 60px var(--gold-2); }
 }
-
 .reward-amount {
     font-size: 68px;
     font-weight: 900;
@@ -916,14 +1150,12 @@ body {
     color: var(--gold-1);
     -webkit-text-fill-color: var(--gold-1);
 }
-
 .reward-sub {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.75);
     font-weight: 600;
     margin-top: 6px;
 }
-
 .reward-total {
     margin-top: 20px;
     padding-top: 20px;
@@ -939,8 +1171,6 @@ body {
     margin-left: 6px;
     text-shadow: 0 0 20px var(--gold-1);
 }
-
-/* Coin ring around card */
 .reward-card::after {
     content: '';
     position: absolute;
@@ -955,7 +1185,6 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Modals */
 .modal {
     position: fixed;
     inset: 0;
@@ -1369,6 +1598,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     .reward-amount { font-size: 54px; }
     .reward-coin-icon { font-size: 72px; }
     .reward-card { padding: 28px 32px; }
+    .series-episodes { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
 }
 @media (min-width: 768px) {
     .v-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1376,6 +1606,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     .modal { align-items: center; padding: 20px; }
     .modal-content { border-radius: var(--r-xl); max-height: 88vh; }
     .modal-content::before { display: none; }
+    .series-episodes { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 }
     </style>
 </head>
@@ -1398,7 +1629,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
     <div id="localModeIndicator">📱 Local Mode</div>
     <div id="toast" class="toast"></div>
 
-    <!-- 🎉 COIN ANIMATION OVERLAY - ULTRA PREMIUM -->
     <div id="coinAnimationOverlay">
         <div class="burst-ring"></div>
         <div class="burst-ring"></div>
@@ -1415,7 +1645,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- AUTH -->
     <div id="authScreen">
         <div class="auth-box">
             <div class="brand">
@@ -1455,7 +1684,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- MAIN APP -->
     <div id="appContainer">
         <div class="app-header">
             <div class="user-chip" onclick="openModal('profileModal')">
@@ -1512,7 +1740,10 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
 
         <div class="pills-scroll">
-            <div class="pill active" onclick="switchCategory('myvideo', this)">
+            <div class="pill active" onclick="switchCategory('rss', this)">
+                <i class="fas fa-satellite-dish"></i><span>Movies</span>
+            </div>
+            <div class="pill" onclick="switchCategory('myvideo', this)">
                 <i class="fa-solid fa-clapperboard"></i><span>My Video</span>
             </div>
             <div class="pill" onclick="switchCategory('song', this)">
@@ -1524,17 +1755,44 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             <div class="pill" onclick="switchCategory('cartoon', this)">
                 <i class="fa-solid fa-face-smile"></i><span>Cartoon</span>
             </div>
-            <div class="pill" onclick="switchCategory('rss', this)">
-                <i class="fas fa-satellite-dish"></i><span>Channels</span>
-            </div>
             <div class="pill" onclick="switchCategory('search', this)">
                 <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
             </div>
         </div>
 
+        <!-- 🎬 Channel Filter Bar (Movies tab မှာပဲ ပြ) -->
+        <div class="channel-filter-bar" id="channelFilterBar">
+            <div class="filter-search-box">
+                <i class="fas fa-search search-icon-small"></i>
+                <input type="text" id="channelSearchInput" placeholder="🎬 ကားအမည် / သရုပ်ဆောင် ရှာရန်..." />
+                <button class="clear-btn" id="clearChannelSearch" onclick="clearChannelSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="filter-channels" id="filterChannels">
+                <!-- Dynamic from JS -->
+            </div>
+
+            <div class="filter-sorts">
+                <button class="sort-btn active" data-sort="latest" onclick="setSortOrder('latest', this)">
+                    <i class="fas fa-clock"></i> Latest
+                </button>
+                <button class="sort-btn" data-sort="popular" onclick="setSortOrder('popular', this)">
+                    <i class="fas fa-fire"></i> Popular
+                </button>
+                <button class="sort-btn" data-sort="oldest" onclick="setSortOrder('oldest', this)">
+                    <i class="fas fa-history"></i> Oldest
+                </button>
+                <button class="sort-btn" data-sort="az" onclick="setSortOrder('az', this)">
+                    <i class="fas fa-sort-alpha-down"></i> A-Z
+                </button>
+            </div>
+        </div>
+
         <div class="list-wrap">
             <div class="list-header">
-                <h4 id="playlistTitle">📽️ My Videos</h4>
+                <h4 id="playlistTitle">🎬 Movies</h4>
                 <span class="count" id="playlistCount">0</span>
             </div>
             <div id="playlistContainer" class="v-grid"></div>
@@ -1559,7 +1817,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         </div>
     </div>
 
-    <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <button class="close" onclick="closeModal('profileModal')">&times;</button>
@@ -1918,15 +2175,17 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         const YOUTUBE_API_KEY = 'AIzaSyBmr5WXG46FsqDSSTax8Z9rlnlpQh4oyzI';
 
         // ============================================================
-        //  📡 RSS FEED SYSTEM
+        //  📡 RSS FEED SYSTEM - 8 CHANNELS
         // ============================================================
         const RSS_CHANNELS = [
-            { id: 'UCNHIxx5X9XND2BMZ4LV73Fg', name: 'Heart & Soul Creation', emoji: '🎬' },
-            { id: 'UCZpd3IpUl7c7vLYIIiWzoOA', name: 'Drama Recap', emoji: '📺' },
-            { id: 'UCgsfh9N8xpBbzmfdV6wzgFA', name: 'Mg Kyaw AI', emoji: '🤖' },
-            { id: 'UCaL6FKyJ75fAKANYL2P7t_g', name: 'Mahar Entertainment', emoji: '🎥' },
-            { id: 'UC1ghHlhem7676hJfsyoON5Q', name: 'Barbie Myanmar', emoji: '💃' },
-            { id: 'UCesiu2rvAlopyNVzEK4RFMA', name: 'SEIN HTAY Film Production', emoji: '🎞️' }
+            { id: 'UCNHIxx5X9XND2BMZ4LV73Fg', name: 'Heart & Soul', emoji: '🎬', category: 'movies' },
+            { id: 'UCZpd3IpUl7c7vLYIIiWzoOA', name: 'Drama Recap', emoji: '📺', category: 'drama' },
+            { id: 'UCgsfh9N8xpBbzmfdV6wzgFA', name: 'Mg Kyaw AI', emoji: '🤖', category: 'ai' },
+            { id: 'UCaL6FKyJ75fAKANYL2P7t_g', name: 'Mahar Ent', emoji: '🎥', category: 'movies' },
+            { id: 'UC1ghHlhem7676hJfsyoON5Q', name: 'Barbie Myanmar', emoji: '💃', category: 'fun' },
+            { id: 'UCesiu2rvAlopyNVzEK4RFMA', name: 'SEIN HTAY', emoji: '🎞️', category: 'movies' },
+            { id: 'UCniPIti4QwaOEorvIqv1RWA', name: 'Anne Bryan', emoji: '🌸', category: 'fun' },
+            { id: 'UCj10WX_WHpZIpN6br_g-h1w', name: 'Pyone Play Sports', emoji: '⚽', category: 'sports' }
         ];
 
         const CORS_PROXIES = [
@@ -1937,6 +2196,15 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 
         const RSS_CACHE_TIME = 30 * 60 * 1000;
 
+        // State for filtering
+        let allRSSVideos = [];  // All fetched videos
+        let currentChannelFilter = 'all';  // Channel filter
+        let currentSortOrder = 'latest';  // Sort order
+        let currentSearchQuery = '';  // Search text
+
+        // ------------------------------------------------------------
+        //  Fetch channel RSS
+        // ------------------------------------------------------------
         async function fetchChannelRSS(channelId) {
             const cacheKey = `rss_cache_${channelId}`;
             let cached = null;
@@ -2009,7 +2277,95 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             return [];
         }
 
-        async function loadRSSVideos() {
+        // ------------------------------------------------------------
+        //  Detect series (အပိုင်း ၁, ၂, ၃ စသည်)
+        // ------------------------------------------------------------
+        function detectSeries(videos) {
+            // Regex patterns for episode numbers
+            const patterns = [
+                /\(အပိုင်း\s*([၁၂၃၄၅၆၇၈၉၀\d]+)\)/i,
+                /အပိုင်း\s*([၁၂၃၄၅၆၇၈၉၀\d]+)/i,
+                /(part|episode|ep|အပိုင်း)\s*([\d၁၂၃၄၅၆၇၈၉၀]+)/i,
+                /\(([၁၂၃၄၅၆၇၈၉၀\d])\)/
+            ];
+
+            const seriesMap = {};
+            const standalone = [];
+
+            videos.forEach(video => {
+                let matched = false;
+                let baseTitle = '';
+                let episodeNum = '';
+
+                for (const pattern of patterns) {
+                    const match = video.name.match(pattern);
+                    if (match) {
+                        episodeNum = match[1] || match[2];
+                        // Remove episode part to get base name
+                        baseTitle = video.name
+                            .replace(/\(အပိုင်း\s*[၁၂၃၄၅၆၇၈၉၀\d]+\)/gi, '')
+                            .replace(/အပိုင်း\s*[၁၂၃၄၅၆၇၈၉၀\d]+/gi, '')
+                            .replace(/\(part\s*[\d၁၂၃၄၅၆၇၈၉၀]+\)/gi, '')
+                            .replace(/[\s\-–—_]+$/, '')
+                            .trim();
+                        matched = true;
+                        break;
+                    }
+                }
+
+                if (matched && baseTitle.length > 5) {
+                    const key = baseTitle.toLowerCase().substring(0, 40);
+                    if (!seriesMap[key]) {
+                        seriesMap[key] = {
+                            baseTitle: baseTitle,
+                            videos: []
+                        };
+                    }
+                    seriesMap[key].videos.push({
+                        ...video,
+                        episodeNum: episodeNum
+                    });
+                } else {
+                    standalone.push(video);
+                }
+            });
+
+            // Convert series with 2+ parts only
+            const series = [];
+            const remainingStandalone = [...standalone];
+
+            Object.values(seriesMap).forEach(s => {
+                if (s.videos.length >= 2) {
+                    // Sort episodes
+                    s.videos.sort((a, b) => {
+                        const aNum = myanmarToNumber(a.episodeNum);
+                        const bNum = myanmarToNumber(b.episodeNum);
+                        return aNum - bNum;
+                    });
+                    series.push(s);
+                } else {
+                    // Single episode - treat as standalone
+                    s.videos.forEach(v => remainingStandalone.push(v));
+                }
+            });
+
+            return { series, standalone: remainingStandalone };
+        }
+
+        function myanmarToNumber(str) {
+            if (!str) return 0;
+            const map = { '၀':0,'၁':1,'၂':2,'၃':3,'၄':4,'၅':5,'၆':6,'၇':7,'၈':8,'၉':9 };
+            let num = '';
+            for (const ch of str) {
+                num += map[ch] !== undefined ? map[ch] : ch;
+            }
+            return parseInt(num) || 0;
+        }
+
+        // ------------------------------------------------------------
+        //  Load all RSS videos
+        // ------------------------------------------------------------
+        async function loadRSSVideos(forceRefresh = false) {
             const container = document.getElementById('playlistContainer');
             const title = document.getElementById('playlistTitle');
             const count = document.getElementById('playlistCount');
@@ -2018,13 +2374,13 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             container.innerHTML = `
                 <div class="search-loading">
                     <i class="fas fa-satellite-dish"></i>
-                    <p>Channel ၆ ခုကနေ Video တွေ ရယူနေပါသည်...</p>
+                    <p>Channel ၈ ခုကနေ Video တွေ ရယူနေပါသည်...</p>
                     <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
                         (ပထမဆုံးအကြိမ် 20-40 စက္ကန့် ကြာနိုင်ပါတယ်)
                     </p>
                 </div>
             `;
-            title.textContent = '📡 YouTube Channels';
+            title.textContent = '🎬 Movies';
             count.textContent = '...';
 
             try {
@@ -2039,81 +2395,23 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     videos.forEach(v => {
                         allVideos.push({
                             ...v,
+                            channelId: channel.id,
                             channelName: channel.name,
-                            channelEmoji: channel.emoji
+                            channelEmoji: channel.emoji,
+                            channelCategory: channel.category
                         });
                     });
                 });
 
-                allVideos.sort((a, b) => new Date(b.published) - new Date(a.published));
-                count.textContent = allVideos.length;
+                allRSSVideos = allVideos;
+                console.log(`✅ Total ${allVideos.length} videos from 8 channels`);
 
-                if (allVideos.length === 0) {
-                    container.innerHTML = `
-                        <div class="search-no-results">
-                            <i class="fas fa-video-slash"></i>
-                            <p>Video မတွေ့ပါ</p>
-                            <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
-                                Internet စစ်ပါ သို့မဟုတ် ခဏနေမှ ပြန်စမ်းပါ
-                            </p>
-                            <button class="btn" onclick="loadRSSVideos()" 
-                                    style="margin-top:12px;width:auto;padding:8px 20px;font-size:12px;">
-                                <i class="fas fa-sync"></i> ပြန်စမ်းမည်
-                            </button>
-                        </div>
-                    `;
-                    return;
-                }
+                // Build channel filter chips
+                buildChannelFilterChips();
 
-                container.innerHTML = '';
-                allVideos.forEach((item, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'v-card';
-                    card.style.animationDelay = (index * 0.02) + 's';
+                // Apply filters and render
+                applyFiltersAndRender();
 
-                    const pubDate = new Date(item.published);
-                    const daysAgo = Math.floor((Date.now() - pubDate) / (1000 * 60 * 60 * 24));
-                    let timeAgo = '';
-                    if (daysAgo === 0) timeAgo = 'Today';
-                    else if (daysAgo === 1) timeAgo = 'Yesterday';
-                    else if (daysAgo < 7) timeAgo = daysAgo + 'd ago';
-                    else if (daysAgo < 30) timeAgo = Math.floor(daysAgo / 7) + 'w ago';
-                    else if (daysAgo < 365) timeAgo = Math.floor(daysAgo / 30) + 'mo ago';
-                    else timeAgo = Math.floor(daysAgo / 365) + 'y ago';
-
-                    let viewsText = '';
-                    if (item.views > 1000000) viewsText = (item.views / 1000000).toFixed(1) + 'M';
-                    else if (item.views > 1000) viewsText = (item.views / 1000).toFixed(0) + 'K';
-                    else if (item.views > 0) viewsText = item.views.toString();
-
-                    card.innerHTML = `
-                        <div class="v-thumb">
-                            <img src="${item.thumbnail}" loading="lazy" 
-                                 onerror="this.src='https://via.placeholder.com/320x180/1a1a2e/a855f7?text=No+Image'" />
-                            <div class="play-overlay">
-                                <div class="play-icon"><i class="fas fa-play"></i></div>
-                            </div>
-                            <div style="position:absolute;bottom:6px;right:6px;
-                                        background:rgba(0,0,0,0.85);padding:3px 8px;
-                                        border-radius:6px;font-size:9px;color:#fff;font-weight:700;
-                                        backdrop-filter:blur(4px);">
-                                ${timeAgo}
-                            </div>
-                        </div>
-                        <div class="v-title">${item.name}</div>
-                        <div style="padding:0 10px 8px;display:flex;
-                                    justify-content:space-between;align-items:center;
-                                    font-size:9px;color:var(--text-3);">
-                            <span>${item.channelEmoji} ${item.channelName}</span>
-                            ${viewsText ? `<span>👁️ ${viewsText}</span>` : ''}
-                        </div>
-                    `;
-
-                    card.onclick = () => loadVideo(item.id);
-                    container.appendChild(card);
-                });
-
-                console.log(`✅ Total ${allVideos.length} videos loaded from 6 channels`);
             } catch (error) {
                 console.error('Load RSS error:', error);
                 container.innerHTML = `
@@ -2129,6 +2427,251 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             }
         }
 
+        // ------------------------------------------------------------
+        //  Build channel filter chips
+        // ------------------------------------------------------------
+        function buildChannelFilterChips() {
+            const container = document.getElementById('filterChannels');
+            if (!container) return;
+
+            // Count videos per channel
+            const counts = {};
+            allRSSVideos.forEach(v => {
+                counts[v.channelId] = (counts[v.channelId] || 0) + 1;
+            });
+
+            let html = `<button class="filter-chip ${currentChannelFilter === 'all' ? 'active' : ''}" 
+                                onclick="setChannelFilter('all', this)">
+                            <i class="fas fa-globe"></i> All (${allRSSVideos.length})
+                        </button>`;
+
+            RSS_CHANNELS.forEach(channel => {
+                const count = counts[channel.id] || 0;
+                if (count === 0) return;
+                const active = currentChannelFilter === channel.id ? 'active' : '';
+                html += `<button class="filter-chip ${active}" 
+                                onclick="setChannelFilter('${channel.id}', this)">
+                            ${channel.emoji} ${channel.name} (${count})
+                        </button>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ------------------------------------------------------------
+        //  Set channel filter
+        // ------------------------------------------------------------
+        function setChannelFilter(channelId, el) {
+            currentChannelFilter = channelId;
+            document.querySelectorAll('#filterChannels .filter-chip').forEach(c => c.classList.remove('active'));
+            if (el) el.classList.add('active');
+            applyFiltersAndRender();
+        }
+
+        // ------------------------------------------------------------
+        //  Set sort order
+        // ------------------------------------------------------------
+        function setSortOrder(order, el) {
+            currentSortOrder = order;
+            document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+            if (el) el.classList.add('active');
+            applyFiltersAndRender();
+        }
+
+        // ------------------------------------------------------------
+        //  Channel search input
+        // ------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('channelSearchInput');
+            const clearBtn = document.getElementById('clearChannelSearch');
+            if (input) {
+                input.addEventListener('input', (e) => {
+                    currentSearchQuery = e.target.value.trim().toLowerCase();
+                    if (clearBtn) {
+                        if (currentSearchQuery) clearBtn.classList.add('show');
+                        else clearBtn.classList.remove('show');
+                    }
+                    applyFiltersAndRender();
+                });
+            }
+        });
+
+        function clearChannelSearch() {
+            const input = document.getElementById('channelSearchInput');
+            const clearBtn = document.getElementById('clearChannelSearch');
+            if (input) input.value = '';
+            if (clearBtn) clearBtn.classList.remove('show');
+            currentSearchQuery = '';
+            applyFiltersAndRender();
+        }
+
+        // ------------------------------------------------------------
+        //  Apply filters + sort + render
+        // ------------------------------------------------------------
+        function applyFiltersAndRender() {
+            let filtered = [...allRSSVideos];
+
+            // Channel filter
+            if (currentChannelFilter !== 'all') {
+                filtered = filtered.filter(v => v.channelId === currentChannelFilter);
+            }
+
+            // Search filter
+            if (currentSearchQuery) {
+                filtered = filtered.filter(v => 
+                    v.name.toLowerCase().includes(currentSearchQuery) ||
+                    v.channelName.toLowerCase().includes(currentSearchQuery)
+                );
+            }
+
+            // Sort
+            switch (currentSortOrder) {
+                case 'latest':
+                    filtered.sort((a, b) => new Date(b.published) - new Date(a.published));
+                    break;
+                case 'oldest':
+                    filtered.sort((a, b) => new Date(a.published) - new Date(b.published));
+                    break;
+                case 'popular':
+                    filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
+                    break;
+                case 'az':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name, 'my'));
+                    break;
+            }
+
+            renderFilteredVideos(filtered);
+        }
+
+        // ------------------------------------------------------------
+        //  Render with series detection
+        // ------------------------------------------------------------
+        function renderFilteredVideos(videos) {
+            const container = document.getElementById('playlistContainer');
+            const title = document.getElementById('playlistTitle');
+            const count = document.getElementById('playlistCount');
+            if (!container) return;
+
+            count.textContent = videos.length;
+            title.textContent = `🎬 Movies (${videos.length})`;
+
+            if (videos.length === 0) {
+                container.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-search"></i>
+                        <p>Video မတွေ့ပါ</p>
+                        <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
+                            ရှာဖွေမှုကို ပြောင်းကြည့်ပါ
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Detect series
+            const { series, standalone } = detectSeries(videos);
+
+            container.innerHTML = '';
+
+            // Render series groups first
+            series.forEach(s => {
+                const group = document.createElement('div');
+                group.className = 'series-group';
+
+                let episodesHtml = '';
+                s.videos.forEach(video => {
+                    const epNum = video.episodeNum || '?';
+                    episodesHtml += `
+                        <div class="series-episode" onclick="event.stopPropagation(); loadVideo('${video.id}')">
+                            <div class="ep-number">${epNum}</div>
+                            <img class="ep-thumb" src="${video.thumbnail}" loading="lazy" 
+                                 onerror="this.src='https://via.placeholder.com/320x180/1a1a2e/a855f7?text=No+Image'" />
+                            <div class="ep-title">အပိုင်း ${epNum}</div>
+                        </div>
+                    `;
+                });
+
+                const firstVideo = s.videos[0];
+                const channelBadge = `${firstVideo.channelEmoji} ${firstVideo.channelName}`;
+
+                group.innerHTML = `
+                    <div class="series-header">
+                        <div class="series-title-wrap">
+                            <span class="series-icon">🎬</span>
+                            <div class="series-info">
+                                <div class="series-name">${s.baseTitle}</div>
+                                <div class="series-meta">
+                                    <span>${channelBadge}</span>
+                                    <span class="series-episodes-count">${s.videos.length} parts</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="series-play-all-btn" onclick="event.stopPropagation(); loadVideo('${firstVideo.id}')">
+                            <i class="fas fa-play"></i> Play All
+                        </button>
+                    </div>
+                    <div class="series-episodes">
+                        ${episodesHtml}
+                    </div>
+                `;
+
+                container.appendChild(group);
+            });
+
+            // Render standalone videos
+            standalone.forEach((item, index) => {
+                const card = createVideoCard(item, index);
+                container.appendChild(card);
+            });
+        }
+
+        function createVideoCard(item, index) {
+            const card = document.createElement('div');
+            card.className = 'v-card';
+            card.style.animationDelay = (index * 0.02) + 's';
+
+            const pubDate = new Date(item.published);
+            const daysAgo = Math.floor((Date.now() - pubDate) / (1000 * 60 * 60 * 24));
+            let timeAgo = '';
+            if (daysAgo === 0) timeAgo = 'Today';
+            else if (daysAgo === 1) timeAgo = 'Yesterday';
+            else if (daysAgo < 7) timeAgo = daysAgo + 'd ago';
+            else if (daysAgo < 30) timeAgo = Math.floor(daysAgo / 7) + 'w ago';
+            else if (daysAgo < 365) timeAgo = Math.floor(daysAgo / 30) + 'mo ago';
+            else timeAgo = Math.floor(daysAgo / 365) + 'y ago';
+
+            let viewsText = '';
+            if (item.views > 1000000) viewsText = (item.views / 1000000).toFixed(1) + 'M';
+            else if (item.views > 1000) viewsText = (item.views / 1000).toFixed(0) + 'K';
+            else if (item.views > 0) viewsText = item.views.toString();
+
+            card.innerHTML = `
+                <div class="v-thumb">
+                    <img src="${item.thumbnail}" loading="lazy" 
+                         onerror="this.src='https://via.placeholder.com/320x180/1a1a2e/a855f7?text=No+Image'" />
+                    <div class="play-overlay">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div style="position:absolute;bottom:6px;right:6px;
+                                background:rgba(0,0,0,0.85);padding:3px 8px;
+                                border-radius:6px;font-size:9px;color:#fff;font-weight:700;
+                                backdrop-filter:blur(4px);">
+                        ${timeAgo}
+                    </div>
+                </div>
+                <div class="v-title">${item.name}</div>
+                <div style="padding:0 10px 8px;display:flex;
+                            justify-content:space-between;align-items:center;
+                            font-size:9px;color:var(--text-3);">
+                    <span>${item.channelEmoji} ${item.channelName}</span>
+                    ${viewsText ? `<span>👁️ ${viewsText}</span>` : ''}
+                </div>
+            `;
+
+            card.onclick = () => loadVideo(item.id);
+            return card;
+        }
+
         // ============================================================
         //  STATE
         // ============================================================
@@ -2138,7 +2681,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         let isAdmin = false;
         let exchangeRate = 3000;
         let usingLocalData = false;
-        let currentCategory = 'myvideo';
+        let currentCategory = 'rss';
 
         let adLinks = [];
         let adIndex = 0;
@@ -2167,7 +2710,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         }
 
         // ============================================================
-        //  🎵 COIN SOUND - Web Audio API
+        //  🎵 COIN SOUND
         // ============================================================
         let audioContext = null;
 
@@ -2176,59 +2719,40 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                
                 const now = audioContext.currentTime;
-                
-                // 🎵 Classic coin sound - two quick tones
-                // Tone 1: High pitch (like Mario coin)
-                playTone(988, now, 0.08, 0.3);      // B5
-                playTone(1319, now + 0.08, 0.2, 0.25); // E6
-                
-                // Sparkle echo
-                playTone(1760, now + 0.15, 0.15, 0.15); // A6
-                
-            } catch (e) {
-                console.warn('Audio error:', e);
-            }
+                playTone(988, now, 0.08, 0.3);
+                playTone(1319, now + 0.08, 0.2, 0.25);
+                playTone(1760, now + 0.15, 0.15, 0.15);
+            } catch (e) {}
         }
 
         function playTone(frequency, startTime, duration, volume) {
             try {
                 const osc = audioContext.createOscillator();
                 const gain = audioContext.createGain();
-                
                 osc.type = 'sine';
                 osc.frequency.value = frequency;
-                
                 gain.gain.setValueAtTime(0, startTime);
                 gain.gain.linearRampToValueAtTime(volume, startTime + 0.01);
                 gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-                
                 osc.connect(gain);
                 gain.connect(audioContext.destination);
-                
                 osc.start(startTime);
                 osc.stop(startTime + duration);
             } catch (e) {}
         }
 
-        // 🎵 Multi-coin cascade sound (for big rewards)
         function playBigRewardSound() {
             try {
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                
                 const now = audioContext.currentTime;
-                
-                // Rising scale
-                playTone(523, now, 0.1, 0.2);       // C5
-                playTone(659, now + 0.1, 0.1, 0.25);  // E5
-                playTone(784, now + 0.2, 0.1, 0.3);   // G5
-                playTone(1047, now + 0.3, 0.15, 0.35); // C6
-                playTone(1319, now + 0.45, 0.3, 0.4);  // E6
-                
-                // Sparkle tail
+                playTone(523, now, 0.1, 0.2);
+                playTone(659, now + 0.1, 0.1, 0.25);
+                playTone(784, now + 0.2, 0.1, 0.3);
+                playTone(1047, now + 0.3, 0.15, 0.35);
+                playTone(1319, now + 0.45, 0.3, 0.4);
                 for (let i = 0; i < 5; i++) {
                     playTone(1760 + Math.random() * 400, now + 0.7 + i * 0.05, 0.1, 0.1);
                 }
@@ -2236,7 +2760,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         }
 
         // ============================================================
-        //  🎉 COIN ANIMATION - ULTRA PREMIUM
+        //  🎉 COIN ANIMATION
         // ============================================================
         function showCoinAnimation(amount, totalCoins) {
             const overlay = document.getElementById('coinAnimationOverlay');
@@ -2245,30 +2769,24 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 
             if (!overlay) return;
 
-            // Reset content
             amountEl.textContent = '0';
             totalEl.textContent = totalCoins;
 
-            // Clear old particles
             document.querySelectorAll('.coin-particle, .confetti, .sparkle').forEach(el => el.remove());
 
-            // Show overlay
             overlay.classList.add('show');
 
-            // 🎵 Play coin sound
             if (amount >= 100) {
                 playBigRewardSound();
             } else {
                 playCoinSound();
             }
 
-            // 💥 Screen shake effect
             setTimeout(() => {
                 overlay.classList.add('shake');
                 setTimeout(() => overlay.classList.remove('shake'), 600);
             }, 100);
 
-            // 🪙 Spawn 50 coin particles (increased from 30)
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
                     const coin = document.createElement('div');
@@ -2285,7 +2803,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 }, i * 30);
             }
 
-            // 🎊 Spawn 60 confetti (increased from 40)
             const colors = ['#a855f7', '#22d3ee', '#f472b6', '#fbbf24', '#22c55e', '#6366f1'];
             for (let i = 0; i < 60; i++) {
                 setTimeout(() => {
@@ -2295,7 +2812,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
                     c.style.width = (8 + Math.random() * 8) + 'px';
                     c.style.height = c.style.width;
-                    
                     const angle = Math.random() * Math.PI * 2;
                     const dist = 200 + Math.random() * 350;
                     c.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
@@ -2307,7 +2823,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 }, i * 20);
             }
 
-            // ✨ Spawn 20 sparkle stars
             const sparkleChars = ['✨', '⭐', '💫', '🌟'];
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
@@ -2327,7 +2842,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 }, i * 40);
             }
 
-            // 📊 Count-up animation (smoother)
             const duration = 1500;
             const start = Date.now();
             const countUp = () => {
@@ -2336,20 +2850,15 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 const eased = 1 - Math.pow(1 - progress, 4);
                 const current = Math.round(amount * eased);
                 amountEl.textContent = current;
-                if (progress < 1) {
-                    requestAnimationFrame(countUp);
-                } else {
-                    amountEl.textContent = amount;
-                }
+                if (progress < 1) requestAnimationFrame(countUp);
+                else amountEl.textContent = amount;
             };
             requestAnimationFrame(countUp);
 
-            // 📱 Haptic feedback (stronger pattern)
             if (navigator.vibrate) {
                 navigator.vibrate([80, 40, 80, 40, 150]);
             }
 
-            // Auto-dismiss (4 seconds - longer)
             setTimeout(() => {
                 overlay.classList.remove('show');
             }, 4000);
@@ -2448,59 +2957,8 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
         }
 
         // ============================================================
-        //  VIDEO DATA
+        //  VIDEO DATA (Empty - Myanmar Movies ဖျက်ထား)
         // ============================================================
-        const MYANMAR_MOVIES = [
-            { name: "ကံငါးပါးမှောက်ငရဲရောက် (မြင့်မြတ်)", id: "I3ShB6jspJc" },
-            { name: "ဘီလူးမျက်စောင်း (ပြေတီဦး မင်းဦး)", id: "CSD3omBlCO4" },
-            { name: "ပန်းနုရောင် (ဟာသကား) မြင့်မြတ်", id: "Gv7eXtFzP8w" },
-            { name: "ကျွန်တော်မုန်းသောအမျိုးသမီး (မြင့်မြတ်)", id: "uw5tQnBzHDE" },
-            { name: "လေပြည်နမ်းတိုင်းအချစ်ပန်းပွင့်စေ (မြင့်မြတ်)", id: "ovl5VfEaW6M" },
-            { name: "ဝတစ်ထောင်သိန်းမောင် (စ/ဆုံး)", id: "you2gfY4hGA" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မောင်မောင်တာနောယက္ခ", id: "B-RUIXjbodQ" },
-            { name: "တောအုပ် မင်းဒင် (အပိုင်း ၂)", id: "4WA4TRXPPu4" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး မြေသျှိုးမိုးပျံသတိုးဘမှန်", id: "zjcy_M5QnIk" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး သိုက်ဆက်ကျိန်စာ", id: "1xLD7PKgb_k" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး သျှောင်တစ်စောင်းမောင်မောင်", id: "HpSQ_ylvNIg" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး မုသားသစ္စာ", id: "aonmCljaTWI" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး မေတ္တာမဲ့အချစ်", id: "m8TX6GUneWY" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး ဘုံရန်သူ", id: "_wnfhQPSBVA" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး ရွှေရုပ်နဲ့ဇနပုဒ်", id: "ocQgJB5VOuw" },
-            { name: "လာမထိနဲ့ မီးပွင့်သွားမယ်(၂)", id: "h69xcEmd3l0" },
-            { name: "လာမထိနဲ့ မီးပွင့်သွားမယ်", id: "AAiH4gxZEiU" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး ကျွန်တော်ချစ်တဲ့မခင်နှင်းဆီ", id: "5YBZJp11_T8" },
-            { name: "မြန်မာဇာတ်ကား စ/ဆုံး ဒေါက်မကျိုးတဲ့ကျောက်ဒိုး", id: "PFxsSfsdf_I" },
-            { name: "【မနူဟာကျိန်စာ | Ma Nu Har Kyain Sar】", id: "ZgcRpuNw9WA" },
-            { name: "အဖေတူသား (စ/ဆုံး)", id: "MRIIaeB1UAM" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး လူတကာထက်တစ်ယူဇနာပိုမိုက်တယ်", id: "ybdI4evCQzw" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး သံမဏိသစ္စာဓား", id: "mVjwRVXLqNc" },
-            { name: "'တိုက်မောင်းကို မိုက်ကြောင်း မပြောနဲ့' အပိုင်း(၁)", id: "y5owcs7CyVM" },
-            { name: "#မြန်မာဇာတ်ကား စ/ဆုံး အချစ်ကြမ်းကြမ်းအလွမ်းဝေးဝေး", id: "msFM4TIkfnI" },
-            { name: "ဗီဒီယို အသစ် 1", id: "EsQubSzRbRk" },
-            { name: "ဗီဒီယို အသစ် 2", id: "pey2PW6_1hs" },
-            { name: "ဗီဒီယို အသစ် 3", id: "U0_E-FgcxJE" },
-            { name: "ဗီဒီယို အသစ် 4", id: "s9O4rVG1iqw" },
-            { name: "ဗီဒီယို အသစ် 5", id: "jrtB-gsh080" },
-            { name: "ဗီဒီယို အသစ် 6", id: "ST4sK0FBDmY" },
-            { name: "ဗီဒီယို အသစ် 7", id: "plXem23ScjE" },
-            { name: "ဗီဒီယို အသစ် 8", id: "QXsFGBkso6o" },
-            { name: "ဗီဒီယို အသစ် 9", id: "cXJgfkSF7bg" },
-            { name: "ဗီဒီယို အသစ် 10", id: "yy9LXZc3oBA" },
-            { name: "ဗီဒီယို အသစ် 11", id: "kwj4T7_2uxw" },
-            { name: "Episode 01", id: "HjsqLvxXqIQ" },
-            { name: "Episode 02", id: "o-BM_i64_rE" },
-            { name: "Episode 03", id: "xWfsW1qL1M8" },
-            { name: "Episode 04", id: "LFNZWGpSYXY" },
-            { name: "Episode 05", id: "zhhybIoNzEM" },
-            { name: "Episode 06", id: "RcggsacqO7g" },
-            { name: "Episode 07", id: "CDZGMij87OI" },
-            { name: "Episode 08", id: "oqJCXJXTHOI" },
-            { name: "Episode 09", id: "vajHPg9aITA" },
-            { name: "Episode 10", id: "dnjqJYSPKaI" },
-            { name: "Episode 11", id: "mZ-_CAwQ4eY" },
-            { name: "Episode 12", id: "JYNyQcblzgI" }
-        ];
-
         const defaultSongList = [
             { name: "သီချင်း 1 - တို့ဗမာ", id: "EnpWs20HZiY" },
             { name: "သီချင်း 2 - ရင်ခုန်သံ", id: "H0GOhtVdC3Y" },
@@ -2516,24 +2974,15 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             { name: "ကာတွန်း 2", id: "H0GOhtVdC3Y" }
         ];
 
-        function getDefaultMyVideos() {
-            const stored = localStorage.getItem('videos_myvideo');
-            if (stored) {
-                try { const v = JSON.parse(stored); if (v && v.length > 0) return v; } catch (e) {}
-            }
-            return MYANMAR_MOVIES;
-        }
-
         function getVideosFromLocal(category) {
             const key = 'videos_' + category;
             const stored = localStorage.getItem(key);
             if (stored) { try { return JSON.parse(stored); } catch (e) {} }
             switch (category) {
-                case 'myvideo': return getDefaultMyVideos();
                 case 'song': return defaultSongList;
                 case 'video': return defaultVideoList;
                 case 'cartoon': return defaultCartoonList;
-                default: return getDefaultMyVideos();
+                default: return [];
             }
         }
 
@@ -2562,7 +3011,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             showToast('✅ Video added!');
             document.getElementById('adminVidTitle').value = '';
             document.getElementById('adminVidUrl').value = '';
-            renderPlaylist('myvideo');
             loadAdminVideoList();
         }
 
@@ -2573,7 +3021,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             currentVideos.splice(index, 1);
             saveVideosToLocal('myvideo', currentVideos);
             showToast('✅ Video deleted');
-            renderPlaylist('myvideo');
             loadAdminVideoList();
         }
 
@@ -2627,11 +3074,24 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     break;
                 }
                 default:
-                    list = getVideosFromLocal('myvideo');
-                    title.textContent = '📽️ My Videos';
+                    list = [];
+                    title.textContent = 'Videos';
             }
 
-            if (!list || list.length === 0) list = [{ name: 'No videos', id: 'you2gfY4hGA' }];
+            if (!list || list.length === 0) {
+                container.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="fas fa-video-slash"></i>
+                        <p>Video မရှိသေးပါ</p>
+                        <p style="font-size:11px;margin-top:8px;color:var(--text-3);">
+                            Admin Panel မှာ Video ထည့်ပါ
+                        </p>
+                    </div>
+                `;
+                count.textContent = '0';
+                return;
+            }
+
             count.textContent = list.length;
 
             list.forEach((item, index) => {
@@ -2639,7 +3099,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 card.className = 'v-card';
                 card.style.animationDelay = (index * 0.04) + 's';
                 const thumb = 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-                const isDefaultVideo = item.name === 'No videos' || item.name === 'No videos yet';
 
                 card.innerHTML = `
                     <div class="v-thumb">
@@ -2647,22 +3106,12 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                         <div class="play-overlay">
                             <div class="play-icon"><i class="fas fa-play"></i></div>
                         </div>
-                        ${category === 'myvideo' && currentUser && !isDefaultVideo ? `
-                            <button class="v-delete" onclick="event.stopPropagation(); adminDeleteVideoLocal(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        ` : ''}
                     </div>
                     <div class="v-title">${item.name}</div>
                 `;
 
                 card.onclick = () => {
-                    if (isDefaultVideo) {
-                        showToast('📢 No video available', 'warning');
-                        return;
-                    }
                     if (item.id && item.id.length === 11) loadVideo(item.id);
-                    else searchYouTube();
                 };
                 container.appendChild(card);
             });
@@ -2980,7 +3429,6 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     usingLocalData = true;
                 }
 
-                // 1️⃣ Ad Modal ကို ချက်ချင်း ပိတ်
                 const adModal = document.getElementById('adModal');
                 if (adModal) adModal.classList.remove('show');
 
@@ -2988,10 +3436,8 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                 isVideoPlaying = false;
                 resetWatchTimer();
 
-                // 2️⃣ Coin Animation ကို ချက်ချင်း ပြ
                 showCoinAnimation(reward, newCoins);
 
-                // 3️⃣ Animation ပြီးမှ Video ပြန် resume (4.2 စက္ကန့်အကြာ)
                 setTimeout(() => resumeVideoAfterAd(), 4200);
 
             } catch (error) {
@@ -3300,7 +3746,8 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
                     lastActive: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(() => {});
 
-                renderPlaylist(currentCategory);
+                // Start with Movies tab
+                switchCategory('rss', document.querySelector('.pill.active'));
                 if (!player) initPlayer();
 
                 let lastActiveUpdate = Date.now();
@@ -3717,9 +4164,13 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
             document.querySelectorAll('.pill').forEach(e => e.classList.remove('active'));
             if (el) el.classList.add('active');
 
+            const filterBar = document.getElementById('channelFilterBar');
+
             if (category === 'rss') {
+                if (filterBar) filterBar.classList.add('show');
                 loadRSSVideos();
             } else {
+                if (filterBar) filterBar.classList.remove('show');
                 renderPlaylist(category);
             }
 
@@ -4454,8 +4905,7 @@ tbody tr:hover { background: rgba(168, 85, 247, 0.06); }
 
         console.log('✅ New Design Loaded');
         console.log('✅ Coin Animation Active (Ultra Premium)');
-        console.log('✅ Coin Sound Active');
-        console.log('✅ RSS Channels: 6 channels loaded');
+        console.log('✅ 8 Channels with Search + Filter + Series');
     </script>
 </body>
 </html>
